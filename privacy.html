@@ -13,7 +13,7 @@
   body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
   body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; border-bottom: 1px solid var(--border); background: rgba(8,12,16,0.85); backdrop-filter: blur(20px); }
-  .nav-logo img { height: 44px; width: auto; display: block; }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text); text-decoration: none; } .nav-logo span { color: var(--accent); }
   .nav-links { display: flex; gap: 2.5rem; list-style: none; }
   .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
   .nav-links a:hover { color: var(--accent); }
@@ -55,7 +55,7 @@
   .contact-box { background: var(--surface); border: 1px solid rgba(0,212,170,0.2); padding: 2rem; margin-top: 1.5rem; }
   .contact-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.8rem; }
   footer { border-top: 1px solid var(--border); background: var(--surface); padding: 2.5rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
-  .footer-logo img { height: 36px; width: auto; }
+  .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); text-decoration: none; } .footer-brand span { color: var(--accent); }
   .footer-links { display: flex; gap: 2rem; list-style: none; }
   .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--accent); }
@@ -65,7 +65,7 @@
 </head>
 <body>
 <nav>
-  <a href="index.html" class="nav-logo"><img src="guardian-logo.png" alt="Guardian Apps LLC"></a>
+  <a href="index.html" class="nav-logo">Guardian<span>.</span></a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="products.html">Products</a></li>
@@ -121,7 +121,7 @@
       <h2>Data Controller & Contact</h2>
       <p><strong>Data Controller:</strong> Guardian Apps LLC</p>
       <p>If you are located in the EEA or UK, Guardian Apps LLC is the data controller for purposes of GDPR and UK-GDPR.</p>
-      <div class="contact-box"><h3>Contact Information</h3><p><strong>Email:</strong> <a href="mailto:support@myguardianapps.com">support@myguardianapps.com</a></p></div>
+      <div class="contact-box"><h3>Contact Information</h3><p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#e89b9d9898879a9ca885918f9d899a8c8189868998989bc68b8785"><span class="__cf_email__" data-cfemail="b9caccc9c9d6cbcdf9d4c0deccd8cbddd0d8d7d8c9c9ca97dad6d4">[email&#160;protected]</span></a></p></div>
     </div>
     <div class="legal-section" id="s2">
       <div class="section-num">Section 2</div>
@@ -230,7 +230,7 @@
         <li>Right to Non-Discrimination for exercising your privacy rights</li>
         <li>We do not sell or share data for cross-context behavioral advertising</li>
       </ul>
-      <p>To exercise your rights, contact us at <a href="mailto:support@myguardianapps.com">support@myguardianapps.com</a>. We aim to respond within 30 days.</p>
+      <p>To exercise your rights, contact us at <a href="/cdn-cgi/l/email-protection#12616762627d6066527f6b75677360767b737c736262613c717d7f"><span class="__cf_email__" data-cfemail="2655535656495452664b5f41534754424f4748475656550845494b">[email&#160;protected]</span></a>. We aim to respond within 30 days.</p>
     </div>
     <div class="legal-section" id="s12">
       <div class="section-num">Section 12</div>
@@ -250,7 +250,7 @@
     <div class="legal-section" id="s15">
       <div class="section-num">Section 15</div>
       <h2>Children's Privacy</h2>
-      <p>The App is not directed to children under 13 (U.S.) or under 16 (EEA/UK). We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us at <a href="mailto:support@myguardianapps.com">support@myguardianapps.com</a> and we will delete such information promptly.</p>
+      <p>The App is not directed to children under 13 (U.S.) or under 16 (EEA/UK). We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us at <a href="/cdn-cgi/l/email-protection#6615131616091412260b1f01130714020f0708071616154805090b"><span class="__cf_email__" data-cfemail="d6a5a3a6a6b9a4a296bbafb1a3b7a4b2bfb7b8b7a6a6a5f8b5b9bb">[email&#160;protected]</span></a> and we will delete such information promptly.</p>
     </div>
     <div class="legal-section" id="s21">
       <div class="section-num">Section 21</div>
@@ -262,22 +262,5 @@
       <h2>Contact Us</h2>
       <div class="contact-box">
         <h3>Guardian Apps LLC</h3>
-        <p><strong>Email:</strong> <a href="mailto:support@myguardianapps.com">support@myguardianapps.com</a></p>
-        <p style="margin-top:0.8rem;font-size:0.85rem;">For EU/UK data-protection inquiries, complaints, or to exercise GDPR/UK-GDPR rights, please use the email above.</p>
-      </div>
-      <p style="margin-top:1.5rem;font-size:0.82rem;color:var(--muted);">© 2025–2026 Guardian Apps LLC. All rights reserved.</p>
-    </div>
-  </main>
-</div>
-
-<footer>
-  <a href="index.html" class="footer-logo"><img src="guardian-logo.png" alt="Guardian Apps LLC"></a>
-  <ul class="footer-links">
-    <li><a href="products.html">Products</a></li>
-    <li><a href="terms.html">Terms of Use</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <span class="footer-copy">© 2025 Guardian Apps LLC</span>
-</footer>
-</body>
-</html>
+        <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#8dfef8fdfde2fff9cde0f4eaf8ecffe9e4ece3ecfdfdfea3eee2e0"><span class="__cf_email__" data-cfemail="62111712120d1016220f1b05170310060b030c031212114c010d0f">[email&#160;protected]</span></a></p>
+        <p style="margin-top:0.8rem;font-size:0.85rem;">For EU/UK data-protection inquiries, complaints, or to exercise GDPR/UK-GDPR 
