@@ -3,7 +3,48 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guardian Apps — AI That Works Where You Do</title>
+<title>DECISIO.ai by Guardian Apps — Meetings That Actually Move Forward</title>
+<meta name="description" content="DECISIO.ai is a private, on-device meeting intelligence app for iPhone & iPad. Turn every meeting into decisions, action owners, and follow-through that survives the week. Prepare. Decide. Act. Follow through.">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="author" content="Guardian Apps LLC">
+<link rel="canonical" href="https://gap-apps.com/">
+<meta name="theme-color" content="#080c10">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Guardian Apps">
+<meta property="og:title" content="DECISIO.ai — Meetings That Actually Move Forward">
+<meta property="og:description" content="Private, on-device meeting intelligence for iPhone & iPad. Decisions captured, actions owned, follow-through that lasts.">
+<meta property="og:url" content="https://gap-apps.com/">
+<meta property="og:image" content="https://gap-apps.com/assets/decisio-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DECISIO.ai — Decisions That Survive the Week">
+<meta name="twitter:description" content="Private, on-device meeting intelligence for iPhone & iPad.">
+<meta name="twitter:image" content="https://gap-apps.com/assets/decisio-og.png">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Structured data: organization -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Guardian Apps LLC",
+  "url": "https://gap-apps.com",
+  "email": "support@myguardianapps.com",
+  "sameAs": [
+    "https://bsky.app/profile/guardianapps.bsky.social",
+    "https://mastodon.social/@guardianAppsLLC"
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -75,6 +116,24 @@
   .product-link:hover { gap: 0.9rem; }
   .product-number { position: absolute; bottom: 2rem; right: 2.5rem; font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.05); line-height: 1; user-select: none; }
 
+  .spine { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .spine-step { background: var(--surface); padding: 2.5rem 1.8rem; transition: background 0.3s; }
+  .spine-step:hover { background: var(--surface2); }
+  .spine-label { font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .spine-label .n { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--muted); }
+  .spine-step h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 600; line-height: 1.25; margin-bottom: 0.7rem; }
+  .spine-step p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  .spotlight { max-width: 1200px; margin: 2rem auto 0; background: var(--surface); border: 1px solid var(--border); display: grid; grid-template-columns: 1.3fr 1fr; overflow: hidden; transition: border-color 0.3s; }
+  .spotlight:hover { border-color: rgba(0,212,170,0.3); }
+  .spotlight-body { padding: 3.5rem; display: flex; flex-direction: column; gap: 1.1rem; }
+  .spotlight-body h3 { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 600; line-height: 1; }
+  .spotlight-body p { color: var(--muted); font-size: 0.95rem; line-height: 1.7; }
+  .spotlight-body .card-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .spotlight-visual { background: var(--surface2); position: relative; display: flex; align-items: center; justify-content: center; min-height: 320px; }
+  .spotlight-visual::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,212,170,0.08), transparent 65%); }
+  .spotlight-ghost { font-family: 'Cormorant Garamond', serif; font-size: 9rem; font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.06); line-height: 1; user-select: none; }
+
   .who-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
   .who-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
   .who-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
@@ -94,6 +153,9 @@
   .footer-links { display: flex; gap: 2rem; list-style: none; }
   .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 1.2rem; }
+  .footer-social a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-social a:hover { color: var(--accent); }
   .footer-copy { font-size: 0.75rem; color: var(--muted); }
 
   @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
@@ -101,6 +163,9 @@
   @media (max-width: 768px) {
     .nav-links { display: none; }
     .philosophy-grid, .product-cards, .who-grid { grid-template-columns: 1fr; }
+    .spine { grid-template-columns: 1fr 1fr; }
+    .spotlight { grid-template-columns: 1fr; }
+    .spotlight-visual { min-height: 160px; }
     .who-list, .stats-strip { grid-template-columns: 1fr 1fr; }
     .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
     .stat-item:last-child { border-bottom: none; }
@@ -119,7 +184,7 @@
     <li><a href="#who">Who We Serve</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <a href="products.html" class="nav-cta">Explore Apps</a>
+  <a href="decisio.html" class="nav-cta">Get DECISIO.ai</a>
 </nav>
 
 <section class="hero">
@@ -129,16 +194,16 @@
     <h1>AI That Solves<br><em>Real Problems.</em><br>Not New Ones.</h1>
     <p class="hero-desc">Purpose-built mobile intelligence for the professionals who run meetings, lead teams, and make decisions that matter. Privacy-first. No bots. No noise.</p>
     <div class="hero-actions">
-      <a href="products.html" class="btn-primary">See Our Apps</a>
+      <a href="decisio.html" class="btn-primary">Meet DECISIO.ai</a>
       <a href="#philosophy" class="btn-ghost">Our Philosophy</a>
     </div>
   </div>
 </section>
 
 <div class="stats-strip">
-  <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">On-Device Privacy</span></div>
+  <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">On-Device Audio</span></div>
   <div class="stat-item"><span class="stat-num">Zero</span><span class="stat-label">Meeting Bots Required</span></div>
-  <div class="stat-item"><span class="stat-num">2+</span><span class="stat-label">Purpose-Built Apps</span></div>
+  <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">Output Languages</span></div>
 </div>
 
 <section class="philosophy" id="philosophy">
@@ -149,7 +214,7 @@
       <p class="section-sub">As a family-based technology company, Guardian Apps LLC focuses on practical innovation over hype. Every app is designed around real workflows — not demo room theatrics.</p>
     </div>
     <div>
-      <div class="pillar"><div class="pillar-icon">🔒</div><div><h4>Privacy-First Architecture</h4><p>Your audio is processed on your device and never uploaded — only text transcripts power AI features. No surveillance-as-a-service. You own your conversations.</p></div></div>
+      <div class="pillar"><div class="pillar-icon">🔒</div><div><h4>Privacy-First Architecture</h4><p>Your audio never leaves your device. When cloud AI is used, it runs on your own provider keys — never ours. You own your conversations.</p></div></div>
       <div class="pillar"><div class="pillar-icon">⚡</div><div><h4>Purpose-Built AI</h4><p>Every feature solves a specific professional problem — not a hypothetical use case cooked up in a boardroom.</p></div></div>
       <div class="pillar"><div class="pillar-icon">🎯</div><div><h4>Zero Training Required</h4><p>Clean, intuitive experiences that fit naturally into your day. If it needs a manual, we didn't do our job.</p></div></div>
       <div class="pillar"><div class="pillar-icon">📈</div><div><h4>Driven by Real Users</h4><p>Continuous improvement based on how professionals actually work — not engagement metrics or investor demos.</p></div></div>
@@ -160,41 +225,52 @@
 <section class="products-section" id="products">
   <div class="products-header">
     <div>
-      <div class="section-tag">Our Products</div>
-      <h2 class="section-heading">Apps Built for<br><strong>Real-World Work.</strong></h2>
+      <div class="section-tag">How DECISIO Works</div>
+      <h2 class="section-heading">Prepare. Decide. Act.<br><strong>Follow through.</strong></h2>
     </div>
-    <p class="section-sub" style="max-width:340px; text-align:right;">From the boardroom to the job site — Guardian delivers AI that works where you do.</p>
+    <p class="section-sub" style="max-width:340px; text-align:right;">Most meeting apps stop at the transcript. DECISIO.ai does the part that actually moves work forward.</p>
   </div>
-  <div class="product-cards">
-    <div class="product-card">
-      <div class="product-tag">Meeting Intelligence</div>
-      
+
+  <div class="spine">
+    <div class="spine-step">
+      <div class="spine-label"><span class="n">01</span> Prepare</div>
+      <h4>Walk in knowing where things left off.</h4>
+      <p>Tap to generate a pre-meeting brief from your history with a person or team — open actions, prior decisions, and what to follow up on.</p>
+    </div>
+    <div class="spine-step">
+      <div class="spine-label"><span class="n">02</span> Decide</div>
+      <h4>A decision gets made. It doesn't get lost.</h4>
+      <p>Decisions are captured automatically and logged — searchable months later, and ready to reverse, supersede, or revisit.</p>
+    </div>
+    <div class="spine-step">
+      <div class="spine-label"><span class="n">03</span> Act</div>
+      <h4>An action no one owns is just a hope.</h4>
+      <p>Every action item gets an owner, a date, and a status in the Action Register. Open, due soon, or overdue — at a glance.</p>
+    </div>
+    <div class="spine-step">
+      <div class="spine-label"><span class="n">04</span> Follow Through</div>
+      <h4>Leaders make decisions findable.</h4>
+      <p>The Weekly Brief surfaces your one thing first on Monday morning, with an executive summary and a shareable PDF report.</p>
+    </div>
+  </div>
+
+  <div class="spotlight">
+    <div class="spotlight-body">
+      <div class="product-tag">Meeting Intelligence · iOS</div>
       <h3>DECISIO.ai</h3>
-      <p>The privacy-first meeting intelligence app that transforms every conversation into structured decisions, tracked actions, and executive-ready briefs — entirely on your device.</p>
+      <p>The privacy-first meeting intelligence app that turns every conversation into structured decisions, tracked actions, and executive-ready briefs. Audio stays on your device; cloud AI runs on your own keys. Output in six languages.</p>
       <ul class="product-features">
-        <li>On-device recording — audio never uploaded</li>
-        <li>No meeting bots or third-party access</li>
-        <li>Action Register with owner assignment</li>
-        <li>Automated Weekly Executive Briefs</li>
-        <li>Works on iOS without cloud dependency</li>
+        <li>On-device recording &amp; transcription — no bots</li>
+        <li>Decisions, actions &amp; owners captured automatically</li>
+        <li>Pre-meeting briefs and Weekly Executive Briefs</li>
+        <li>English, Spanish, French, German, Portuguese &amp; Italian</li>
       </ul>
-      <a href="decisio.html" class="product-link">Learn More →</a>
-      <div class="product-number">01</div>
+      <div class="card-actions">
+        <a href="decisio.html" class="btn-primary">Full Details</a>
+        <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" class="btn-ghost">Download on App Store</a>
+      </div>
     </div>
-    <div class="product-card">
-      <div class="product-tag">Field Operations</div>
-      <h3>Guardian Inspection</h3>
-      <p>Streamline field assessments, site inspections, and quality reviews with AI-powered documentation that captures what matters and delivers structured reports instantly.</p>
-      <ul class="product-features">
-        <li>Rapid mobile inspection workflows</li>
-        <li>Photo capture with auto-documentation</li>
-        <li>Structured reports generated on-device</li>
-        <li>Built for field teams and solo operators</li>
-        <li>Zero manual write-up required</li>
-      </ul>
-      <a href="inspection.html" class="product-link">Learn More →</a>
-      <div class="product-number">02</div>
-    </div>
+    <div class="spotlight-visual"><div class="spotlight-ghost">D</div></div>
   </div>
 </section>
 
@@ -202,26 +278,26 @@
   <div class="who-grid">
     <div>
       <div class="section-tag">Who We Serve</div>
-      <h2 class="section-heading">If your work involves<br><strong>decisions,</strong> we're for you.</h2>
-      <p class="section-sub" style="margin-bottom: 2rem;">From boardrooms to job sites — Guardian delivers AI that works where professionals work.</p>
-      <a href="products.html" class="btn-primary">Find Your App</a>
+      <h2 class="section-heading">If your work runs on<br><strong>decisions,</strong> we're for you.</h2>
+      <p class="section-sub" style="margin-bottom: 2rem;">From the boardroom to the back-to-back week — DECISIO works wherever follow-through is the difference between a good meeting and a wasted one.</p>
+      <a href="decisio.html" class="btn-primary">Get DECISIO.ai</a>
     </div>
     <div class="who-list">
-      <div class="who-item"><span>🏢</span>Business Leaders & Executives</div>
-      <div class="who-item"><span>📋</span>Project & Team Managers</div>
-      <div class="who-item"><span>🔧</span>Field & Inspection Teams</div>
-      <div class="who-item"><span>🚀</span>Entrepreneurs & Founders</div>
-      <div class="who-item"><span>⚖️</span>Compliance Professionals</div>
-      <div class="who-item"><span>🏗️</span>Small Business Owners</div>
+      <div class="who-item"><span>🏢</span>Business Leaders &amp; Executives</div>
+      <div class="who-item"><span>🗂️</span>Directors &amp; Department Heads</div>
+      <div class="who-item"><span>📋</span>Project &amp; Team Managers</div>
+      <div class="who-item"><span>🔁</span>People Managers Running 1:1s</div>
+      <div class="who-item"><span>🚀</span>Founders &amp; Operators</div>
+      <div class="who-item"><span>🎯</span>Specialists &amp; Team Leads</div>
     </div>
   </div>
 </section>
 
 <section class="cta-banner">
   <h2>Less time managing.<br><strong>More time leading.</strong></h2>
-  <p>Explore apps built with one goal — to give you your time back.</p>
+  <p>DECISIO.ai is free on the App Store for iPhone &amp; iPad. Start with your next meeting.</p>
   <div class="cta-actions">
-    <a href="products.html" class="btn-primary">View All Products</a>
+    <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" class="btn-primary">Download on App Store</a>
     <a href="contact.html" class="btn-ghost">Get In Touch</a>
   </div>
 </section>
@@ -229,12 +305,17 @@
 <footer>
   <a href="index.html" class="footer-brand">Guardian<span>.</span> Apps LLC</a>
   <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
     <li><a href="decisio.html">DECISIO.ai</a></li>
-    <li><a href="inspection.html">Inspection</a></li>
     <li><a href="privacy.html">Privacy Policy</a></li>
     <li><a href="terms.html">Terms</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
-  <span class="footer-copy">© 2025 Guardian Apps LLC</span>
+  <div class="footer-social">
+    <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+    <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+  </div>
+  <span class="footer-copy">© 2025–2026 Guardian Apps LLC</span>
 </footer>
 </body>
 </html>

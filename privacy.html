@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Privacy Policy — Guardian Apps LLC</title>
+<meta name="description" content="How Guardian Apps LLC collects, uses, and protects your information across DECISIO.ai and its services. GDPR, UK-GDPR, CCPA/CPRA compliant.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://gap-apps.com/privacy.html">
+<meta name="theme-color" content="#080c10">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -59,6 +65,9 @@
   .footer-links { display: flex; gap: 2rem; list-style: none; }
   .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
   .footer-links a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 1.2rem; }
+  .footer-social a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-social a:hover { color: var(--accent); }
   .footer-copy { font-size: 0.75rem; color: var(--muted); }
   @media (max-width: 900px) { .nav-links { display: none; } .layout { grid-template-columns: 1fr; } .toc { position: static; margin-bottom: 2rem; } .content { padding-left: 0; } footer { flex-direction: column; align-items: flex-start; } }
 </style>
@@ -127,11 +136,11 @@
       <div class="section-num">Section 2</div>
       <h2>Categories of Personal Data We Collect</h2>
       <h3>2.1 Account and Profile Data</h3>
-      <ul><li>Name, email address, and account credentials</li><li>Optional profile logo, avatar, or signature</li><li>User preferences and settings</li></ul>
+      <ul><li>Name, email address, and account credentials</li><li>Optional profile logo or avatar</li><li>User preferences and settings</li></ul>
       <h3>2.2 User-Generated Content</h3>
-      <ul><li>Inspection data, customer and site details, and notes</li><li>Photographs, images, and files you capture, upload, or create</li><li>Voice and audio recordings (only when you explicitly enable recording features)</li><li>Text, annotations, and other content you input</li></ul>
+      <ul><li>Meeting transcripts, decisions, action items, and participant names you capture or enter</li><li>Voice and audio recordings (only when you explicitly enable recording features)</li><li>Notes, annotations, and other text content you input</li><li>Files you create or export within the App, such as PDF reports</li></ul>
       <h3>2.3 Location Data</h3>
-      <p>Approximate or precise geolocation is collected only with your explicit, affirmative consent and can be revoked at any time through your device settings.</p>
+      <p>DECISIO.ai does not require or collect location data for its core features. If a future feature uses location, it will be requested only with your explicit, affirmative consent and can be revoked at any time through your device settings.</p>
       <h3>2.4 Device and Technical Identifiers</h3>
       <ul><li>App-generated unique identifiers</li><li>Device type, operating system, and version information</li><li>IP address (collected automatically by servers processing your requests)</li></ul>
       <h3>2.5 Purchase and Subscription Data</h3>
@@ -139,7 +148,7 @@
       <h3>2.6 Usage and Diagnostics Data</h3>
       <ul><li>Feature usage analytics</li><li>Crash logs, error reports, and performance diagnostics</li><li>Session duration and frequency of use</li></ul>
       <h3>2.7 AI Analysis Data</h3>
-      <p>Images, text, audio, or other content you voluntarily submit for AI-powered analysis, and AI-generated outputs derived from your submissions.</p>
+      <p>Meeting transcripts and text you voluntarily submit for AI-powered analysis, and the AI-generated outputs (summaries, decisions, action items, and briefs) derived from them.</p>
     </div>
     <div class="legal-section" id="s3">
       <div class="section-num">Section 3</div>
@@ -147,7 +156,7 @@
       <table>
         <tr><th>Legal Basis</th><th>Applicable Processing Activities</th></tr>
         <tr><td><strong>Performance of a Contract</strong></td><td>Providing App functionality, processing purchases, syncing data, delivering AI analysis features you request</td></tr>
-        <tr><td><strong>Consent</strong></td><td>Camera, microphone, photos, location access; optional analytics; marketing communications</td></tr>
+        <tr><td><strong>Consent</strong></td><td>Microphone, speech recognition, and calendar access; optional analytics; marketing communications</td></tr>
         <tr><td><strong>Legitimate Interests</strong></td><td>Fraud prevention, security, product improvement, debugging, customer support</td></tr>
         <tr><td><strong>Legal Obligation</strong></td><td>Tax records, regulatory compliance, responding to lawful government requests</td></tr>
       </table>
@@ -168,7 +177,7 @@
       <div class="section-num">Section 5</div>
       <h2>Artificial Intelligence Processing</h2>
       <h3>5.1 How AI Features Work</h3>
-      <p>The App incorporates AI features that generate automated insights from content you submit. When you invoke an AI feature, selected text or images may be transmitted to third-party AI service providers (such as OpenAI) solely for the purpose of producing results for you. For meeting audio, transcription is performed on your device, and only the resulting text transcript — never the audio recording or your voice — is transmitted for analysis.</p>
+      <p>The App incorporates AI features that generate automated insights from your meetings. Recording and transcription run on your device using Apple's on-device speech framework. When you invoke a cloud AI feature, the text transcript of your meeting — never the audio recording or any voiceprint — may be transmitted to a third-party AI service provider, such as OpenAI or Anthropic, solely to produce results for you. Where supported, this processing runs through your own AI provider keys rather than ours, and your meeting content does not pass through Guardian Apps servers.</p>
       <h3>5.2 AI Accuracy Disclaimer</h3>
       <div class="highlight-box"><p>AI outputs are NOT guaranteed to be accurate, complete, or error-free. AI outputs do NOT constitute professional, legal, safety, medical, engineering, or regulatory advice. AI results may contain biases, hallucinations, omissions, or inaccuracies inherent in machine-learning systems.</p></div>
       <h3>5.3 AI Data Retention</h3>
@@ -194,7 +203,7 @@
       <div class="section-num">Section 8</div>
       <h2>Data Sharing</h2>
       <div class="highlight-box"><p>We do not sell, rent, or trade your personal information to any third party for monetary or other valuable consideration.</p></div>
-      <p>We may share personal data with Apple Inc. (for app-store and iCloud services), AI service providers (limited to content you submit for analysis), cloud infrastructure providers, analytics providers (aggregated/de-identified data only), and legal/regulatory authorities when required by law.</p>
+      <p>We may share personal data with Apple Inc. (for app-store and iCloud services), AI service providers (limited to the meeting transcripts you submit for analysis), cloud infrastructure providers, analytics providers (aggregated/de-identified data only), and legal/regulatory authorities when required by law.</p>
     </div>
     <div class="legal-section" id="s9">
       <div class="section-num">Section 9</div>
@@ -206,7 +215,7 @@
       <h2>Data Retention</h2>
       <table>
         <tr><th>Data Category</th><th>Retention Period</th></tr>
-        <tr><td>Inspections, reports, and media</td><td>Until you delete them from the App</td></tr>
+        <tr><td>Meetings, recordings, transcripts, and reports</td><td>Until you delete them from the App</td></tr>
         <tr><td>Account data</td><td>Duration of account plus 30 days after deletion request</td></tr>
         <tr><td>Support communications</td><td>12–24 months</td></tr>
         <tr><td>Diagnostics and analytics</td><td>30–90 days</td></tr>
@@ -235,7 +244,7 @@
     <div class="legal-section" id="s12">
       <div class="section-num">Section 12</div>
       <h2>Device Permissions</h2>
-      <p>The App may request access to: Camera, Photo Library, Files, Microphone, Location Services, Notifications, and Bluetooth. Each permission is requested only when the associated feature is accessed and can be revoked at any time in your device settings.</p>
+      <p>The App may request access to: Microphone, Speech Recognition, Calendar, Notifications, and Files. Each permission is requested only when the associated feature is accessed and can be revoked at any time in your device settings.</p>
     </div>
     <div class="legal-section" id="s13">
       <div class="section-num">Section 13</div>
@@ -263,4 +272,26 @@
       <div class="contact-box">
         <h3>Guardian Apps LLC</h3>
         <p><strong>Email:</strong> <a href="/cdn-cgi/l/email-protection#8dfef8fdfde2fff9cde0f4eaf8ecffe9e4ece3ecfdfdfea3eee2e0"><span class="__cf_email__" data-cfemail="62111712120d1016220f1b05170310060b030c031212114c010d0f">[email&#160;protected]</span></a></p>
-        <p style="margin-top:0.8rem;font-size:0.85rem;">For EU/UK data-protection inquiries, complaints, or to exercise GDPR/UK-GDPR 
+        <p style="margin-top:0.8rem;font-size:0.85rem;">For EU/UK data-protection inquiries, complaints, or to exercise GDPR/UK-GDPR rights, please contact us at the email address above. We aim to respond within 30 days.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-brand">Guardian<span>.</span> Apps LLC</a>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="decisio.html">DECISIO.ai</a></li>
+    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="terms.html">Terms</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="footer-social">
+    <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+    <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+  </div>
+  <span class="footer-copy">© 2025–2026 Guardian Apps LLC</span>
+</footer>
+</body>
+</html>
