@@ -117,6 +117,9 @@
   .newsletter-note { font-size: 0.78rem; color: var(--muted); margin-top: 1.2rem; }
   .newsletter-note a { color: var(--accent); text-decoration: none; }
   .newsletter-note a:hover { text-decoration: underline; }
+  .newsletter-powered { font-size: 0.72rem; margin-top: 0.5rem; }
+  .newsletter-powered a { color: var(--muted); text-decoration: none; opacity: 0.65; transition: color 0.2s, opacity 0.2s; }
+  .newsletter-powered a:hover { color: var(--accent); opacity: 1; }
   @media (max-width: 520px) { .newsletter-form { flex-direction: column; } .newsletter-btn { width: 100%; } }
 
   @media (max-width: 768px) {
@@ -159,7 +162,7 @@
 <div class="stats-strip">
   <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">On-Device Privacy</span></div>
   <div class="stat-item"><span class="stat-num">Zero</span><span class="stat-label">Meeting Bots Required</span></div>
-  <div class="stat-item"><span class="stat-num">2+</span><span class="stat-label">Purpose-Built Apps</span></div>
+  <div class="stat-item"><span class="stat-num">iOS</span><span class="stat-label">iPhone &amp; iPad</span></div>
 </div>
 
 <section class="philosophy" id="philosophy">
@@ -184,9 +187,9 @@
       <div class="section-tag">Our Products</div>
       <h2 class="section-heading">Apps Built for<br><strong>Real-World Work.</strong></h2>
     </div>
-    <p class="section-sub" style="max-width:340px; text-align:right;">From the boardroom to the job site — Guardian delivers AI that works where you do.</p>
+    <p class="section-sub" style="max-width:340px; text-align:right;">From the boardroom to the back office — Guardian delivers AI that works where you do.</p>
   </div>
-  <div class="product-cards">
+  <div class="product-cards" style="grid-template-columns:1fr;">
     <div class="product-card">
       <div class="product-tag">Meeting Intelligence</div>
       
@@ -202,20 +205,6 @@
       <a href="decisio.html" class="product-link">Learn More →</a>
       <div class="product-number">01</div>
     </div>
-    <div class="product-card">
-      <div class="product-tag">Field Operations</div>
-      <h3>Guardian Inspection</h3>
-      <p>Streamline field assessments, site inspections, and quality reviews with AI-powered documentation that captures what matters and delivers structured reports instantly.</p>
-      <ul class="product-features">
-        <li>Rapid mobile inspection workflows</li>
-        <li>Photo capture with auto-documentation</li>
-        <li>Structured reports generated on-device</li>
-        <li>Built for field teams and solo operators</li>
-        <li>Zero manual write-up required</li>
-      </ul>
-      <a href="inspection.html" class="product-link">Learn More →</a>
-      <div class="product-number">02</div>
-    </div>
   </div>
 </section>
 
@@ -224,13 +213,13 @@
     <div>
       <div class="section-tag">Who We Serve</div>
       <h2 class="section-heading">If your work involves<br><strong>decisions,</strong> we're for you.</h2>
-      <p class="section-sub" style="margin-bottom: 2rem;">From boardrooms to job sites — Guardian delivers AI that works where professionals work.</p>
+      <p class="section-sub" style="margin-bottom: 2rem;">Wherever decisions get made — Guardian delivers AI that works where professionals work.</p>
       <a href="products.html" class="btn-primary">Find Your App</a>
     </div>
     <div class="who-list">
       <div class="who-item"><span>🏢</span>Business Leaders & Executives</div>
       <div class="who-item"><span>📋</span>Project & Team Managers</div>
-      <div class="who-item"><span>🔧</span>Field & Inspection Teams</div>
+      <div class="who-item"><span>🤝</span>Consultants &amp; Advisors</div>
       <div class="who-item"><span>🚀</span>Entrepreneurs & Founders</div>
       <div class="who-item"><span>⚖️</span>Compliance Professionals</div>
       <div class="who-item"><span>🏗️</span>Small Business Owners</div>
@@ -260,6 +249,7 @@
     </form>
     <div class="newsletter-success" id="newsletterSuccess">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
     <p class="newsletter-note">Double opt-in — we'll only email you the newsletter. See our <a href="privacy.html">Privacy Policy</a>.</p>
+    <p class="newsletter-powered"><a href="https://buttondown.com/refer/MyGuardianApps" target="_blank" rel="noopener">Powered by Buttondown</a></p>
   </div>
 </section>
 <script>
@@ -280,9 +270,7 @@
 <footer>
   <a href="index.html" class="footer-brand">Guardian<span>.</span> Apps LLC</a>
   <ul class="footer-links">
-    <li><a href="decisio.html">DECISIO.ai</a></li>
-    <li><a href="inspection.html">Inspection</a></li>
-    <li><a href="privacy.html">Privacy Policy</a></li>
+    <li><a href="decisio.html">DECISIO.ai</a></li>    <li><a href="privacy.html">Privacy Policy</a></li>
     <li><a href="terms.html">Terms</a></li>
   </ul>
   <span class="footer-copy">© 2025 Guardian Apps LLC</span>
