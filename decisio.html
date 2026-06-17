@@ -86,6 +86,9 @@
   .footer-links a:hover { color: var(--accent); }
   .footer-copy { font-size: 0.75rem; color: var(--muted); }
   @media (max-width: 768px) { .nav-links { display: none; } .stats-strip { grid-template-columns: repeat(2,1fr); } .features-grid { grid-template-columns: 1fr; } .two-col, .privacy-box { grid-template-columns: 1fr; gap: 2rem; } .privacy-box { padding: 2rem; } footer { flex-direction: column; align-items: flex-start; } }
+  /* ---- Pro tag ---- */
+  .pro-tag { display: inline-block; font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent2); border: 1px solid var(--accent2); border-radius: 2px; padding: 0.1rem 0.4rem; margin-left: 0.4rem; vertical-align: middle; font-weight: 600; }
+
   /* ---- Newsletter signup ---- */
   .newsletter-section { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 5%; text-align: center; overflow: hidden; }
   .newsletter-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
@@ -145,14 +148,16 @@
 
 <section class="features-section">
   <div class="section-tag">How It Works</div>
-  <h2 class="section-heading">Six capabilities.<br><strong>One complete system.</strong></h2>
+  <h2 class="section-heading">Eight capabilities.<br><strong>One complete system.</strong></h2>
   <div class="features-grid">
     <div class="feature-card"><span class="feature-icon">🎙️</span><h3>Record & Transcribe</h3><p>One-tap recording captures high-quality audio. AI transcription with speaker recognition means you always know who said what — and who committed to what.</p></div>
     <div class="feature-card"><span class="feature-icon">🧠</span><h3>AI Decision Extraction</h3><p>DECISIO.ai doesn't just transcribe — it thinks. The AI automatically identifies decisions made, action items with owners, risks flagged, and open questions needing follow-up.</p></div>
     <div class="feature-card"><span class="feature-icon">📋</span><h3>Decision Log</h3><p>Every decision from every meeting, searchable and organized. Build an institutional record of what was decided, when, and in which meeting. No more "I thought we agreed to..."</p></div>
     <div class="feature-card"><span class="feature-icon">✅</span><h3>Action Register</h3><p>Track every action item across all your meetings in one place. See what's due, what's overdue, and who owns it. Filter by owner, priority, status, or meeting.</p></div>
-    <div class="feature-card"><span class="feature-icon">📊</span><h3>Executive Briefings</h3><p>Generate polished PDF reports with one tap. Share executive summaries or full transcripts. Weekly briefs give a consolidated view of all decisions and actions across meetings.</p></div>
-    <div class="feature-card"><span class="feature-icon">🔒</span><h3>Built for Privacy</h3><p>Recordings sync securely via iCloud. Face ID and passcode protection keep sensitive content secure. Confidentiality levels let you classify meetings appropriately.</p></div>
+    <div class="feature-card"><span class="feature-icon">☀️</span><h3>Daily Morning Brief <span class="pro-tag">Pro</span></h3><p>A personalised brief delivered each morning at the time you choose — today's meetings with prep notes, actions due, anything overdue, and a single focus to anchor your day.</p></div>
+    <div class="feature-card"><span class="feature-icon">🔎</span><h3>Prep by Person</h3><p>Plan a meeting around who you're meeting, not just the topic. Start typing a name and DECISIO surfaces everyone from your history, then pulls in your recent meetings with them so their open items and context are right there.</p></div>
+    <div class="feature-card"><span class="feature-icon">📊</span><h3>Executive Briefings</h3><p>Generate polished PDF reports with one tap. Share executive summaries or full transcripts. A weekly look-back keeps decisions and commitments from slipping through the cracks.</p></div>
+    <div class="feature-card"><span class="feature-icon">🔒</span><h3>Built for Privacy</h3><p>Audio is processed on your device and never uploaded. Face ID, passcode, and iOS Data Protection guard your content, and confidentiality labels let you classify meetings appropriately.</p></div>
   </div>
 </section>
 
@@ -169,14 +174,16 @@
       <li>Automatic decision and action extraction</li>
       <li>Decision Log across all meetings — searchable</li>
       <li>Action Register with owners, deadlines & priorities</li>
+      <li><span>Daily Morning Brief at your chosen time <span class="pro-tag">Pro</span></span></li>
+      <li>Meeting prep by person — pulls in your history together</li>
       <li>Executive PDF report generation</li>
-      <li>Weekly briefings with accountability tracking</li>
+      <li><span>Weekly look-back brief <span class="pro-tag">Pro</span></span></li>
       <li>iCloud sync across iPhone and iPad</li>
-      <li>Face ID / passcode security</li>
-      <li>Calendar integration</li>
-      <li>Siri Shortcuts support</li>
+      <li>Face ID / passcode security with iOS Data Protection</li>
+      <li><span>Calendar integration <span class="pro-tag">Pro</span></span></li>
+      <li>Siri &amp; Shortcuts — read a summary aloud, hands-free</li>
       <li>Dark mode optimized interface</li>
-      <li>Speaker labeling & voice profile training</li>
+      <li>Speaker labeling &amp; voice profile training</li>
       <li>Confidentiality classification per meeting</li>
     </ul>
   </div>
@@ -187,10 +194,11 @@
     <div>
       <div class="section-tag">Privacy First</div>
       <h2>Your meetings.<br>Your data.</h2>
-      <p style="margin-top:1rem; color:var(--muted); font-size:0.95rem;">DECISIO.ai was designed from the ground up around one principle: your conversations belong to you. Not to servers. Not to third parties. Not to us.</p>
+      <p style="margin-top:1rem; color:var(--muted); font-size:0.95rem;">DECISIO.ai was designed from the ground up around one principle: your meetings belong to you. Your audio is processed on your device and never uploaded. When you use AI features, only the text transcript is sent for analysis — never your recordings or voice.</p>
     </div>
     <ul class="privacy-points">
       <li><div class="dot"></div><span><strong>No audio ever leaves your device</strong>Recordings are processed locally — never uploaded to any external server.</span></li>
+      <li><div class="dot"></div><span><strong>Only text, never audio, powers AI</strong>Your device transcribes audio locally. Only that text transcript is sent to our AI provider for analysis — your recordings, voice, and voiceprint never leave your device.</span></li>
       <li><div class="dot"></div><span><strong>No meeting bots</strong>No third-party bot joins your calls. No permissions granted to outside services.</span></li>
       <li><div class="dot"></div><span><strong>iCloud sync — your account, your control</strong>Syncs securely through your own Apple iCloud. Guardian never has access.</span></li>
       <li><div class="dot"></div><span><strong>Face ID & passcode protection</strong>Sensitive meeting content is locked behind biometric or passcode security.</span></li>
@@ -213,7 +221,7 @@
     <h2>Decisions, <em>delivered.</em></h2>
     <p>Product updates, new features, and the occasional note on building privacy-first tools. No spam, no noise — unsubscribe anytime.</p>
     <iframe name="bd-iframe" title="newsletter" style="display:none;"></iframe>
-    <form id="newsletterForm" class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/decisio" method="post" target="bd-iframe">
+    <form id="newsletterForm" class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
       <input type="email" name="email" class="newsletter-input" placeholder="you@example.com" aria-label="Email address" required>
       <input type="hidden" name="embed" value="1">
       <button type="submit" class="newsletter-btn">Subscribe</button>
