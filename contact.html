@@ -3,180 +3,183 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact — Guardian Apps (DECISIO.ai)</title>
-<meta name="description" content="Get in touch with Guardian Apps about DECISIO.ai — support, partnerships, privacy, or general questions. We respond promptly.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://gap-apps.com/contact.html">
-<meta name="theme-color" content="#080c10">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Guardian Apps">
-<meta property="og:title" content="Contact — Guardian Apps (DECISIO.ai)">
-<meta property="og:description" content="Support, partnerships, and questions about DECISIO.ai.">
-<meta property="og:url" content="https://gap-apps.com/contact.html">
-<meta property="og:image" content="https://gap-apps.com/assets/decisio-og.png">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<title>Contact — Guardian.Apps</title>
+<meta name="description" content="Questions, support, or partnership ideas for DECISIO.ai — get in touch with Guardian Apps LLC.">
+<meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --bg: #080c10; --surface: #0f1520; --surface2: #151d2e; --border: rgba(255,255,255,0.07); --text: #e8edf5; --muted: #7a8799; --accent: #00d4aa; --accent2: #c9a84c; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0A111E;--bg-top:#0E1A2C;--surface:#0F1B2D;--surface-2:#15243A;
+    --line:rgba(255,255,255,0.09);--line-soft:rgba(255,255,255,0.055);
+    --text:#EAF0F8;--muted:#8B98AD;--faint:#74829A;
+    --gold:#D4A84A;--gold-2:#E8C56E;--green:#34D399;--green-2:#5FE3B4;--ink:#0A111E;
+    --radius:16px;--shadow:0 30px 80px -30px rgba(0,0,0,0.75);--maxw:1100px;
+    --sans:-apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:400;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(70% 55% at 80% -2%,rgba(212,168,74,0.10),transparent 55%),
+    radial-gradient(60% 50% at -5% 10%,rgba(52,211,153,0.07),transparent 55%),
+    linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 38%,var(--bg) 100%)}
+  body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.22;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 6%}
+  a{color:inherit;text-decoration:none}
+  .sprite{position:absolute;width:0;height:0;overflow:hidden}
 
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; border-bottom: 1px solid var(--border); background: rgba(8,12,16,0.85); backdrop-filter: blur(20px); }
-  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text); text-decoration: none; } .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-cta { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1.4rem; font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.25s, color 0.25s; text-decoration: none; }
-  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;border-bottom:1px solid var(--line-soft);background:rgba(10,17,30,0.72);backdrop-filter:blur(18px) saturate(140%)}
+  .nav-logo{font-weight:700;font-size:1.15rem;letter-spacing:-0.01em}.nav-logo span{color:var(--green)}
+  .nav-links{display:flex;gap:2.2rem;list-style:none}
+  .nav-links a{color:var(--muted);font-size:.82rem;font-weight:500;transition:color .2s}.nav-links a:hover{color:var(--text)}
+  .nav-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--green);color:var(--ink);padding:.55rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;transition:transform .2s,box-shadow .2s}
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px -10px rgba(52,211,153,.6)}
+  .nav-cta svg{width:15px;height:15px}
 
-  .page-hero { position: relative; padding: 140px 5% 60px; border-bottom: 1px solid var(--border); background: var(--surface); overflow: hidden; }
-  .page-hero::after { content: ''; position: absolute; top: 0; right: 0; width: 40vw; height: 100%; background: radial-gradient(ellipse at right, rgba(0,212,170,0.05) 0%, transparent 65%); pointer-events: none; }
-  .eyebrow { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; position: relative; z-index: 1; }
-  .eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
-  .page-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 300; line-height: 1.1; margin-bottom: 1rem; position: relative; z-index: 1; }
-  .page-hero h1 strong { font-weight: 700; }
-  .page-hero p { color: var(--muted); font-size: 1rem; max-width: 480px; position: relative; z-index: 1; }
+  .eyebrow{display:inline-flex;align-items:center;gap:.7rem;font-size:.72rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem}
+  .eyebrow::before{content:'';width:26px;height:1px;background:var(--gold);opacity:.8}
+  h1,h2{letter-spacing:-0.02em;line-height:1.08;font-weight:700}
 
-  .contact-layout { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 6rem 5%; display: grid; grid-template-columns: 1fr 1.6fr; gap: 6rem; align-items: start; }
+  .page-hero{padding:150px 0 40px;position:relative}
+  .page-hero h1{font-size:clamp(2.4rem,4.4vw,3.6rem);font-weight:800}
+  .page-hero h1 .g{color:var(--gold-2)}
+  .page-hero p{color:var(--muted);font-size:1.05rem;max-width:34rem;margin-top:1rem}
 
-  .contact-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; margin-bottom: 1.2rem; }
-  .contact-info p { color: var(--muted); font-size: 0.92rem; line-height: 1.7; margin-bottom: 2rem; }
+  .layout{display:grid;grid-template-columns:1fr 1.5fr;gap:4.5rem;padding:3.5rem 0 6rem;align-items:start}
+  .info h2{font-size:1.5rem;font-weight:700;margin-bottom:.9rem}
+  .info>p{color:var(--muted);font-size:.95rem;margin-bottom:2rem}
+  .info-items{display:flex;flex-direction:column}
+  .info-item{display:flex;gap:1rem;align-items:flex-start;padding:1.3rem 0;border-bottom:1px solid var(--line-soft)}
+  .info-item:first-child{border-top:1px solid var(--line-soft)}
+  .info-ic{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0;background:linear-gradient(145deg,rgba(212,168,74,.16),rgba(212,168,74,.05));border:1px solid rgba(212,168,74,.25)}
+  .info-ic svg{width:18px;height:18px;color:var(--gold-2)}
+  .info-item h4{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:.3rem}
+  .info-item p{color:var(--muted);font-size:.88rem}
+  .info-item a{color:var(--text);font-size:.88rem}.info-item a:hover{color:var(--green-2)}
 
-  .info-items { display: flex; flex-direction: column; gap: 0; }
-  .info-item { display: flex; gap: 1rem; align-items: flex-start; padding: 1.4rem 0; border-bottom: 1px solid var(--border); }
-  .info-item:first-child { border-top: 1px solid var(--border); }
-  .info-icon { width: 36px; height: 36px; border: 1px solid var(--accent); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; color: var(--accent); }
-  .info-item h4 { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 0.2rem; }
-  .info-item p { color: var(--muted); font-size: 0.88rem; margin-bottom: 0; }
-  .info-item a { color: var(--text); text-decoration: none; font-size: 0.88rem; }
-  .info-item a:hover { color: var(--accent); }
+  .links-group{margin-top:2.2rem}
+  .links-group h4{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:600;margin-bottom:.9rem}
+  .link-btn{display:flex;align-items:center;gap:.7rem;background:var(--surface);border:1px solid var(--line);padding:.75rem 1rem;border-radius:10px;font-size:.84rem;color:var(--text);margin-bottom:.55rem;transition:border-color .2s,background .2s}
+  .link-btn:hover{border-color:var(--green);background:var(--surface-2)}
+  .link-btn svg{width:17px;height:17px;color:var(--green-2);flex-shrink:0}
 
-  .app-links { margin-top: 2.5rem; }
-  .app-links h4 { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; margin-bottom: 1rem; }
-  .app-link-btn { display: flex; align-items: center; gap: 0.8rem; background: var(--surface2); border: 1px solid var(--border); padding: 0.8rem 1.2rem; text-decoration: none; color: var(--text); font-size: 0.85rem; margin-bottom: 0.6rem; transition: border-color 0.2s; }
-  .app-link-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .app-link-btn img { height: 28px; width: auto; object-fit: contain; }
+  .form-wrap{background:linear-gradient(180deg,var(--surface),rgba(15,27,45,.5));border:1px solid var(--line);border-radius:20px;padding:2.6rem;position:relative;overflow:hidden}
+  .form-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--green),transparent)}
+  .form-title{font-size:1.4rem;font-weight:700;margin-bottom:.4rem}
+  .form-sub{color:var(--muted);font-size:.88rem;margin-bottom:1.8rem}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem}
+  .form-group label{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .form-group input,.form-group select,.form-group textarea{background:var(--bg);border:1px solid var(--line);color:var(--text);padding:.8rem 1rem;border-radius:10px;font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s;width:100%}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green)}
+  .form-group select{appearance:none;cursor:pointer}
+  .form-group select option{background:var(--surface)}
+  .form-group textarea{resize:vertical;min-height:130px}
+  .form-group input::placeholder,.form-group textarea::placeholder{color:var(--faint)}
+  .btn-submit{background:var(--green);color:var(--ink);border:none;padding:.95rem 2rem;border-radius:11px;font-family:var(--sans);font-size:.9rem;font-weight:700;cursor:pointer;width:100%;transition:transform .2s,box-shadow .2s;margin-top:.4rem}
+  .btn-submit:hover{transform:translateY(-1px);box-shadow:0 14px 30px -14px rgba(52,211,153,.6)}
+  .form-note{font-size:.76rem;color:var(--faint);text-align:center;margin-top:1rem}
+  .form-note a{color:var(--gold-2)}
+  .success-msg{display:none;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);padding:1.4rem;border-radius:12px;text-align:center;margin-top:1rem}
+  .success-msg p{color:var(--green-2);font-size:.92rem}
 
-  .contact-form-wrap { background: var(--surface); border: 1px solid var(--border); padding: 3rem; position: relative; overflow: hidden; }
-  .contact-form-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); }
+  footer{border-top:1px solid var(--line-soft);padding:2.6rem 0;margin-top:1rem}
+  .foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+  .foot-brand{font-weight:700;font-size:1.05rem}.foot-brand span{color:var(--green)}
+  .foot-links{display:flex;gap:1.8rem;list-style:none;flex-wrap:wrap}
+  .foot-links a{font-size:.78rem;color:var(--muted);transition:color .2s}.foot-links a:hover{color:var(--gold-2)}
+  .foot-social{display:flex;gap:1.1rem}
+  .foot-social a{font-size:.76rem;color:var(--faint);transition:color .2s}.foot-social a:hover{color:var(--green-2)}
+  .foot-copy{font-size:.74rem;color:var(--faint)}
 
-  .form-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 600; margin-bottom: 0.5rem; }
-  .form-subtitle { color: var(--muted); font-size: 0.88rem; margin-bottom: 2rem; }
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
 
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
-  .form-group label { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-  .form-group input, .form-group select, .form-group textarea { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.8rem 1rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 300; outline: none; transition: border-color 0.2s; width: 100%; }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
-  .form-group select { appearance: none; cursor: pointer; }
-  .form-group select option { background: var(--surface); }
-  .form-group textarea { resize: vertical; min-height: 130px; }
-  .form-group input::placeholder, .form-group textarea::placeholder { color: var(--muted); opacity: 0.6; }
-
-  .btn-submit { background: var(--accent); color: var(--bg); border: none; padding: 1rem 2.5rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; width: 100%; transition: opacity 0.2s, transform 0.2s; margin-top: 0.5rem; }
-  .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-
-  .form-note { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 1rem; }
-  .form-note a { color: var(--accent); text-decoration: none; }
-
-  .success-msg { display: none; background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.3); padding: 1.5rem; text-align: center; margin-top: 1rem; }
-  .success-msg p { color: var(--accent); font-size: 0.95rem; }
-
-  footer { border-top: 1px solid var(--border); background: var(--surface); padding: 2.5rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
-  .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); text-decoration: none; } .footer-brand span { color: var(--accent); }
-  .footer-links { display: flex; gap: 2rem; list-style: none; }
-  .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--accent); }
-  .footer-social { display: flex; gap: 1.2rem; }
-  .footer-social a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .footer-social a:hover { color: var(--accent); }
-  .footer-copy { font-size: 0.75rem; color: var(--muted); }
-
-  @media (max-width: 900px) {
-    .nav-links { display: none; }
-    .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
-    .form-row { grid-template-columns: 1fr; }
-    .contact-form-wrap { padding: 2rem; }
-    footer { flex-direction: column; align-items: flex-start; }
+  @media (max-width:900px){
+    .nav-links{display:none}
+    .layout{grid-template-columns:1fr;gap:2.8rem}
+    .form-row{grid-template-columns:1fr}
+    .form-wrap{padding:1.8rem}
+    .page-hero{padding:120px 0 20px}
+    .foot{flex-direction:column;align-items:flex-start}
   }
 </style>
 </head>
 <body>
 
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 12.04c-.03-2.42 1.98-3.58 2.07-3.64-1.13-1.65-2.89-1.88-3.51-1.9-1.49-.15-2.91.88-3.67.88-.76 0-1.93-.86-3.17-.84-1.63.02-3.14.95-3.98 2.41-1.7 2.95-.43 7.3 1.21 9.69.8 1.17 1.76 2.48 3.01 2.43 1.21-.05 1.67-.78 3.13-.78 1.46 0 1.87.78 3.15.76 1.3-.02 2.12-1.19 2.91-2.36.92-1.35 1.3-2.66 1.32-2.73-.03-.01-2.53-.97-2.56-3.85zM14.62 5.39c.67-.81 1.12-1.94.99-3.06-.96.04-2.13.64-2.82 1.45-.62.72-1.16 1.87-1.02 2.97 1.07.08 2.17-.55 2.85-1.36z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M4 7l8 6 8-6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7l-2.2 5a2.6 2.6 0 0 0 4.4 0L9 7M19 7l-2.2 5a2.6 2.6 0 0 0 4.4 0L23 7"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.3 2.3 3.5 5.3 3.5 8.5s-1.2 6.2-3.5 8.5c-2.3-2.3-3.5-5.3-3.5-8.5S9.7 5.8 12 3.5z"/></symbol>
+</svg>
+
 <nav>
-  <a href="index.html" class="nav-logo">Guardian<span>.</span></a>
+  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
-    <li><a href="products.html">Products</a></li>
+    <li><a href="products.html">The App</a></li>
     <li><a href="contact.html">Contact</a></li>
     <li><a href="privacy.html">Privacy</a></li>
   </ul>
-  <a href="products.html" class="nav-cta">Our Apps</a>
+  <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="nav-cta"><svg><use href="#i-apple"/></svg>Download</a>
 </nav>
 
-<div class="page-hero">
-  <div class="eyebrow">Contact</div>
-  <h1>Get In <strong>Touch</strong></h1>
-  <p>Have a question about our apps, a support request, or just want to say hello? We'd love to hear from you.</p>
-</div>
+<header class="page-hero">
+  <div class="wrap">
+    <div class="eyebrow">Contact</div>
+    <h1>Get in <span class="g">touch.</span></h1>
+    <p>A question about the app, a support request, or just want to say hello? We'd love to hear from you.</p>
+  </div>
+</header>
 
-<div class="contact-layout">
-
-  <div class="contact-info">
+<div class="wrap layout">
+  <div class="info">
     <h2>We're here to help.</h2>
     <p>Whether you need support for DECISIO.ai, have a general inquiry, or want to explore a partnership — reach out and we'll get back to you promptly.</p>
 
     <div class="info-items">
       <div class="info-item">
-        <div class="info-icon">✉️</div>
+        <div class="info-ic"><svg><use href="#i-mail"/></svg></div>
         <div>
           <h4>Email</h4>
           <a href="/cdn-cgi/l/email-protection#96e5e3e6e6f9e4e2d6fbeff1e3f7e4f2fff7f8f7e6e6e5b8f5f9fb"><span class="__cf_email__" data-cfemail="087b7d7878677a7c4865716f7d697a6c6169666978787b266b6765">[email&#160;protected]</span></a>
         </div>
       </div>
       <div class="info-item">
-        <div class="info-icon">🛡️</div>
+        <div class="info-ic"><svg><use href="#i-shield"/></svg></div>
         <div>
           <h4>Company</h4>
           <p>Guardian Apps LLC</p>
         </div>
       </div>
       <div class="info-item">
-        <div class="info-icon">⚖️</div>
+        <div class="info-ic"><svg><use href="#i-scale"/></svg></div>
         <div>
-          <h4>Legal & Privacy</h4>
+          <h4>Legal &amp; Privacy</h4>
           <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp; <a href="terms.html">Terms of Use</a>
         </div>
       </div>
     </div>
 
-    <div class="app-links">
-      <h4>Download the App</h4>
-      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" class="app-link-btn">
-        🧠 DECISIO.ai — App Store
-      </a>
+    <div class="links-group">
+      <h4>Download the app</h4>
+      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="link-btn"><svg><use href="#i-apple"/></svg>DECISIO.ai — App Store</a>
     </div>
 
-    <div class="app-links">
-      <h4>Follow Us</h4>
-      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener" class="app-link-btn">
-        🦋 Bluesky — @guardianapps.bsky.social
-      </a>
-      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener" class="app-link-btn">
-        🐘 Mastodon — @guardianAppsLLC@mastodon.social
-      </a>
+    <div class="links-group">
+      <h4>Follow us</h4>
+      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener" class="link-btn"><svg><use href="#i-globe"/></svg>Bluesky — @guardianapps.bsky.social</a>
+      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener" class="link-btn"><svg><use href="#i-globe"/></svg>Mastodon — @guardianAppsLLC</a>
     </div>
   </div>
 
-  <div class="contact-form-wrap">
-    <div class="form-title">Send Us a Message</div>
-    <p class="form-subtitle">Fill out the form below and we'll respond as soon as possible.</p>
+  <div class="form-wrap">
+    <div class="form-title">Send us a message</div>
+    <p class="form-sub">Fill out the form below and we'll respond as soon as possible.</p>
 
     <form id="contactForm" action="mailto:support@myguardianapps.com" method="POST" enctype="text/plain" onsubmit="handleSubmit(event)">
       <div class="form-row">
@@ -216,39 +219,41 @@
       <p>✓ &nbsp;Thank you! Your message has been sent. We'll be in touch shortly.</p>
     </div>
   </div>
-
 </div>
 
 <footer>
-  <a href="index.html" class="footer-brand">Guardian<span>.</span> Apps LLC</a>
-  <ul class="footer-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="decisio.html">DECISIO.ai</a></li>
-    <li><a href="privacy.html">Privacy Policy</a></li>
-    <li><a href="terms.html">Terms</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <div class="footer-social">
-    <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
-    <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+  <div class="wrap foot">
+    <a href="index.html" class="foot-brand">Guardian<span>.</span>Apps LLC</a>
+    <ul class="foot-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="decisio.html">DECISIO.ai</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="foot-social">
+      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+    </div>
+    <span class="foot-copy">© 2025–2026 Guardian Apps LLC</span>
   </div>
-  <span class="footer-copy">© 2025–2026 Guardian Apps LLC</span>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function handleSubmit(e) {
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+function handleSubmit(e){
   e.preventDefault();
-  const form = document.getElementById('contactForm');
-  const fname = document.getElementById('fname').value;
-  const lname = document.getElementById('lname').value;
-  const email = document.getElementById('email').value;
-  const subject = document.getElementById('subject').value;
-  const message = document.getElementById('message').value;
-  const body = `Name: ${fname} ${lname}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`;
-  const mailto = `mailto:support@myguardianapps.com?subject=${encodeURIComponent('[' + subject + '] Website Contact')}&body=${encodeURIComponent(body)}`;
-  window.location.href = mailto;
-  form.style.display = 'none';
-  document.getElementById('successMsg').style.display = 'block';
+  const form=document.getElementById('contactForm');
+  const fname=document.getElementById('fname').value;
+  const lname=document.getElementById('lname').value;
+  const email=document.getElementById('email').value;
+  const subject=document.getElementById('subject').value;
+  const message=document.getElementById('message').value;
+  const body=`Name: ${fname} ${lname}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`;
+  const mailto=`mailto:support@myguardianapps.com?subject=${encodeURIComponent('['+subject+'] Website Contact')}&body=${encodeURIComponent(body)}`;
+  window.location.href=mailto;
+  form.style.display='none';
+  document.getElementById('successMsg').style.display='block';
 }
 </script>
 </body>

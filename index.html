@@ -3,277 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guardian Apps — AI That Works Where You Do</title>
+<title>Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through</title>
+<meta name="description" content="Guardian.Apps builds DECISIO.ai — a private iOS instrument that turns the decisions in your meetings into clear ownership and follow-through. Privacy-first. No bots.">
+<meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --bg: #080c10; --surface: #0f1520; --surface2: #151d2e; --border: rgba(255,255,255,0.07); --text: #e8edf5; --muted: #7a8799; --accent: #00d4aa; --accent2: #c9a84c; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.7; overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
-
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; border-bottom: 1px solid var(--border); background: rgba(8,12,16,0.85); backdrop-filter: blur(20px); }
-  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text); text-decoration: none; } .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.2s; }
-  .nav-links a:hover { color: var(--accent); }
-  .nav-cta { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1.4rem; font-family: 'Outfit', sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.25s, color 0.25s; text-decoration: none; }
-  .nav-cta:hover { background: var(--accent); color: var(--bg); }
-
-  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 0 5%; padding-top: 80px; overflow: hidden; }
-  .hero::after { content: ''; position: absolute; top: 10%; left: -10%; width: 60vw; height: 60vw; background: radial-gradient(ellipse, rgba(0,212,170,0.06) 0%, transparent 65%); pointer-events: none; }
-  .hero-ghost { position: absolute; right: -2%; top: 50%; transform: translateY(-50%); font-family: 'Cormorant Garamond', serif; font-size: clamp(120px, 18vw, 280px); font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.04); line-height: 1; user-select: none; pointer-events: none; letter-spacing: -0.02em; }
-  .hero-inner { position: relative; z-index: 1; max-width: 720px; }
-  .hero-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.8rem; opacity: 0; animation: fadeUp 0.8s 0.2s ease forwards; }
-  .hero-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
-  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(3rem, 6vw, 5.2rem); font-weight: 300; line-height: 1.08; letter-spacing: -0.01em; margin-bottom: 1.6rem; opacity: 0; animation: fadeUp 0.9s 0.35s ease forwards; }
-  .hero h1 em { font-style: normal; font-weight: 600; color: var(--accent); }
-  .hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 520px; margin-bottom: 2.8rem; opacity: 0; animation: fadeUp 0.9s 0.5s ease forwards; }
-  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.9s 0.65s ease forwards; }
-  .btn-primary { background: var(--accent); color: var(--bg); border: none; padding: 0.85rem 2.2rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; transition: opacity 0.2s, transform 0.2s; }
-  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-  .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); padding: 0.85rem 2.2rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; text-decoration: none; display: inline-block; transition: border-color 0.2s, color 0.2s; }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  .stats-strip { position: relative; z-index: 1; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface); display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
-  .stat-item { padding: 2.2rem 1rem; border-right: 1px solid var(--border); }
-  .stat-item:last-child { border-right: none; }
-  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 600; color: var(--accent); line-height: 1; display: block; margin-bottom: 0.4rem; }
-  .stat-label { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
-
-  section { position: relative; z-index: 1; padding: 7rem 5%; }
-  .section-tag { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
-  .section-heading { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.2rem, 4vw, 3.4rem); font-weight: 400; line-height: 1.15; margin-bottom: 1.2rem; }
-  .section-heading strong { font-weight: 700; }
-  .section-sub { color: var(--muted); max-width: 520px; font-size: 1rem; }
-
-  .philosophy { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
-  .pillar { display: flex; gap: 1.4rem; padding: 1.8rem 0; border-bottom: 1px solid var(--border); transition: padding-left 0.25s; }
-  .pillar:first-child { border-top: 1px solid var(--border); }
-  .pillar:hover { padding-left: 0.5rem; }
-  .pillar-icon { width: 36px; height: 36px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--accent); color: var(--accent); font-size: 1rem; margin-top: 0.2rem; }
-  .pillar h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
-  .pillar p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-
-  .products-section { background: var(--bg); }
-  .products-header { max-width: 1200px; margin: 0 auto 4rem; display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
-  .product-cards { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5px; background: var(--border); border: 1px solid var(--border); }
-  .product-card { background: var(--surface); padding: 3rem; position: relative; overflow: hidden; transition: background 0.3s; }
-  .product-card:hover { background: var(--surface2); }
-  .product-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
-  .product-card:hover::before { opacity: 1; }
-  .product-tag { display: inline-block; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.2rem 0.6rem; margin-bottom: 1rem; }
-  
-  .product-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1; }
-  .product-card p { font-size: 0.92rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.65; }
-  .product-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2.5rem; }
-  .product-features li { font-size: 0.85rem; color: var(--muted); display: flex; align-items: center; gap: 0.7rem; }
-  .product-features li::before { content: ''; width: 14px; height: 1px; background: var(--accent); flex-shrink: 0; }
-  .product-link { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 500; transition: gap 0.2s; }
-  .product-link:hover { gap: 0.9rem; }
-  .product-number { position: absolute; bottom: 2rem; right: 2.5rem; font-family: 'Cormorant Garamond', serif; font-size: 5rem; font-weight: 700; color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.05); line-height: 1; user-select: none; }
-
-  .who-section { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
-  .who-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
-  .who-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
-  .who-item { background: var(--bg); padding: 1.6rem 1.4rem; font-size: 0.88rem; font-weight: 400; color: var(--muted); transition: color 0.2s, background 0.2s; cursor: default; }
-  .who-item:hover { color: var(--text); background: var(--surface2); }
-  .who-item span { display: block; font-size: 1.2rem; margin-bottom: 0.5rem; }
-
-  .cta-banner { background: var(--bg); padding: 7rem 5%; text-align: center; position: relative; overflow: hidden; }
-  .cta-banner::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(0,212,170,0.08) 0%, transparent 70%); pointer-events: none; }
-  .cta-banner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300; margin-bottom: 1.2rem; position: relative; }
-  .cta-banner h2 strong { font-weight: 700; color: var(--accent); }
-  .cta-banner p { color: var(--muted); font-size: 1rem; margin-bottom: 2.8rem; position: relative; }
-  .cta-banner .cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
-
-  footer { border-top: 1px solid var(--border); background: var(--surface); padding: 2.5rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
-  .footer-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); text-decoration: none; } .footer-brand span { color: var(--accent); }
-  .footer-links { display: flex; gap: 2rem; list-style: none; }
-  .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--accent); }
-  .footer-copy { font-size: 0.75rem; color: var(--muted); }
-
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ---- Newsletter signup ---- */
-  .newsletter-section { position: relative; z-index: 1; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 6rem 5%; text-align: center; overflow: hidden; }
-  .newsletter-section::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
-  .newsletter-section::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 560px; height: 280px; background: radial-gradient(ellipse, rgba(0,212,170,0.08) 0%, transparent 70%); pointer-events: none; }
-  .newsletter-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
-  .newsletter-tag { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
-  .newsletter-inner h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; line-height: 1.15; margin-bottom: 1rem; }
-  .newsletter-inner h2 em { font-style: italic; color: var(--accent); }
-  .newsletter-inner > p { color: var(--muted); font-size: 0.95rem; max-width: 460px; margin: 0 auto 2.5rem; }
-  .newsletter-form { display: flex; gap: 0.8rem; max-width: 440px; margin: 0 auto; flex-wrap: wrap; }
-  .newsletter-input { flex: 1; min-width: 200px; background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.9rem 1.1rem; font-family: 'Outfit', sans-serif; font-size: 0.9rem; font-weight: 300; outline: none; transition: border-color 0.2s; }
-  .newsletter-input::placeholder { color: var(--muted); opacity: 0.6; }
-  .newsletter-input:focus { border-color: var(--accent); }
-  .newsletter-btn { background: var(--accent); color: var(--bg); border: none; padding: 0.9rem 2rem; font-family: 'Outfit', sans-serif; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: opacity 0.2s, transform 0.2s; }
-  .newsletter-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-  .newsletter-success { display: none; max-width: 440px; margin: 0 auto; background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.3); color: var(--accent); padding: 1rem 1.5rem; font-size: 0.9rem; }
-  .newsletter-note { font-size: 0.78rem; color: var(--muted); margin-top: 1.2rem; }
-  .newsletter-note a { color: var(--accent); text-decoration: none; }
-  .newsletter-note a:hover { text-decoration: underline; }
-  .newsletter-powered { font-size: 0.72rem; margin-top: 0.5rem; }
-  .newsletter-powered a { color: var(--muted); text-decoration: none; opacity: 0.65; transition: color 0.2s, opacity 0.2s; }
-  .newsletter-powered a:hover { color: var(--accent); opacity: 1; }
-  @media (max-width: 520px) { .newsletter-form { flex-direction: column; } .newsletter-btn { width: 100%; } }
-
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .philosophy-grid, .product-cards, .who-grid { grid-template-columns: 1fr; }
-    .who-list, .stats-strip { grid-template-columns: 1fr 1fr; }
-    .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
-    .stat-item:last-child { border-bottom: none; }
-    footer { flex-direction: column; align-items: flex-start; }
-    .product-card { padding: 2rem; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0A111E;--bg-top:#0E1A2C;--surface:#0F1B2D;--surface-2:#15243A;
+    --line:rgba(255,255,255,0.09);--line-soft:rgba(255,255,255,0.055);
+    --text:#EAF0F8;--muted:#8B98AD;--faint:#74829A;
+    --gold:#D4A84A;--gold-2:#E8C56E;--green:#34D399;--green-2:#5FE3B4;--ink:#0A111E;
+    --radius:16px;--shadow:0 30px 80px -30px rgba(0,0,0,0.75);--maxw:1180px;
+    --sans:-apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:"Cormorant Garamond",Georgia,serif;
   }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-weight:400;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  body::before{content:'';position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(70% 55% at 80% -2%,rgba(212,168,74,0.10),transparent 55%),
+    radial-gradient(60% 50% at -5% 10%,rgba(52,211,153,0.07),transparent 55%),
+    linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 38%,var(--bg) 100%)}
+  body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.22;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 6%}
+  a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
+  .sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 6%;border-bottom:1px solid var(--line-soft);background:rgba(10,17,30,0.72);backdrop-filter:blur(18px) saturate(140%)}
+  .nav-logo{font-weight:700;font-size:1.15rem;letter-spacing:-0.01em}.nav-logo span{color:var(--green)}
+  .nav-links{display:flex;gap:2.2rem;list-style:none}
+  .nav-links a{color:var(--muted);font-size:.82rem;font-weight:500;transition:color .2s}
+  .nav-links a:hover{color:var(--text)}
+  .nav-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--green);color:var(--ink);padding:.55rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;transition:transform .2s,box-shadow .2s}
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px -10px rgba(52,211,153,.6)}
+  .nav-cta svg{width:15px;height:15px}
+
+  .eyebrow{display:inline-flex;align-items:center;gap:.7rem;font-size:.72rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:1.3rem}
+  .eyebrow::before{content:'';width:26px;height:1px;background:var(--gold);opacity:.8}
+  h1,h2,h3{letter-spacing:-0.02em;line-height:1.05;font-weight:700}
+  .btn{display:inline-flex;align-items:center;gap:.6rem;border-radius:11px;font-weight:700;font-size:.92rem;padding:.95rem 1.7rem;transition:transform .2s,box-shadow .2s,border-color .2s,color .2s;cursor:pointer;border:1px solid transparent}
+  .btn svg{width:18px;height:18px}
+  .btn-green{background:var(--green);color:var(--ink)}
+  .btn-green:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px rgba(52,211,153,.65)}
+  .btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold-2)}
+
+  /* hero */
+  .hero{position:relative;padding:170px 0 80px}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:4rem;align-items:center}
+  .hero h1{font-size:clamp(2.5rem,4.6vw,4rem);font-weight:800}
+  .hero h1 .g{color:var(--gold-2)}
+  .hero-sub{color:var(--muted);font-size:1.1rem;max-width:30rem;margin:1.6rem 0 2.2rem}
+  .hero-actions{display:flex;gap:.9rem;flex-wrap:wrap}
+  .hero-proof{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap;margin-top:2.3rem;font-size:.82rem;color:var(--faint);font-weight:500}
+  .hero-proof b{color:var(--muted);font-weight:600}.hero-proof .dot{width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:.7}
+  .shots{position:relative}
+  .shots .shot{border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--surface)}
+  .shots::before{content:'';position:absolute;inset:-12% -8%;z-index:-1;background:radial-gradient(60% 60% at 60% 40%,rgba(212,168,74,.16),transparent 70%),radial-gradient(55% 55% at 20% 80%,rgba(52,211,153,.14),transparent 70%);filter:blur(8px)}
+  .fade{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.32s}
+  @keyframes rise{to{opacity:1;transform:none}}
+
+  /* philosophy */
+  .sec{padding:6rem 0}
+  .philosophy{border-top:1px solid var(--line-soft)}
+  .phil-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:4.5rem;align-items:start}
+  .sec-head h2{font-size:clamp(1.9rem,3.3vw,2.7rem)}
+  .sec-head h2 .g{color:var(--gold-2)}
+  .sec-head p{color:var(--muted);margin-top:1rem;font-size:1.02rem;max-width:34rem}
+  .pillars{display:flex;flex-direction:column;gap:.4rem}
+  .pillar{display:flex;gap:1.1rem;padding:1.4rem 0;border-bottom:1px solid var(--line-soft)}
+  .pillar:first-child{border-top:1px solid var(--line-soft)}
+  .pillar-ic{flex-shrink:0;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,rgba(212,168,74,.16),rgba(212,168,74,.05));border:1px solid rgba(212,168,74,.25)}
+  .pillar-ic svg{width:20px;height:20px;color:var(--gold-2)}
+  .pillar.green .pillar-ic{background:linear-gradient(145deg,rgba(52,211,153,.16),rgba(52,211,153,.05));border-color:rgba(52,211,153,.28)}
+  .pillar.green .pillar-ic svg{color:var(--green-2)}
+  .pillar h4{font-size:1rem;font-weight:600;margin-bottom:.25rem}
+  .pillar p{font-size:.9rem;color:var(--muted);line-height:1.6}
+
+  /* showcase */
+  .showcase{border-top:1px solid var(--line-soft);position:relative}
+  .show-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:4rem;align-items:center}
+  .show-media{position:relative}
+  .show-media img{border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .show-media::before{content:'';position:absolute;inset:-10% -6%;z-index:-1;background:radial-gradient(55% 55% at 50% 50%,rgba(52,211,153,.13),transparent 70%);filter:blur(6px)}
+  .badge{display:inline-block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);border:1px solid rgba(212,168,74,.4);border-radius:5px;padding:.25rem .65rem;margin-bottom:1.1rem}
+  .show-copy h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-bottom:1rem}
+  .show-copy > p{color:var(--muted);font-size:1.03rem;max-width:33rem;margin-bottom:1.6rem}
+  .flist{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
+  .flist li{display:flex;align-items:flex-start;gap:.7rem;font-size:.94rem;color:var(--text)}
+  .flist svg{width:16px;height:16px;color:var(--green-2);flex-shrink:0;margin-top:.25rem}
+
+  /* who */
+  .who{border-top:1px solid var(--line-soft)}
+  .who-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:4.5rem;align-items:center}
+  .roles{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line-soft);border:1px solid var(--line-soft);border-radius:var(--radius);overflow:hidden}
+  .role{background:var(--surface);padding:1.3rem 1.3rem;display:flex;align-items:center;gap:.8rem;font-size:.9rem;color:var(--muted);transition:background .2s,color .2s}
+  .role:hover{background:var(--surface-2);color:var(--text)}
+  .role svg{width:17px;height:17px;color:var(--gold-2);flex-shrink:0}
+
+  /* cta banner */
+  .ctab{border-top:1px solid var(--line-soft);text-align:center;position:relative}
+  .ctab::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:560px;height:280px;background:radial-gradient(ellipse,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
+  .ctab h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:800;position:relative}
+  .ctab h2 .g{color:var(--green-2)}
+  .ctab p{color:var(--muted);margin:1rem auto 2.2rem;max-width:32rem;position:relative}
+  .ctab .hero-actions{justify-content:center;position:relative}
+
+  /* newsletter */
+  .news{border-top:1px solid var(--line-soft);text-align:center;padding:5rem 0}
+  .news-inner{max-width:560px;margin:0 auto}
+  .news h2{font-size:clamp(1.6rem,2.6vw,2.1rem);font-weight:700}.news h2 .g{color:var(--gold-2)}
+  .news-inner>p{color:var(--muted);font-size:.95rem;margin:.9rem auto 1.8rem;max-width:30rem}
+  .news-form{display:flex;gap:.7rem;max-width:430px;margin:0 auto;flex-wrap:wrap}
+  .news-form input{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--line);color:var(--text);padding:.85rem 1rem;border-radius:10px;font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s}
+  .news-form input:focus{border-color:var(--green)}
+  .news-form button{background:var(--green);color:var(--ink);border:none;padding:.85rem 1.5rem;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;transition:transform .2s}
+  .news-form button:hover{transform:translateY(-1px)}
+  .news-note{font-size:.76rem;color:var(--faint);margin-top:1rem}.news-note a{color:var(--gold-2)}
+  .news-powered{font-size:.72rem;margin-top:.5rem}.news-powered a{color:var(--faint)}
+  .news-success{display:none;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.3);color:var(--green-2);padding:.9rem 1.3rem;border-radius:10px;font-size:.9rem;max-width:430px;margin:0 auto}
+
+  footer{border-top:1px solid var(--line-soft);padding:2.6rem 0;margin-top:1rem}
+  .foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+  .foot-brand{font-weight:700;font-size:1.05rem}.foot-brand span{color:var(--green)}
+  .foot-links{display:flex;gap:1.8rem;list-style:none;flex-wrap:wrap}
+  .foot-links a{font-size:.78rem;color:var(--muted);transition:color .2s}.foot-links a:hover{color:var(--gold-2)}
+  .foot-social{display:flex;gap:1.1rem}
+  .foot-social a{font-size:.76rem;color:var(--faint);transition:color .2s}.foot-social a:hover{color:var(--green-2)}
+  .foot-copy{font-size:.74rem;color:var(--faint)}
+
+  :focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
+
+  @media (max-width:900px){
+    .nav-links{display:none}
+    .hero-grid,.phil-grid,.show-grid,.who-grid{grid-template-columns:1fr;gap:2.6rem}
+    .hero{padding:130px 0 50px}
+    .roles{grid-template-columns:1fr}
+    .foot{flex-direction:column;align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fade{animation:none;opacity:1;transform:none}*{transition:none!important}}
 </style>
 </head>
 <body>
 
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-apple" viewBox="0 0 24 24"><path fill="currentColor" d="M17.05 12.04c-.03-2.42 1.98-3.58 2.07-3.64-1.13-1.65-2.89-1.88-3.51-1.9-1.49-.15-2.91.88-3.67.88-.76 0-1.93-.86-3.17-.84-1.63.02-3.14.95-3.98 2.41-1.7 2.95-.43 7.3 1.21 9.69.8 1.17 1.76 2.48 3.01 2.43 1.21-.05 1.67-.78 3.13-.78 1.46 0 1.87.78 3.15.76 1.3-.02 2.12-1.19 2.91-2.36.92-1.35 1.3-2.66 1.32-2.73-.03-.01-2.53-.97-2.56-3.85zM14.62 5.39c.67-.81 1.12-1.94.99-3.06-.96.04-2.13.64-2.82 1.45-.62.72-1.16 1.87-1.02 2.97 1.07.08 2.17-.55 2.85-1.36z"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8" fill="currentColor"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 3 3 7-7"/><path d="M15 7h4v4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M8 12.2l2.6 2.6L16.5 9"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 19.5c.7-3 3.3-4.6 6.5-4.6s5.8 1.6 6.5 4.6"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 8h4M8 12h8M8 16h6"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 21V4M6 4h11l-2 3.5L17 11H6"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 21h10M5 7h14M5 7l-2.2 5a2.6 2.6 0 0 0 4.4 0L9 7M19 7l-2.2 5a2.6 2.6 0 0 0 4.4 0L23 7"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15c-1 1-1.5 4-1.5 4s3-.5 4-1.5M14.5 4.5C18 4 20 6 19.5 9.5c-.4 2.7-3 6-7 9l-3-3c3-4 6.3-6.6 9-7z"/><circle cx="14.5" cy="9.5" r="1.6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+</svg>
+
 <nav>
-  <a href="index.html" class="nav-logo">Guardian<span>.</span></a>
+  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
   <ul class="nav-links">
-    <li><a href="products.html">Products</a></li>
+    <li><a href="decisio.html">The App</a></li>
     <li><a href="#philosophy">Philosophy</a></li>
-    <li><a href="#who">Who We Serve</a></li>
+    <li><a href="#who">Who It's For</a></li>
     <li><a href="contact.html">Contact</a></li>
   </ul>
-  <a href="products.html" class="nav-cta">Explore Apps</a>
+  <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="nav-cta"><svg><use href="#i-apple"/></svg>Download</a>
 </nav>
 
-<section class="hero">
-  <div class="hero-ghost">AI</div>
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Guardian Apps LLC</div>
-    <h1>AI That Solves<br><em>Real Problems.</em><br>Not New Ones.</h1>
-    <p class="hero-desc">Purpose-built mobile intelligence for the professionals who run meetings, lead teams, and make decisions that matter. Privacy-first. No bots. No noise.</p>
-    <div class="hero-actions">
-      <a href="products.html" class="btn-primary">See Our Apps</a>
-      <a href="#philosophy" class="btn-ghost">Our Philosophy</a>
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow fade d1">Guardian.Apps · iOS</div>
+      <h1 class="fade d1">AI that solves real problems.<br><span class="g">Not new ones.</span></h1>
+      <p class="hero-sub fade d2">We build one thing, and build it well: DECISIO.ai — a private instrument for the people who run meetings, lead teams, and own the decisions that follow. Privacy-first. No bots. No noise.</p>
+      <div class="hero-actions fade d2">
+        <a href="decisio.html" class="btn btn-green">See the app <svg><use href="#i-arrow"/></svg></a>
+        <a href="#philosophy" class="btn btn-ghost">Our philosophy</a>
+      </div>
+      <div class="hero-proof fade d3">
+        <span><b>On-device by design</b></span><span class="dot"></span>
+        <span><b>No meeting bots</b></span><span class="dot"></span>
+        <span><b>iPhone &amp; iPad</b></span>
+      </div>
+    </div>
+    <div class="shots fade d3">
+      <img class="shot" src="assets/decisio-today.png" alt="DECISIO.ai daily dashboard on iPad — today's brief, open and overdue actions, and decisions at a glance" width="1320" height="878" loading="eager">
+    </div>
+  </div>
+</header>
+
+<section class="sec philosophy" id="philosophy">
+  <div class="wrap phil-grid">
+    <div class="sec-head">
+      <div class="eyebrow">Our philosophy</div>
+      <h2>Built for <span class="g">clarity,</span><br>not complexity.</h2>
+      <p>A family-built technology company focused on practical innovation over hype. Every feature is designed around a real workflow — not demo-room theatrics.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar green"><div class="pillar-ic"><svg><use href="#i-shield"/></svg></div><div><h4>Privacy-first architecture</h4><p>Your audio and voice never leave your device. Only the text needed for AI analysis is ever sent — never your recordings. You own your conversations.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-bolt"/></svg></div><div><h4>Purpose-built AI</h4><p>Every feature solves a specific professional problem — not a hypothetical use case cooked up in a boardroom.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-target"/></svg></div><div><h4>Zero training required</h4><p>Clean, intuitive experiences that fit naturally into your day. If it needs a manual, we didn't do our job.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-trend"/></svg></div><div><h4>Driven by real users</h4><p>Continuous improvement based on how professionals actually work — not engagement metrics or investor demos.</p></div></div>
     </div>
   </div>
 </section>
 
-<div class="stats-strip">
-  <div class="stat-item"><span class="stat-num">100%</span><span class="stat-label">On-Device Privacy</span></div>
-  <div class="stat-item"><span class="stat-num">Zero</span><span class="stat-label">Meeting Bots Required</span></div>
-  <div class="stat-item"><span class="stat-num">iOS</span><span class="stat-label">iPhone &amp; iPad</span></div>
-</div>
-
-<section class="philosophy" id="philosophy">
-  <div class="philosophy-grid">
-    <div>
-      <div class="section-tag">Our Philosophy</div>
-      <h2 class="section-heading">Built for <strong>clarity,</strong><br>not complexity.</h2>
-      <p class="section-sub">As a family-based technology company, Guardian Apps LLC focuses on practical innovation over hype. Every app is designed around real workflows — not demo room theatrics.</p>
-    </div>
-    <div>
-      <div class="pillar"><div class="pillar-icon">🔒</div><div><h4>Privacy-First Architecture</h4><p>No audio ever leaves your device. No cloud uploads. No surveillance-as-a-service. You own your conversations.</p></div></div>
-      <div class="pillar"><div class="pillar-icon">⚡</div><div><h4>Purpose-Built AI</h4><p>Every feature solves a specific professional problem — not a hypothetical use case cooked up in a boardroom.</p></div></div>
-      <div class="pillar"><div class="pillar-icon">🎯</div><div><h4>Zero Training Required</h4><p>Clean, intuitive experiences that fit naturally into your day. If it needs a manual, we didn't do our job.</p></div></div>
-      <div class="pillar"><div class="pillar-icon">📈</div><div><h4>Driven by Real Users</h4><p>Continuous improvement based on how professionals actually work — not engagement metrics or investor demos.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<section class="products-section" id="products">
-  <div class="products-header">
-    <div>
-      <div class="section-tag">Our Products</div>
-      <h2 class="section-heading">Apps Built for<br><strong>Real-World Work.</strong></h2>
-    </div>
-    <p class="section-sub" style="max-width:340px; text-align:right;">From the boardroom to the back office — Guardian delivers AI that works where you do.</p>
-  </div>
-  <div class="product-cards" style="grid-template-columns:1fr;">
-    <div class="product-card">
-      <div class="product-tag">Meeting Intelligence</div>
-      
-      <h3>DECISIO.ai</h3>
-      <p>The privacy-first meeting intelligence app that transforms every conversation into structured decisions, tracked actions, and executive-ready briefs — entirely on your device.</p>
-      <ul class="product-features">
-        <li>On-device recording — audio never uploaded</li>
-        <li>No meeting bots or third-party access</li>
-        <li>Action Register with owner assignment</li>
-        <li>Automated Weekly Executive Briefs</li>
-        <li>Works on iOS without cloud dependency</li>
+<section class="sec showcase" id="products">
+  <div class="wrap show-grid">
+    <div class="show-media"><img src="assets/decisio-decision-log.png" alt="DECISIO.ai Decision Log — every decision captured with its status and the meeting it came from" width="1320" height="878" loading="lazy"></div>
+    <div class="show-copy">
+      <div class="badge">Decision &amp; Follow-Through · iOS</div>
+      <h2>DECISIO.ai</h2>
+      <p>The privacy-first app that turns every meeting into structured decisions, tracked actions, and executive-ready briefs. Audio stays on your device; cloud AI runs on your own keys. No bots. No compromise.</p>
+      <ul class="flist">
+        <li><svg><use href="#i-check"/></svg>One-tap capture — audio never leaves your device</li>
+        <li><svg><use href="#i-check"/></svg>No meeting bots or third-party access</li>
+        <li><svg><use href="#i-check"/></svg>Action Register — every action gets an owner</li>
+        <li><svg><use href="#i-check"/></svg>Weekly Brief surfaces what's overdue, before anyone asks</li>
+        <li><svg><use href="#i-check"/></svg>Your instrument alone — no team rollout required</li>
       </ul>
-      <a href="decisio.html" class="product-link">Learn More →</a>
-      <div class="product-number">01</div>
+      <div class="hero-actions">
+        <a href="decisio.html" class="btn btn-green">Explore the app <svg><use href="#i-arrow"/></svg></a>
+        <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>App Store</a>
+      </div>
     </div>
   </div>
 </section>
 
-<section class="who-section" id="who">
-  <div class="who-grid">
-    <div>
-      <div class="section-tag">Who We Serve</div>
-      <h2 class="section-heading">If your work involves<br><strong>decisions,</strong> we're for you.</h2>
-      <p class="section-sub" style="margin-bottom: 2rem;">Wherever decisions get made — Guardian delivers AI that works where professionals work.</p>
-      <a href="products.html" class="btn-primary">Find Your App</a>
+<section class="sec who" id="who">
+  <div class="wrap who-grid">
+    <div class="sec-head">
+      <div class="eyebrow">Who it's for</div>
+      <h2>If your work involves <span class="g">decisions,</span><br>it's for you.</h2>
+      <p>Wherever decisions get made and have to be followed through — DECISIO.ai works the way leaders actually work.</p>
     </div>
-    <div class="who-list">
-      <div class="who-item"><span>🏢</span>Business Leaders & Executives</div>
-      <div class="who-item"><span>📋</span>Project & Team Managers</div>
-      <div class="who-item"><span>🤝</span>Consultants &amp; Advisors</div>
-      <div class="who-item"><span>🚀</span>Entrepreneurs & Founders</div>
-      <div class="who-item"><span>⚖️</span>Compliance Professionals</div>
-      <div class="who-item"><span>🏗️</span>Small Business Owners</div>
+    <div class="roles">
+      <div class="role"><svg><use href="#i-board"/></svg>Business leaders &amp; executives</div>
+      <div class="role"><svg><use href="#i-flag"/></svg>Project &amp; team managers</div>
+      <div class="role"><svg><use href="#i-user"/></svg>Consultants &amp; advisors</div>
+      <div class="role"><svg><use href="#i-rocket"/></svg>Entrepreneurs &amp; founders</div>
+      <div class="role"><svg><use href="#i-scale"/></svg>Compliance professionals</div>
+      <div class="role"><svg><use href="#i-trend"/></svg>Small business owners</div>
     </div>
   </div>
 </section>
 
-<section class="cta-banner">
-  <h2>Less time managing.<br><strong>More time leading.</strong></h2>
-  <p>Explore apps built with one goal — to give you your time back.</p>
-  <div class="cta-actions">
-    <a href="products.html" class="btn-primary">View All Products</a>
-    <a href="contact.html" class="btn-ghost">Get In Touch</a>
+<section class="sec ctab">
+  <div class="wrap">
+    <h2>Less time managing.<br><span class="g">More time leading.</span></h2>
+    <p>One app, built with a single goal — to give you your time back, and your decisions a place to live.</p>
+    <div class="hero-actions">
+      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-green"><svg><use href="#i-apple"/></svg>Download on the App Store</a>
+      <a href="contact.html" class="btn btn-ghost">Get in touch</a>
+    </div>
   </div>
 </section>
 
-<section class="newsletter-section">
-  <div class="newsletter-inner">
-    <div class="newsletter-tag">Stay In The Loop</div>
-    <h2>Decisions, <em>delivered.</em></h2>
+<section class="news">
+  <div class="wrap news-inner">
+    <div class="eyebrow" style="justify-content:center">Stay in the loop</div>
+    <h2>Decisions, <span class="g">delivered.</span></h2>
     <p>Product updates, new features, and the occasional note on building privacy-first tools. No spam, no noise — unsubscribe anytime.</p>
-    <iframe name="bd-iframe" title="newsletter" style="display:none;"></iframe>
-    <form id="newsletterForm" class="newsletter-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
-      <input type="email" name="email" class="newsletter-input" placeholder="you@example.com" aria-label="Email address" required>
+    <iframe name="bd-iframe" title="newsletter" style="display:none"></iframe>
+    <form id="newsletterForm" class="news-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
+      <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
       <input type="hidden" name="embed" value="1">
-      <button type="submit" class="newsletter-btn">Subscribe</button>
+      <button type="submit">Subscribe</button>
     </form>
-    <div class="newsletter-success" id="newsletterSuccess">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
-    <p class="newsletter-note">Double opt-in — we'll only email you the newsletter. See our <a href="privacy.html">Privacy Policy</a>.</p>
-    <p class="newsletter-powered"><a href="https://buttondown.com/refer/MyGuardianApps" target="_blank" rel="noopener">Powered by Buttondown</a></p>
+    <div class="news-success" id="newsletterSuccess">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
+    <p class="news-note">Double opt-in — we'll only email you the newsletter. See our <a href="privacy.html">Privacy Policy</a>.</p>
+    <p class="news-powered"><a href="https://buttondown.com/refer/MyGuardianApps" target="_blank" rel="noopener">Powered by Buttondown</a></p>
   </div>
 </section>
-<script>
-  (function () {
-    var form = document.getElementById('newsletterForm');
-    if (!form) return;
-    form.addEventListener('submit', function () {
-      var input = form.querySelector('input[name="email"]');
-      if (!input.value) return;
-      setTimeout(function () {
-        form.style.display = 'none';
-        document.getElementById('newsletterSuccess').style.display = 'block';
-      }, 400);
-    });
-  })();
-</script>
 
 <footer>
-  <a href="index.html" class="footer-brand">Guardian<span>.</span> Apps LLC</a>
-  <ul class="footer-links">
-    <li><a href="decisio.html">DECISIO.ai</a></li>    <li><a href="privacy.html">Privacy Policy</a></li>
-    <li><a href="terms.html">Terms</a></li>
-  </ul>
-  <span class="footer-copy">© 2025 Guardian Apps LLC</span>
+  <div class="wrap foot">
+    <a href="index.html" class="foot-brand">Guardian<span>.</span>Apps LLC</a>
+    <ul class="foot-links">
+      <li><a href="decisio.html">DECISIO.ai</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="foot-social">
+      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+    </div>
+    <span class="foot-copy">© 2025–2026 Guardian Apps LLC</span>
+  </div>
 </footer>
+
+<script>
+  (function(){var form=document.getElementById('newsletterForm');if(!form)return;
+   form.addEventListener('submit',function(){var i=form.querySelector('input[name="email"]');if(!i.value)return;
+   setTimeout(function(){form.style.display='none';document.getElementById('newsletterSuccess').style.display='block';},400);});})();
+</script>
 </body>
 </html>
