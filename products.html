@@ -55,13 +55,13 @@
   .page-hero p{color:var(--muted);font-size:1.08rem;max-width:38rem;margin-top:1.3rem}
 
   .showcase{padding:3rem 0 5rem}
-  .show-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:4rem;align-items:center}
-  .show-media{position:relative}
-  .show-media img{border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
-  .show-media::before{content:'';position:absolute;inset:-10% -6%;z-index:-1;background:radial-gradient(55% 55% at 50% 50%,rgba(52,211,153,.13),transparent 70%),radial-gradient(50% 50% at 80% 20%,rgba(212,168,74,.12),transparent 70%);filter:blur(7px)}
+  .show-copy{max-width:44rem;margin-bottom:2.8rem}
+  .stage{position:relative;margin:0 auto}
+  .stage img{width:100%;display:block;border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
+  .stage::before{content:'';position:absolute;inset:-7% -6% -10%;z-index:-1;background:radial-gradient(60% 60% at 50% 40%,rgba(52,211,153,.12),transparent 70%),radial-gradient(50% 50% at 82% 18%,rgba(212,168,74,.1),transparent 70%);filter:blur(9px)}
   .badge{display:inline-block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-2);border:1px solid rgba(212,168,74,.4);border-radius:5px;padding:.25rem .65rem;margin-bottom:1.1rem}
   .show-copy h2{font-size:clamp(2rem,3.6vw,2.8rem);font-weight:800;margin-bottom:1rem}
-  .show-copy>p{color:var(--muted);font-size:1.03rem;max-width:33rem;margin-bottom:1.6rem}
+  .show-copy>p{color:var(--muted);font-size:1.03rem;max-width:38rem;margin-bottom:1.6rem}
   .flist{list-style:none;display:flex;flex-direction:column;gap:.7rem;margin-bottom:2rem}
   .flist li{display:flex;align-items:flex-start;gap:.7rem;font-size:.94rem;color:var(--text)}
   .flist svg{width:16px;height:16px;color:var(--green-2);flex-shrink:0;margin-top:.25rem}
@@ -73,11 +73,8 @@
   .gallery-head h2 .g{color:var(--gold-2)}
   .gallery-head p{color:var(--muted);margin-top:.8rem}
   .grows{display:flex;flex-direction:column}
-  .grow{display:grid;grid-template-columns:1.12fr .88fr;gap:4rem;align-items:center;padding:3.8rem 0;border-top:1px solid var(--line-soft)}
-  .grow:nth-child(even) .grow-media{order:2}
-  .grow-media{position:relative}
-  .grow-media img{width:100%;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
-  .grow-media::before{content:'';position:absolute;inset:-9% -6%;z-index:-1;background:radial-gradient(55% 55% at 50% 50%,rgba(212,168,74,.12),transparent 70%),radial-gradient(50% 50% at 80% 25%,rgba(52,211,153,.1),transparent 70%);filter:blur(7px)}
+  .grow{padding:4.2rem 0;border-top:1px solid var(--line-soft)}
+  .grow-copy{max-width:44rem;margin-bottom:2.4rem}
   .gtag{display:inline-flex;align-items:center;gap:.55rem;font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-2);margin-bottom:.9rem}
   .gtag svg{width:16px;height:16px}
   .grow-copy h3{font-size:clamp(1.4rem,2.4vw,1.95rem);font-weight:700;margin-bottom:.7rem}
@@ -103,10 +100,7 @@
 
   @media (max-width:900px){
     .nav-links{display:none}
-    .show-grid{grid-template-columns:1fr;gap:2.6rem}
-    .grow{grid-template-columns:1fr;gap:2.2rem}
-    .grow:nth-child(even) .grow-media{order:0}
-    .page-hero{padding:130px 0 40px}
+    .page-hero{padding:120px 0 30px}
     .foot{flex-direction:column;align-items:flex-start}
   }
 </style>
@@ -142,8 +136,7 @@
 </header>
 
 <section class="showcase">
-  <div class="wrap show-grid">
-    <div class="show-media"><img src="assets/decisio-action-register.png" alt="DECISIO.ai Action Register — every action with an owner, due date, and status" width="1320" height="878" loading="eager"></div>
+  <div class="wrap">
     <div class="show-copy">
       <div class="badge">Decision &amp; Follow-Through · iOS</div>
       <h2>DECISIO.ai</h2>
@@ -161,6 +154,7 @@
         <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>App Store</a>
       </div>
     </div>
+    <div class="show-media stage"><img src="assets/decisio-action-register.png" alt="DECISIO.ai Action Register — every action with an owner, due date, and status" width="1320" height="878" loading="eager"></div>
   </div>
 </section>
 
@@ -173,28 +167,28 @@
     </div>
     <div class="grows">
       <div class="grow">
-        <div class="grow-media"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep screen with an auto-built agenda of decisions, updates, and risks" width="1320" height="878" loading="lazy"></div>
         <div class="grow-copy">
           <div class="gtag"><svg><use href="#i-card"/></svg>Meeting Prep</div>
           <h3>Walk in with the agenda already built.</h3>
           <p>Plan around the person and DECISIO assembles your open items, decisions to make, and risks from past sessions — then lets you email it or drop it on the calendar.</p>
         </div>
+        <div class="grow-media stage"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep screen with an auto-built agenda of decisions, updates, and risks" width="1320" height="878" loading="lazy"></div>
       </div>
       <div class="grow">
-        <div class="grow-media"><img src="assets/decisio-ask-my-work.png" alt="Ask My Work — natural-language search across every meeting, decision, and action" width="1320" height="878" loading="lazy"></div>
         <div class="grow-copy">
           <div class="gtag"><svg><use href="#i-search"/></svg>Ask My Work</div>
           <h3>Question months of work in plain English.</h3>
           <p>Search across every meeting, decision, and action — or just ask. "What are my overdue items?" "What did we decide last week?" Real answers, instantly.</p>
         </div>
+        <div class="grow-media stage"><img src="assets/decisio-ask-my-work.png" alt="Ask My Work — natural-language search across every meeting, decision, and action" width="1320" height="878" loading="lazy"></div>
       </div>
       <div class="grow">
-        <div class="grow-media"><img src="assets/decisio-weekly-brief.png" alt="Weekly Brief — the Monday look-back with overdue items and momentum" width="1320" height="878" loading="lazy"></div>
         <div class="grow-copy">
           <div class="gtag"><svg><use href="#i-book"/></svg>Weekly Brief</div>
           <h3>Every Monday, know exactly where things stand.</h3>
           <p>A look-back on decisions made, commitments kept, what's overdue, and your momentum for the week — so nothing slips before anyone has to ask.</p>
         </div>
+        <div class="grow-media stage"><img src="assets/decisio-weekly-brief.png" alt="Weekly Brief — the Monday look-back with overdue items and momentum" width="1320" height="878" loading="lazy"></div>
       </div>
     </div>
   </div>
