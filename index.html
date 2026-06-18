@@ -64,6 +64,27 @@
   .stage img{width:100%;display:block;border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05)}
   .stage::before{content:'';position:absolute;inset:-7% -6% -10%;z-index:-1;background:radial-gradient(60% 60% at 50% 35%,rgba(212,168,74,.13),transparent 70%),radial-gradient(55% 55% at 22% 92%,rgba(52,211,153,.11),transparent 70%);filter:blur(10px)}
   .hero-stage{margin-top:3.4rem}
+
+  /* Device frames */
+  .dev-glow{position:relative}
+  .dev-glow::before{content:'';position:absolute;inset:-12% -18%;z-index:-1;background:radial-gradient(50% 50% at 70% 28%,rgba(212,168,74,.16),transparent 70%),radial-gradient(55% 55% at 22% 88%,rgba(52,211,153,.14),transparent 70%);filter:blur(20px)}
+  .phone{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:42px;padding:9px;border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 70px -34px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.55)}
+  .phone-screen{position:relative;border-radius:34px;overflow:hidden;aspect-ratio:1242/2688;background:#0A111E}
+  .phone-screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:35%;height:19px;background:#090d12;border-radius:0 0 13px 13px;z-index:3}
+  .phone-notch::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:32%;height:4px;border-radius:3px;background:rgba(255,255,255,.12)}
+  .tablet{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:24px;padding:13px;border:1px solid rgba(255,255,255,.10);box-shadow:0 44px 80px -38px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
+  .tablet-screen{position:relative;border-radius:11px;overflow:hidden;aspect-ratio:2360/1640;background:#0A111E}
+  .tablet-screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:3.4rem;align-items:center}
+  .hero-phone{width:300px;max-width:78vw;justify-self:center}
+  .hero .hero-copy{max-width:37rem}
+  .media-tablet{width:100%;max-width:900px;margin:2.8rem auto 0}
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:2.4rem}
+    .hero-phone{width:244px}
+    .hero .hero-copy{max-width:none}
+  }
   .fade{opacity:0;transform:translateY(20px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
   .d1{animation-delay:.05s}.d2{animation-delay:.18s}.d3{animation-delay:.32s}
   @keyframes rise{to{opacity:1;transform:none}}
@@ -179,22 +200,27 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="hero-copy">
-      <div class="eyebrow fade d1">Guardian.Apps · iOS</div>
-      <h1 class="fade d1">AI that solves real problems.<br><span class="g">Not new ones.</span></h1>
-      <p class="hero-sub fade d2">We build one thing, and build it well: DECISIO.ai — a private instrument for the people who run meetings, lead teams, and own the decisions that follow. Privacy-first. No bots. No noise.</p>
-      <div class="hero-actions fade d2">
-        <a href="decisio.html" class="btn btn-green">See the app <svg><use href="#i-arrow"/></svg></a>
-        <a href="#philosophy" class="btn btn-ghost">Our philosophy</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow fade d1">Guardian.Apps · iOS</div>
+        <h1 class="fade d1">AI that solves real problems.<br><span class="g">Not new ones.</span></h1>
+        <p class="hero-sub fade d2">We build one thing, and build it well: DECISIO.ai — a private instrument for the people who run meetings, lead teams, and own the decisions that follow. Privacy-first. No bots. No noise.</p>
+        <div class="hero-actions fade d2">
+          <a href="decisio.html" class="btn btn-green">See the app <svg><use href="#i-arrow"/></svg></a>
+          <a href="#philosophy" class="btn btn-ghost">Our philosophy</a>
+        </div>
+        <div class="hero-proof fade d3">
+          <span><b>On-device by design</b></span><span class="dot"></span>
+          <span><b>No meeting bots</b></span><span class="dot"></span>
+          <span><b>iPhone &amp; iPad</b></span>
+        </div>
       </div>
-      <div class="hero-proof fade d3">
-        <span><b>On-device by design</b></span><span class="dot"></span>
-        <span><b>No meeting bots</b></span><span class="dot"></span>
-        <span><b>iPhone &amp; iPad</b></span>
+      <div class="hero-phone fade d3">
+        <div class="phone dev-glow">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><img src="assets/ph-actions.webp" alt="DECISIO.ai Action Register on iPhone — open actions with owners, due dates, and status" width="900" height="1948" loading="eager"></div>
+        </div>
       </div>
-    </div>
-    <div class="stage hero-stage fade d3">
-      <img src="assets/decisio-today.png" alt="DECISIO.ai daily dashboard on iPad — today's brief, open and overdue actions, and decisions at a glance" width="1320" height="878" loading="eager">
     </div>
   </div>
 </header>
@@ -233,7 +259,7 @@
         <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>App Store</a>
       </div>
     </div>
-    <div class="show-media stage"><img src="assets/decisio-decision-log.png" alt="DECISIO.ai Decision Log — every decision captured with its status and the meeting it came from" width="1320" height="878" loading="lazy"></div>
+    <div class="media-tablet dev-glow"><div class="tablet"><div class="tablet-screen"><img src="assets/ipad-today.webp" alt="DECISIO.ai on iPad — the Today command center: the brief, today's meetings, open and overdue actions, and recent decisions" width="2000" height="1390" loading="lazy"></div></div></div>
   </div>
 </section>
 

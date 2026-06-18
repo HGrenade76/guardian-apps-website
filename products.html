@@ -80,6 +80,39 @@
   .grow-copy h3{font-size:clamp(1.4rem,2.4vw,1.95rem);font-weight:700;margin-bottom:.7rem}
   .grow-copy p{color:var(--muted);font-size:1.01rem;max-width:30rem}
 
+  /* Device frames */
+  .dev-glow{position:relative}
+  .dev-glow::before{content:'';position:absolute;inset:-12% -18%;z-index:-1;background:radial-gradient(50% 50% at 70% 28%,rgba(212,168,74,.16),transparent 70%),radial-gradient(55% 55% at 22% 88%,rgba(52,211,153,.14),transparent 70%);filter:blur(20px)}
+  .phone{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:42px;padding:9px;border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 70px -34px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.55)}
+  .phone-screen{position:relative;border-radius:34px;overflow:hidden;aspect-ratio:1242/2688;background:#0A111E}
+  .phone-screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:35%;height:19px;background:#090d12;border-radius:0 0 13px 13px;z-index:3}
+  .phone-notch::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:32%;height:4px;border-radius:3px;background:rgba(255,255,255,.12)}
+  .tablet{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:24px;padding:13px;border:1px solid rgba(255,255,255,.10);box-shadow:0 44px 80px -38px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
+  .tablet-screen{position:relative;border-radius:11px;overflow:hidden;aspect-ratio:2360/1640;background:#0A111E}
+  .tablet-screen img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Two-column media rows */
+  .showcase .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:3.6rem;align-items:center}
+  .showcase .show-copy{max-width:none;margin-bottom:0}
+  .grow{display:grid;grid-template-columns:1fr 1fr;gap:3.6rem;align-items:center}
+  .grow .grow-copy{max-width:none;margin-bottom:0}
+  .grow.rev .grow-copy{order:2}
+  .media-phone{width:286px;max-width:84%;justify-self:center}
+
+  /* iPad band */
+  .ipad-band{padding:5.5rem 0;border-top:1px solid var(--line-soft)}
+  .ipad-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:3.4rem;align-items:center;max-width:1200px;margin:0 auto}
+  .ipad-grid h2{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;line-height:1.12;margin-bottom:1rem}
+  .ipad-grid h2 .g{color:var(--gold-2)}
+  .ipad-grid p{color:var(--muted);font-size:1rem;line-height:1.65}
+
+  @media (max-width:820px){
+    .showcase .wrap,.grow,.ipad-grid{grid-template-columns:1fr;gap:2rem}
+    .grow.rev .grow-copy{order:0}
+    .media-phone{width:240px}
+  }
+
   .cta-strip{border-top:1px solid var(--line-soft);text-align:center;padding:5.5rem 0;position:relative}
   .cta-strip::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:560px;height:280px;background:radial-gradient(ellipse,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
   .cta-strip h2{font-size:clamp(1.9rem,4vw,3rem);font-weight:800;position:relative}
@@ -154,7 +187,7 @@
         <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>App Store</a>
       </div>
     </div>
-    <div class="show-media stage"><img src="assets/decisio-action-register.png" alt="DECISIO.ai Action Register — every action with an owner, due date, and status" width="1320" height="878" loading="eager"></div>
+    <div class="media-phone dev-glow"><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-actions.webp" alt="DECISIO.ai Action Register — every action with an owner, due date, and status" width="900" height="1948" loading="eager"></div></div></div>
   </div>
 </section>
 
@@ -172,15 +205,15 @@
           <h3>Walk in with the agenda already built.</h3>
           <p>Plan around the person and DECISIO assembles your open items, decisions to make, and risks from past sessions — then lets you email it or drop it on the calendar.</p>
         </div>
-        <div class="grow-media stage"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep screen with an auto-built agenda of decisions, updates, and risks" width="1320" height="878" loading="lazy"></div>
+        <div class="media-phone dev-glow"><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep.webp" alt="Meeting Prep screen with an auto-built agenda of decisions, updates, and risks" width="900" height="1948" loading="lazy"></div></div></div>
       </div>
-      <div class="grow">
+      <div class="grow rev">
         <div class="grow-copy">
           <div class="gtag"><svg><use href="#i-search"/></svg>Ask My Work</div>
           <h3>Question months of work in plain English.</h3>
           <p>Search across every meeting, decision, and action — or just ask. "What are my overdue items?" "What did we decide last week?" Real answers, instantly.</p>
         </div>
-        <div class="grow-media stage"><img src="assets/decisio-ask-my-work.png" alt="Ask My Work — natural-language search across every meeting, decision, and action" width="1320" height="878" loading="lazy"></div>
+        <div class="media-phone dev-glow"><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-ask.webp" alt="Ask My Work — natural-language search across every meeting, decision, and action" width="900" height="1948" loading="lazy"></div></div></div>
       </div>
       <div class="grow">
         <div class="grow-copy">
@@ -188,7 +221,22 @@
           <h3>Every Monday, know exactly where things stand.</h3>
           <p>A look-back on decisions made, commitments kept, what's overdue, and your momentum for the week — so nothing slips before anyone has to ask.</p>
         </div>
-        <div class="grow-media stage"><img src="assets/decisio-weekly-brief.png" alt="Weekly Brief — the Monday look-back with overdue items and momentum" width="1320" height="878" loading="lazy"></div>
+        <div class="media-phone dev-glow"><div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-weekly.webp" alt="Weekly Brief — the Monday look-back with overdue items and momentum" width="900" height="1948" loading="lazy"></div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ipad-band">
+  <div class="wrap">
+    <div class="ipad-grid">
+      <div>
+        <div class="eyebrow">On the bigger screen</div>
+        <h2>The whole command center,<br><span class="g">on iPad.</span></h2>
+        <p>Everything syncs across iPhone and iPad. On iPad, your day opens up — the brief, today's meetings, decisions, and what's overdue, side by side in one calm view.</p>
+      </div>
+      <div class="tablet dev-glow">
+        <div class="tablet-screen"><img src="assets/ipad-today.webp" alt="DECISIO.ai on iPad — the Today command center with brief, meetings, actions, and decisions" width="2000" height="1390" loading="lazy"></div>
       </div>
     </div>
   </div>

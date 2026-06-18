@@ -99,7 +99,7 @@
   .acts-head h2 .g{color:var(--gold-2)}
   .acts-head p{color:var(--muted);font-size:1.05rem;margin-top:1rem}
   .act{padding:4.8rem 0;border-top:1px solid var(--line-soft)}
-  .act-top{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:end;margin-bottom:2.6rem}
+  .act-top{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:start}
   .act-num{font-size:3.2rem;font-weight:800;line-height:1;color:transparent;-webkit-text-stroke:1.4px rgba(212,168,74,.55);margin-bottom:1rem}
   .act .eyebrow{margin-bottom:.9rem}
   .act h3{font-size:clamp(1.5rem,2.4vw,2rem);font-weight:700;margin-bottom:.9rem}
@@ -188,6 +188,56 @@
   .foot-links a:hover{color:var(--gold-2)}
   .foot-copy{font-size:.74rem;color:var(--faint)}
 
+  /* Device frames */
+  .dev-glow{position:relative}
+  .dev-glow::before{content:'';position:absolute;inset:-12% -18%;z-index:-1;background:radial-gradient(50% 50% at 70% 28%,rgba(212,168,74,.16),transparent 70%),radial-gradient(55% 55% at 22% 88%,rgba(52,211,153,.14),transparent 70%);filter:blur(20px)}
+  .phone{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:42px;padding:9px;border:1px solid rgba(255,255,255,.10);box-shadow:0 40px 70px -34px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.55)}
+  .phone-screen{position:relative;border-radius:34px;overflow:hidden;aspect-ratio:1242/2688;background:#0A111E}
+  .phone-screen img{width:100%;height:100%;object-fit:cover;display:block}
+  .phone-notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:35%;height:19px;background:#090d12;border-radius:0 0 13px 13px;z-index:3}
+  .phone-notch::after{content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);width:32%;height:4px;border-radius:3px;background:rgba(255,255,255,.12)}
+  .tablet{position:relative;width:100%;background:linear-gradient(155deg,#11181f,#090d12);border-radius:24px;padding:13px;border:1px solid rgba(255,255,255,.10);box-shadow:0 44px 80px -38px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
+  .tablet-screen{position:relative;border-radius:11px;overflow:hidden;aspect-ratio:2360/1640;background:#0A111E}
+  .tablet-screen img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Hero split */
+  .hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:3.4rem;align-items:center}
+  .hero-phone{width:300px;max-width:78vw;justify-self:center}
+  .hero .hero-copy{max-width:37rem}
+
+  /* Phone showcase carousel */
+  .showcase{padding:36px 0 14px}
+  .show-head{text-align:center;max-width:42rem;margin:0 auto 1.4rem}
+  .show-head h2{font-size:clamp(1.7rem,3vw,2.4rem);font-weight:800;margin-top:.5rem}
+  .car-wrap{position:relative}
+  .car-track{display:flex;gap:1.8rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;position:relative;padding:1.4rem .4rem 1rem;scrollbar-width:none;-ms-overflow-style:none}
+  .car-track::-webkit-scrollbar{display:none}
+  .car-slide{flex:0 0 auto;width:min(258px,66vw);scroll-snap-align:center;margin:0}
+  .car-cap{margin-top:1.3rem;text-align:center;font-size:.86rem;color:var(--muted);line-height:1.5;padding:0 .3rem}
+  .car-cap b{color:var(--text);font-weight:600;display:block;margin-bottom:.15rem;font-size:.95rem}
+  .car-nav{display:flex;align-items:center;justify-content:center;gap:1.1rem;margin-top:1.6rem}
+  .car-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:border-color .2s,color .2s}
+  .car-btn:hover{border-color:var(--green);color:var(--green-2)}
+  .car-btn svg{width:18px;height:18px}
+  .car-dots{display:flex;gap:.5rem;align-items:center}
+  .car-dot{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer;transition:background .2s,transform .2s}
+  .car-dot.active{background:var(--gold-2);transform:scale(1.3)}
+  .car-hint{text-align:center;color:var(--faint);font-size:.8rem;margin-top:1rem;letter-spacing:.02em}
+
+  /* iPad band */
+  .ipad-band{padding:6rem 0}
+  .ipad-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:3.4rem;align-items:center;max-width:1200px;margin:0 auto}
+  .ipad-grid h2{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;line-height:1.12;margin-bottom:1rem}
+  .ipad-grid p{color:var(--muted);font-size:1rem;line-height:1.65}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:2.4rem}
+    .hero-phone{width:244px}
+    .hero .hero-copy{max-width:none}
+    .ipad-grid{grid-template-columns:1fr;gap:1.8rem}
+  }
+  @media (max-width:700px){.car-slide{width:74vw}}
+
   :focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:4px}
 
   @media (max-width:900px){
@@ -235,25 +285,73 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="hero-copy">
-      <div class="eyebrow fade d1">Decision &amp; Follow-Through · iPhone &amp; iPad</div>
-      <h1 class="fade d1">You don't run meetings to take notes.<br>You run them to <span class="gold">make decisions.</span></h1>
-      <p class="hero-sub fade d2">DECISIO.ai turns the decisions in your meetings into clear ownership — and ownership into follow-through that doesn't depend on your memory. Audio stays on your device; cloud AI runs on your own keys.</p>
-      <div class="hero-actions fade d2">
-        <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-green"><svg><use href="#i-apple"/></svg>Download on the App Store</a>
-        <a href="#why" class="btn btn-ghost">Why I built it</a>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow fade d1">Decision &amp; Follow-Through · iPhone &amp; iPad</div>
+        <h1 class="fade d1">You don't run meetings to take notes.<br>You run them to <span class="gold">make decisions.</span></h1>
+        <p class="hero-sub fade d2">DECISIO.ai turns the decisions in your meetings into clear ownership — and ownership into follow-through that doesn't depend on your memory. Audio stays on your device; cloud AI runs on your own keys.</p>
+        <div class="hero-actions fade d2">
+          <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-green"><svg><use href="#i-apple"/></svg>Download on the App Store</a>
+          <a href="#why" class="btn btn-ghost">Why I built it</a>
+        </div>
+        <div class="hero-proof fade d3">
+          <span><b>Private by design</b></span><span class="dot"></span>
+          <span><b>No meeting bots</b></span><span class="dot"></span>
+          <span><b>iPhone &amp; iPad</b></span>
+        </div>
       </div>
-      <div class="hero-proof fade d3">
-        <span><b>Private by design</b></span><span class="dot"></span>
-        <span><b>No meeting bots</b></span><span class="dot"></span>
-        <span><b>iPhone &amp; iPad</b></span>
+      <div class="hero-phone fade d3">
+        <div class="phone dev-glow">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><img src="assets/ph-decisions.webp" alt="DECISIO.ai Decision Log on iPhone — active decisions captured from meetings, each with status and related actions" width="900" height="1948" loading="eager"></div>
+        </div>
       </div>
-    </div>
-    <div class="stage hero-stage fade d3">
-      <img src="assets/decisio-today.png" alt="DECISIO.ai daily dashboard — today's brief, open and overdue actions, and decisions at a glance" width="1320" height="878" loading="eager">
     </div>
   </div>
 </header>
+
+<section class="showcase">
+  <div class="wrap">
+    <div class="show-head">
+      <div class="eyebrow">See it in action</div>
+      <h2>Every screen, exactly as it looks.</h2>
+    </div>
+    <div class="car-wrap" data-carousel>
+      <div class="car-track">
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-ask.webp" alt="Ask My Work on iPhone — search across meetings, decisions, and actions, or ask a question in plain English" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Ask My Work</b>Question months of meetings in plain English.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep.webp" alt="Plan Meeting on iPhone — meeting type, agenda items, and open actions pulled from past sessions" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Meeting Prep</b>Walk in with the agenda already built.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-actions.webp" alt="Action Register on iPhone — open actions with owners, due dates, and status" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Action Register</b>Every commitment gets an owner and a date.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-weekly.webp" alt="Weekly Brief on iPhone — the week's summary, decisions, and what needs attention" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Weekly Brief</b>Where everything stands, before anyone asks.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-session.webp" alt="Session detail on iPhone — audio recording, participants, and an AI summary of the meeting" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Session</b>Record, transcribe, and summarize in a tap.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep-preview.webp" alt="Agenda preview on iPhone — a clean, shareable agenda generated for the meeting" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Agenda preview</b>A clean agenda, ready to send.</figcaption>
+        </figure>
+      </div>
+      <div class="car-nav">
+        <button class="car-btn car-prev" type="button" aria-label="Previous screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <div class="car-dots"></div>
+        <button class="car-btn car-next" type="button" aria-label="Next screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="car-hint">Swipe or drag to explore →</div>
+    </div>
+  </div>
+</section>
 
 <section class="argument" id="why">
   <div class="wrap argument-inner">
@@ -273,7 +371,7 @@
     <div class="acts-head">
       <div class="eyebrow">How it works</div>
       <h2>Three moves. <span class="g">Prepare. Decide. Follow through.</span></h2>
-      <p>Each one is a real screen in the app — not a promise on a landing page.</p>
+      <p>Each move is a real screen you just scrolled through — not a promise on a landing page.</p>
     </div>
 
     <div class="act">
@@ -289,7 +387,6 @@
           <li><span class="chip green"><svg><use href="#i-arrow"/></svg></span><span>Send the agenda <small>— email it or drop it on the calendar in one tap</small></span></li>
         </ul>
       </div>
-      <div class="act-media stage"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep — an auto-built agenda with decisions to make, updates, and risks pulled from past sessions" width="1320" height="878" loading="lazy"></div>
     </div>
 
     <div class="act">
@@ -305,7 +402,6 @@
           <li><span class="chip"><svg><use href="#i-search"/></svg></span><span>Ask My Work <small>— question months of meetings in plain English</small></span></li>
         </ul>
       </div>
-      <div class="act-media stage"><img src="assets/decisio-decision-log.png" alt="Decision Log — every decision captured with status: active, resolved, reversed, or superseded" width="1320" height="878" loading="lazy"></div>
     </div>
 
     <div class="act">
@@ -321,7 +417,21 @@
           <li><span class="chip"><svg><use href="#i-book"/></svg></span><span>Weekly Brief <small>— your week's wins, overdue items, and momentum</small></span></li>
         </ul>
       </div>
-      <div class="act-media stage"><img src="assets/decisio-action-register.png" alt="Action Register — every action with an owner, a due date, and a status" width="1320" height="878" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<section class="ipad-band">
+  <div class="wrap">
+    <div class="ipad-grid">
+      <div>
+        <div class="eyebrow">On the bigger screen</div>
+        <h2>Your command center,<br><span class="g">in full view.</span></h2>
+        <p>Everything syncs across iPhone and iPad. On iPad, the day opens up — your brief, today's meetings, the decisions you've made, and what's overdue, all in one calm view. Pick up on the phone, finish on the larger screen.</p>
+      </div>
+      <div class="tablet dev-glow">
+        <div class="tablet-screen"><img src="assets/ipad-today.webp" alt="DECISIO.ai on iPad — the Today command center with the morning brief, today's meetings, open and overdue actions, and recent decisions" width="2000" height="1390" loading="lazy"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -453,6 +563,52 @@
       var input=form.querySelector('input[name="email"]');
       if(!input.value)return;
       setTimeout(function(){form.style.display='none';document.getElementById('newsletterSuccess').style.display='block';},400);
+    });
+  })();
+</script>
+<script>
+  (function(){
+    document.querySelectorAll('[data-carousel]').forEach(function(c){
+      var track=c.querySelector('.car-track');
+      if(!track)return;
+      var slides=Array.prototype.slice.call(track.children);
+      var dotsWrap=c.querySelector('.car-dots');
+      var prev=c.querySelector('.car-prev');
+      var next=c.querySelector('.car-next');
+      if(!slides.length)return;
+      var dots=slides.map(function(s,i){
+        var b=document.createElement('button');
+        b.type='button';b.className='car-dot';
+        b.setAttribute('aria-label','Go to screen '+(i+1));
+        b.addEventListener('click',function(){jump(i);});
+        if(dotsWrap)dotsWrap.appendChild(b);
+        return b;
+      });
+      function jump(i){
+        var s=slides[i];if(!s)return;
+        track.scrollTo({left:s.offsetLeft-(track.clientWidth-s.clientWidth)/2,behavior:'smooth'});
+      }
+      function current(){
+        var center=track.scrollLeft+track.clientWidth/2,idx=0,best=Infinity;
+        slides.forEach(function(s,i){
+          var sc=s.offsetLeft+s.clientWidth/2,d=Math.abs(sc-center);
+          if(d<best){best=d;idx=i;}
+        });
+        return idx;
+      }
+      function sync(){
+        var idx=current();
+        dots.forEach(function(d,i){d.classList.toggle('active',i===idx);});
+      }
+      var raf;
+      track.addEventListener('scroll',function(){
+        if(raf)cancelAnimationFrame(raf);
+        raf=requestAnimationFrame(sync);
+      },{passive:true});
+      if(prev)prev.addEventListener('click',function(){jump(Math.max(0,current()-1));});
+      if(next)next.addEventListener('click',function(){jump(Math.min(slides.length-1,current()+1));});
+      window.addEventListener('resize',sync);
+      sync();
     });
   })();
 </script>
