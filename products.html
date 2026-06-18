@@ -26,7 +26,7 @@
     radial-gradient(70% 55% at 80% -2%,rgba(212,168,74,0.10),transparent 55%),
     radial-gradient(60% 50% at -5% 10%,rgba(52,211,153,0.07),transparent 55%),
     linear-gradient(180deg,var(--bg-top) 0%,var(--bg) 38%,var(--bg) 100%)}
-  body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.22;
+  body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0.07;
     background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E")}
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 6%}
   a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
@@ -72,13 +72,16 @@
   .gallery-head h2{font-size:clamp(1.8rem,3vw,2.4rem)}
   .gallery-head h2 .g{color:var(--gold-2)}
   .gallery-head p{color:var(--muted);margin-top:.8rem}
-  .gal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem}
-  .gal{display:flex;flex-direction:column;gap:.9rem}
-  .gal-img{position:relative;border-radius:13px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
-  .gal-img img{display:block;width:100%}
-  .gal h4{font-size:.95rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
-  .gal h4 svg{width:16px;height:16px;color:var(--gold-2)}
-  .gal p{font-size:.85rem;color:var(--muted);line-height:1.55}
+  .grows{display:flex;flex-direction:column}
+  .grow{display:grid;grid-template-columns:1.12fr .88fr;gap:4rem;align-items:center;padding:3.8rem 0;border-top:1px solid var(--line-soft)}
+  .grow:nth-child(even) .grow-media{order:2}
+  .grow-media{position:relative}
+  .grow-media img{width:100%;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  .grow-media::before{content:'';position:absolute;inset:-9% -6%;z-index:-1;background:radial-gradient(55% 55% at 50% 50%,rgba(212,168,74,.12),transparent 70%),radial-gradient(50% 50% at 80% 25%,rgba(52,211,153,.1),transparent 70%);filter:blur(7px)}
+  .gtag{display:inline-flex;align-items:center;gap:.55rem;font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-2);margin-bottom:.9rem}
+  .gtag svg{width:16px;height:16px}
+  .grow-copy h3{font-size:clamp(1.4rem,2.4vw,1.95rem);font-weight:700;margin-bottom:.7rem}
+  .grow-copy p{color:var(--muted);font-size:1.01rem;max-width:30rem}
 
   .cta-strip{border-top:1px solid var(--line-soft);text-align:center;padding:5.5rem 0;position:relative}
   .cta-strip::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:560px;height:280px;background:radial-gradient(ellipse,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
@@ -101,7 +104,8 @@
   @media (max-width:900px){
     .nav-links{display:none}
     .show-grid{grid-template-columns:1fr;gap:2.6rem}
-    .gal-grid{grid-template-columns:1fr;gap:2.2rem}
+    .grow{grid-template-columns:1fr;gap:2.2rem}
+    .grow:nth-child(even) .grow-media{order:0}
     .page-hero{padding:130px 0 40px}
     .foot{flex-direction:column;align-items:flex-start}
   }
@@ -167,21 +171,30 @@
       <h2>Real screens. <span class="g">Real outcomes.</span></h2>
       <p>Prepare around the person, capture the decision, brief yourself on what's slipping.</p>
     </div>
-    <div class="gal-grid">
-      <div class="gal">
-        <div class="gal-img"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep screen with an auto-built agenda" width="1320" height="878" loading="lazy"></div>
-        <h4><svg><use href="#i-card"/></svg>Meeting Prep</h4>
-        <p>An agenda built from your open items, decisions to make, and risks — before you walk in.</p>
+    <div class="grows">
+      <div class="grow">
+        <div class="grow-media"><img src="assets/decisio-meeting-prep.png" alt="Meeting Prep screen with an auto-built agenda of decisions, updates, and risks" width="1320" height="878" loading="lazy"></div>
+        <div class="grow-copy">
+          <div class="gtag"><svg><use href="#i-card"/></svg>Meeting Prep</div>
+          <h3>Walk in with the agenda already built.</h3>
+          <p>Plan around the person and DECISIO assembles your open items, decisions to make, and risks from past sessions — then lets you email it or drop it on the calendar.</p>
+        </div>
       </div>
-      <div class="gal">
-        <div class="gal-img"><img src="assets/decisio-ask-my-work.png" alt="Ask My Work — natural-language search across meetings" width="1320" height="878" loading="lazy"></div>
-        <h4><svg><use href="#i-search"/></svg>Ask My Work</h4>
-        <p>Question months of meetings, decisions, and actions in plain English — and get a real answer.</p>
+      <div class="grow">
+        <div class="grow-media"><img src="assets/decisio-ask-my-work.png" alt="Ask My Work — natural-language search across every meeting, decision, and action" width="1320" height="878" loading="lazy"></div>
+        <div class="grow-copy">
+          <div class="gtag"><svg><use href="#i-search"/></svg>Ask My Work</div>
+          <h3>Question months of work in plain English.</h3>
+          <p>Search across every meeting, decision, and action — or just ask. "What are my overdue items?" "What did we decide last week?" Real answers, instantly.</p>
+        </div>
       </div>
-      <div class="gal">
-        <div class="gal-img"><img src="assets/decisio-weekly-brief.png" alt="Weekly Brief — the Monday look-back" width="1320" height="878" loading="lazy"></div>
-        <h4><svg><use href="#i-book"/></svg>Weekly Brief</h4>
-        <p>A Monday look-back: decisions made, commitments kept, overdue items, and your momentum.</p>
+      <div class="grow">
+        <div class="grow-media"><img src="assets/decisio-weekly-brief.png" alt="Weekly Brief — the Monday look-back with overdue items and momentum" width="1320" height="878" loading="lazy"></div>
+        <div class="grow-copy">
+          <div class="gtag"><svg><use href="#i-book"/></svg>Weekly Brief</div>
+          <h3>Every Monday, know exactly where things stand.</h3>
+          <p>A look-back on decisions made, commitments kept, what's overdue, and your momentum for the week — so nothing slips before anyone has to ask.</p>
+        </div>
       </div>
     </div>
   </div>
