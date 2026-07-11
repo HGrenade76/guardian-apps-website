@@ -55,6 +55,15 @@
   .legal-section a:hover { text-decoration: underline; }
   .highlight-box { background: var(--surface2); border-left: 2px solid var(--accent); padding: 1.2rem 1.5rem; margin: 1.2rem 0; }
   .highlight-box p { margin-bottom: 0; }
+  .commitments { background: linear-gradient(180deg,var(--surface2) 0%,var(--surface) 100%); border: 1px solid rgba(52,211,153,0.28); border-left: 2px solid var(--accent); padding: 2rem 2.2rem; margin-bottom: 3rem; padding-bottom: 2.2rem; }
+  .commitments .section-num { color: var(--accent2); }
+  .commitments h2 { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.2; }
+  .commitments-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.3rem 2.2rem; }
+  .commitment { display: flex; gap: 0.85rem; align-items: flex-start; }
+  .commitment .check { color: var(--accent); font-size: 1rem; line-height: 1.5; flex-shrink: 0; font-weight: 700; }
+  .commitment p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+  .commitment p strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 600px) { .commitments-grid { grid-template-columns: 1fr; } .commitments { padding: 1.5rem; } }
   table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.2rem 0; }
   th { background: var(--surface2); color: var(--text); font-weight: 500; padding: 0.8rem 1rem; text-align: left; border: 1px solid var(--border); font-size: 0.8rem; }
   td { padding: 0.75rem 1rem; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
@@ -99,6 +108,7 @@
     <div class="toc-title">Contents</div>
     <ul>
       <li><a href="#s0">Overview</a></li>
+      <li><a href="#commitments">Our Commitments</a></li>
       <li><a href="#s1">1. Data Controller</a></li>
       <li><a href="#s2">2. Data We Collect</a></li>
       <li><a href="#s3">3. Legal Bases</a></li>
@@ -124,6 +134,28 @@
       <p>Guardian Apps LLC ("we," "us," "our") operates the Guardian Apps mobile applications and associated websites, digital services, and companion applications available through the Apple App Store and other distribution platforms (collectively, the "Services").</p>
       <p>This Privacy Policy explains how we collect, use, disclose, and protect your information. It is designed to comply with applicable data-protection laws worldwide, including EU GDPR, UK-GDPR, CCPA/CPRA, PIPEDA, LGPD, and other applicable frameworks.</p>
       <div class="highlight-box"><p>By downloading, installing, accessing, or using our Services, you acknowledge that you have read and understood this Privacy Policy. Where required by law, your continued use constitutes consent to the practices described herein.</p></div>
+    </div>
+    <div class="commitments" id="commitments">
+      <div class="section-num">At a Glance</div>
+      <h2>Our Privacy Commitments</h2>
+      <div class="commitments-grid">
+        <div class="commitment">
+          <span class="check">✓</span>
+          <p>We <strong>never sell, rent, or trade your data.</strong></p>
+        </div>
+        <div class="commitment">
+          <span class="check">✓</span>
+          <p>We <strong>never use your content to train AI models.</strong></p>
+        </div>
+        <div class="commitment">
+          <span class="check">✓</span>
+          <p><strong>Recording and transcription run on your device.</strong> For cloud AI features, only the meeting transcript — never audio — is sent, using your own AI provider key, and only to fulfill your request.</p>
+        </div>
+        <div class="commitment">
+          <span class="check">✓</span>
+          <p>You can <strong>delete your data at any time</strong> from within the app.</p>
+        </div>
+      </div>
     </div>
     <div class="legal-section" id="s1">
       <div class="section-num">Section 1</div>
