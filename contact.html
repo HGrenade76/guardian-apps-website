@@ -146,7 +146,7 @@
         <div class="info-ic"><svg><use href="#i-mail"/></svg></div>
         <div>
           <h4>Email</h4>
-          <a href="/cdn-cgi/l/email-protection#96e5e3e6e6f9e4e2d6fbeff1e3f7e4f2fff7f8f7e6e6e5b8f5f9fb"><span class="__cf_email__" data-cfemail="087b7d7878677a7c4865716f7d697a6c6169666978787b266b6765">[email&#160;protected]</span></a>
+          <a href="mailto:support@guardian-apps.com">support@guardian-apps.com</a>
         </div>
       </div>
       <div class="info-item">
@@ -181,7 +181,7 @@
     <div class="form-title">Send us a message</div>
     <p class="form-sub">Fill out the form below and we'll respond as soon as possible.</p>
 
-    <form id="contactForm" action="mailto:support@myguardianapps.com" method="POST" enctype="text/plain" onsubmit="handleSubmit(event)">
+    <form id="contactForm" action="mailto:support@guardian-apps.com" method="POST" enctype="text/plain" onsubmit="handleSubmit(event)">
       <div class="form-row">
         <div class="form-group">
           <label for="fname">First Name</label>
@@ -239,7 +239,6 @@
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 function handleSubmit(e){
   e.preventDefault();
@@ -250,7 +249,7 @@ function handleSubmit(e){
   const subject=document.getElementById('subject').value;
   const message=document.getElementById('message').value;
   const body=`Name: ${fname} ${lname}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}`;
-  const mailto=`mailto:support@myguardianapps.com?subject=${encodeURIComponent('['+subject+'] Website Contact')}&body=${encodeURIComponent(body)}`;
+  const mailto=`mailto:support@guardian-apps.com?subject=${encodeURIComponent('['+subject+'] Website Contact')}&body=${encodeURIComponent(body)}`;
   window.location.href=mailto;
   form.style.display='none';
   document.getElementById('successMsg').style.display='block';
