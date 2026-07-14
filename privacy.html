@@ -149,7 +149,7 @@
         </div>
         <div class="commitment">
           <span class="check">✓</span>
-          <p><strong>Recording and transcription run on your device.</strong> For cloud AI features, only the meeting transcript — never audio — is sent, using your own AI provider key, and only to fulfill your request.</p>
+          <p><strong>Recording and transcription run on your device.</strong> Short meetings are analyzed entirely on-device; for longer ones, only the text transcript — never audio — is sent over an encrypted connection, and only to fulfill your request. We do not store your transcripts.</p>
         </div>
         <div class="commitment">
           <span class="check">✓</span>
@@ -210,7 +210,10 @@
       <div class="section-num">Section 5</div>
       <h2>Artificial Intelligence Processing</h2>
       <h3>5.1 How AI Features Work</h3>
-      <p>The App incorporates AI features that generate automated insights from your meetings. Recording and transcription run on your device using Apple's on-device speech framework. When you invoke a cloud AI feature, the text transcript of your meeting — never the audio recording or any voiceprint — may be transmitted to a third-party AI service provider, such as OpenAI or Anthropic, solely to produce results for you. Where supported, this processing runs through your own AI provider keys rather than ours, and your meeting content does not pass through Guardian Apps servers.</p>
+      <p>The App incorporates AI features that generate automated insights from your meetings. <strong>Recording and transcription happen entirely on your device</strong> using Apple's on-device speech framework. Your audio never leaves your device — it is not uploaded to us or to anyone else.</p>
+      <p>For shorter meetings, analysis also runs <strong>entirely on your device</strong> using Apple Intelligence, and no meeting content is sent anywhere.</p>
+      <p>For subscribers, longer transcripts are analyzed in the cloud. In that case, only the <strong>text transcript</strong> of your meeting — never the audio recording or any voiceprint — is transmitted over an encrypted connection to Guardian Apps' server, which relays it to our AI provider, Anthropic (Claude), for analysis and returns the result to you. <strong>Guardian Apps does not store your transcripts:</strong> they exist only in memory for the duration of the request and are never written to disk, logged, or retained on our servers. Anthropic does not use them to train its models.</p>
+      <p>You may also choose to supply your own AI provider API key in Settings. When you do, your transcript is sent directly from your device to that provider solely to fulfill your request, and does not pass through Guardian Apps' servers.</p>
       <h3>5.2 AI Accuracy Disclaimer</h3>
       <div class="highlight-box"><p>AI outputs are NOT guaranteed to be accurate, complete, or error-free. AI outputs do NOT constitute professional, legal, safety, medical, engineering, or regulatory advice. AI results may contain biases, hallucinations, omissions, or inaccuracies inherent in machine-learning systems.</p></div>
       <h3>5.3 AI Data Retention</h3>
