@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through</title>
-<meta name="description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, one-month Pro trial.">
+<meta name="description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
 <meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -183,6 +183,14 @@
 
   section.on-paper{--green-2:#0F7A57}
   section.on-paper + section.on-paper{border-top:1px solid var(--line-on-paper)}
+
+  .hero-duo{position:relative;width:360px;max-width:84vw;justify-self:center;padding-left:14%}
+  .duo-back{position:absolute;top:7%;left:0;width:64%;transform:rotate(-7deg);z-index:1}
+  .duo-front{position:relative;width:78%;margin-left:auto;z-index:2}
+  .duo-tag{position:absolute;bottom:-2.1rem;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  .duo-back .duo-tag{left:10%}.duo-front .duo-tag{right:10%}
+  .phone-screen.dark{background:#0A111E}
+  @media (max-width:860px){.hero-duo{width:290px;margin-bottom:2rem}}
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/">
@@ -193,7 +201,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gap-apps.com/">
   <meta property="og:title" content="Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through">
-  <meta property="og:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, one-month Pro trial.">
+  <meta property="og:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
   <meta property="og:image" content="https://gap-apps.com/assets/gap-og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -203,7 +211,7 @@
   <!-- X / Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through">
-  <meta name="twitter:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, one-month Pro trial.">
+  <meta name="twitter:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
   <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og.png">
   <meta name="twitter:image:alt" content="Guardian.Apps — AI that solves real problems. Not new ones.">
 
@@ -320,11 +328,11 @@
           },
           {
             "@type": "Offer",
-            "name": "DECISIO Pro — one-month free trial",
+            "name": "DECISIO Pro — 30-day free trial",
             "price": "0",
             "priceCurrency": "USD",
             "url": "https://apps.apple.com/us/app/decisio-ai/id6759219287",
-            "description": "The first month of DECISIO Pro is free. Then $7.99/month or $79.99/year. Cancel anytime."
+            "description": "The first 30 days of DECISIO Pro are free. Then $7.99/month or $79.99/year. Cancel anytime."
           },
           {
             "@type": "Offer",
@@ -392,10 +400,16 @@
           <span><b>iPhone &amp; iPad</b></span>
         </div>
       </div>
-      <div class="hero-phone fade d3">
-        <div class="phone dev-glow">
+      <div class="hero-duo fade d3">
+        <div class="phone duo-back">
           <div class="phone-notch"></div>
-          <div class="phone-screen"><img src="assets/light/ph-actions-light.webp" alt="DECISIO.ai Action Register on iPhone — open actions with owners, due dates, and status" width="1242" height="2688" loading="eager"></div>
+          <div class="phone-screen dark"><img src="assets/ph-actions.webp" alt="DECISIO.ai Action Register on iPhone in dark mode" width="900" height="1948" loading="eager"></div>
+          <span class="duo-tag">Dark</span>
+        </div>
+        <div class="phone dev-glow duo-front">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><img src="assets/light/ph-actions-light.webp" alt="DECISIO.ai Action Register on iPhone in light mode — open actions with owners, due dates, and status" width="1242" height="2688" loading="eager"></div>
+          <span class="duo-tag">Light</span>
         </div>
       </div>
     </div>
@@ -435,7 +449,7 @@
         <a href="decisio.html" class="btn btn-primary">Explore the app <svg><use href="#i-arrow"/></svg></a>
         <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>Try free on the App Store</a>
       </div>
-        <p class="cta-fine">Free download · First month of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
+        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
     </div>
     <div class="media-tablet dev-glow"><div class="tablet"><div class="tablet-screen"><img src="assets/ipad-today.webp" alt="DECISIO.ai on iPad — the Today command center: the brief, today's meetings, open and overdue actions, and recent decisions" width="2000" height="1390" loading="lazy"></div></div></div>
   </div>
@@ -464,10 +478,10 @@
     <h2>Less time managing.<br><span class="g">More time leading.</span></h2>
     <p>One app, built with a single goal — to give you your time back, and your decisions a place to live.</p>
     <div class="hero-actions">
-      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for a month</a>
+      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 30 days</a>
       <a href="contact.html" class="btn btn-ghost">Get in touch</a>
     </div>
-        <p class="cta-fine">Free download · First month of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
+        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
   </div>
 </section>
 

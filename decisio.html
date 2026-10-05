@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DECISIO.ai — Meeting Decisions &amp; Follow-Through · Guardian.Apps</title>
-<meta name="description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, one-month Pro trial.">
+<meta name="description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, 30-day Pro trial.">
 <meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,6 +288,24 @@
   }
   .brand-mark{display:block;width:52px;height:auto;margin-bottom:1.4rem;filter:drop-shadow(0 10px 24px rgba(212,168,74,.22))}
   .closing .brand-mark{width:64px;margin:0 auto 1.6rem;position:relative}
+
+  /* Hero: same screen in both modes */
+  .hero-duo{position:relative;width:360px;max-width:84vw;justify-self:center;padding-left:14%}
+  .duo-back{position:absolute;top:7%;left:0;width:64%;transform:rotate(-7deg);z-index:1}
+  .duo-front{position:relative;width:78%;margin-left:auto;z-index:2}
+  .duo-tag{position:absolute;bottom:-2.1rem;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--faint)}
+  .duo-back .duo-tag{left:10%}.duo-front .duo-tag{right:10%}
+  .phone-screen.dark{background:#0A111E}
+  /* Carousel theme toggle */
+  .show-sub{color:var(--muted);margin-top:.6rem}
+  .theme-tog{display:inline-flex;gap:2px;margin-top:1.2rem;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+  .theme-tog button{display:inline-flex;align-items:center;gap:.45rem;background:none;border:0;color:var(--muted);font:600 .82rem var(--sans);padding:.5rem 1.15rem;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
+  .theme-tog button svg{width:15px;height:15px}
+  .theme-tog button[aria-pressed="true"]{background:var(--ink-strong);color:#fff}
+  .car-slide[hidden]{display:none}
+  /* Report docs on navy */
+  .reports:not(.on-paper) .doc{border-color:rgba(255,255,255,.12);box-shadow:0 40px 70px -30px rgba(0,0,0,.8)}
+  @media (max-width:860px){.hero-duo{width:290px;margin-bottom:2rem}}
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/decisio.html">
@@ -298,7 +316,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gap-apps.com/decisio.html">
   <meta property="og:title" content="DECISIO.ai — Meeting Decisions &amp; Follow-Through · Guardian.Apps">
-  <meta property="og:description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, one-month Pro trial.">
+  <meta property="og:description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, 30-day Pro trial.">
   <meta property="og:image" content="https://gap-apps.com/assets/decisio-og.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -308,7 +326,7 @@
   <!-- X / Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DECISIO.ai — Meeting Decisions &amp; Follow-Through · Guardian.Apps">
-  <meta name="twitter:description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, one-month Pro trial.">
+  <meta name="twitter:description" content="DECISIO.ai turns meeting decisions into clear ownership and follow-through. Audio stays on your device. iPhone and iPad. Free download, 30-day Pro trial.">
   <meta name="twitter:image" content="https://gap-apps.com/assets/decisio-og.png">
   <meta name="twitter:image:alt" content="DECISIO.ai — private, on-device meeting intelligence for iPhone and iPad.">
 
@@ -425,11 +443,11 @@
           },
           {
             "@type": "Offer",
-            "name": "DECISIO Pro — one-month free trial",
+            "name": "DECISIO Pro — 30-day free trial",
             "price": "0",
             "priceCurrency": "USD",
             "url": "https://apps.apple.com/us/app/decisio-ai/id6759219287",
-            "description": "The first month of DECISIO Pro is free. Then $7.99/month or $79.99/year. Cancel anytime."
+            "description": "The first 30 days of DECISIO Pro are free. Then $7.99/month or $79.99/year. Cancel anytime."
           },
           {
             "@type": "Offer",
@@ -470,6 +488,8 @@
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l5-5 3 3 7-7"/><path d="M15 7h4v4"/></symbol>
   <symbol id="i-hourglass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12M6 21h12M7 3c0 4 3 5.5 5 7 2-1.5 5-3 5-7M7 21c0-4 3-5.5 5-7 2 1.5 5 3 5 7"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></symbol>
 </svg>
 
 <nav>
@@ -492,20 +512,26 @@
         <h1 class="fade d1">You don't run meetings to take notes.<br>You run them to <span class="gold">make decisions.</span></h1>
         <p class="hero-sub fade d2">DECISIO.ai turns the decisions in your meetings into clear ownership — and ownership into follow-through that doesn't depend on your memory. Audio stays on your device; only the text transcript is sent for AI analysis.</p>
         <div class="hero-actions fade d2">
-          <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for a month</a>
+          <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 30 days</a>
           <a href="#why" class="btn btn-ghost">Why I built it</a>
         </div>
-        <p class="cta-fine">Free download · First month of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
+        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
         <div class="hero-proof fade d3">
           <span><b>Private by design</b></span><span class="dot"></span>
           <span><b>No meeting bots</b></span><span class="dot"></span>
           <span><b>iPhone &amp; iPad</b></span>
         </div>
       </div>
-      <div class="hero-phone fade d3">
-        <div class="phone dev-glow">
+      <div class="hero-duo fade d3">
+        <div class="phone duo-back">
           <div class="phone-notch"></div>
-          <div class="phone-screen"><img src="assets/light/ph-decisions-light.webp" alt="DECISIO.ai Decision Log on iPhone — active decisions captured from meetings, each with status and related actions" width="1242" height="2688" loading="eager"></div>
+          <div class="phone-screen dark"><img src="assets/ph-decisions.webp" alt="DECISIO.ai Decision Log on iPhone in dark mode" width="900" height="1948" loading="eager"></div>
+          <span class="duo-tag">Dark</span>
+        </div>
+        <div class="phone dev-glow duo-front">
+          <div class="phone-notch"></div>
+          <div class="phone-screen"><img src="assets/light/ph-decisions-light.webp" alt="DECISIO.ai Decision Log on iPhone in light mode — active decisions captured from meetings, each with status and related actions" width="1242" height="2688" loading="eager"></div>
+          <span class="duo-tag">Light</span>
         </div>
       </div>
     </div>
@@ -517,48 +543,75 @@
     <div class="show-head">
       <div class="eyebrow">See it in action</div>
       <h2>Every screen, exactly as it looks.</h2>
+      <p class="show-sub">Light or dark — DECISIO follows your iPhone.</p>
+      <div class="theme-tog" role="group" aria-label="Screenshot appearance">
+        <button type="button" data-theme-btn="light" aria-pressed="true"><svg><use href="#i-sun"/></svg>Light</button>
+        <button type="button" data-theme-btn="dark" aria-pressed="false"><svg><use href="#i-moon"/></svg>Dark</button>
+      </div>
     </div>
     <div class="car-wrap" data-carousel>
       <div class="car-track">
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-home-light.webp" alt="DECISIO.ai Home on iPhone — one-tap recording, the morning brief, and open, overdue, and decision counts" width="1242" height="2688" loading="lazy"></div></div>
+        <!-- Light mode -->
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-home-light.webp" alt="Home in light mode — one-tap recording, the morning brief, and open, overdue, and decision counts" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Home</b>Record the meeting. Keep the decisions.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-ask-light.webp" alt="Ask My Work on iPhone — search across meetings, decisions, and actions, or ask a question in plain English" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-ask-light.webp" alt="Ask My Work in light mode — search across meetings, decisions, and actions in plain English" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Ask My Work</b>Question months of meetings in plain English.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep.webp" alt="Plan Meeting on iPhone — meeting type, agenda items, and open actions pulled from past sessions" width="900" height="1948" loading="lazy"></div></div>
-          <figcaption class="car-cap"><b>Meeting Prep</b>Walk in with the agenda already built.</figcaption>
-        </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-actions-light.webp" alt="Action Register on iPhone — open actions with owners, due dates, and status" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-actions-light.webp" alt="Action Register in light mode — open actions with owners, due dates, and status" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Action Register</b>Every commitment gets an owner and a date.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-edit-action-light.webp" alt="Edit Action on iPhone — pick the owner from the meeting’s participants, set a due date and status" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-edit-action-light.webp" alt="Edit Action in light mode — pick the owner from the meeting’s participants, set a due date and status" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Assign in one tap</b>The right owner, straight from the meeting.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-weekly-light.webp" alt="Monday Mandate on iPhone — the week's summary, decisions, and what needs attention" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-weekly-light.webp" alt="Monday Mandate in light mode — the week’s sessions, decisions, actions, and what needs attention" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Monday Mandate</b>Where everything stands, before anyone asks.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-brief-light.webp" alt="Morning Brief on iPhone — the one thing to focus on today and what’s overdue" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-brief-light.webp" alt="Morning Brief in light mode — the one thing to focus on today and what’s overdue" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Morning Brief</b>Your day, before it starts.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-session-light.webp" alt="Session detail on iPhone — audio recording, participants, and an AI summary of the meeting" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-session-light.webp" alt="Session in light mode — participants, audio playback, and an AI summary of the meeting" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Session</b>Record, transcribe, and summarize in a tap.</figcaption>
         </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep-preview.webp" alt="Agenda preview on iPhone — a clean, shareable agenda generated for the meeting" width="900" height="1948" loading="lazy"></div></div>
-          <figcaption class="car-cap"><b>Agenda preview</b>A clean agenda, ready to send.</figcaption>
-        </figure>
-        <figure class="car-slide">
-          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-siri-light.webp" alt="Siri &amp; Shortcuts settings on iPhone — start recording, read open actions, and hear today’s decisions by voice" width="1242" height="2688" loading="lazy"></div></div>
+        <figure class="car-slide" data-theme="light">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-siri-light.webp" alt="Siri &amp; Shortcuts in light mode — start recording, read open actions, and hear today’s decisions by voice" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Siri &amp; Shortcuts</b>Start recording with your voice.</figcaption>
+        </figure>
+        <!-- Dark mode -->
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-decisions.webp" alt="Decision Log in dark mode — active decisions with status and related actions" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Decision Log</b>Every decision, with the person who owns it.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-ask.webp" alt="Ask My Work in dark mode — search across meetings, decisions, and actions in plain English" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Ask My Work</b>Question months of meetings in plain English.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-prep.webp" alt="Plan Meeting in dark mode — meeting type, agenda items, and open actions pulled from past sessions" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Meeting Prep</b>Walk in with the agenda already built.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-actions.webp" alt="Action Register in dark mode — open actions with owners, due dates, and status" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Action Register</b>Every commitment gets an owner and a date.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-weekly.webp" alt="Monday Mandate in dark mode — the week’s summary, decisions, and what needs attention" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Monday Mandate</b>Where everything stands, before anyone asks.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-session.webp" alt="Session in dark mode — audio recording, participants, and an AI summary of the meeting" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Session</b>Record, transcribe, and summarize in a tap.</figcaption>
+        </figure>
+        <figure class="car-slide" data-theme="dark" hidden>
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen dark"><img src="assets/ph-prep-preview.webp" alt="Agenda preview in dark mode — a clean, shareable agenda generated for the meeting" width="900" height="1948" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Agenda preview</b>A clean agenda, ready to send.</figcaption>
         </figure>
       </div>
       <div class="car-nav">
@@ -571,7 +624,7 @@
   </div>
 </section>
 
-<section class="argument on-paper" id="why">
+<section class="argument" id="why">
   <div class="wrap argument-inner">
     <div class="eyebrow">Why this exists</div>
     <p class="lead">A decision gets made. Everyone nods. Then — nothing.</p>
@@ -640,7 +693,7 @@
   </div>
 </section>
 
-<section class="reports on-paper">
+<section class="reports">
   <div class="wrap reports-grid">
     <div class="reports-copy">
       <div class="eyebrow">Executive-ready</div>
@@ -659,7 +712,7 @@
   </div>
 </section>
 
-<section class="ipad-band">
+<section class="ipad-band on-paper">
   <div class="wrap">
     <div class="ipad-grid">
       <div>
@@ -696,14 +749,14 @@
   </div>
 </section>
 
-<section class="quote">
+<section class="quote on-paper">
   <div class="wrap quote-inner">
     <q>Your team doesn't remember what you said. <span class="g">They remember what you followed up on.</span></q>
     <div class="quote-by"><b>Hein Ellis</b> · Founder, DECISIO.ai</div>
   </div>
 </section>
 
-<section class="privacy on-paper">
+<section class="privacy">
   <div class="wrap">
     <div class="privacy-box">
       <div>
@@ -763,10 +816,10 @@
     <h2>Stop relying on your memory.<br>Start running on a <span class="g">system.</span></h2>
     <p>DECISIO.ai is on the App Store for iPhone and iPad. Record privately, decide clearly, and never lose a decision again.</p>
     <div class="hero-actions">
-      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for a month</a>
+      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 30 days</a>
       <a href="contact.html" class="btn btn-ghost">Contact us</a>
     </div>
-        <p class="cta-fine">Free download · First month of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
+        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
   </div>
 </section>
 
@@ -815,19 +868,31 @@
     document.querySelectorAll('[data-carousel]').forEach(function(c){
       var track=c.querySelector('.car-track');
       if(!track)return;
-      var slides=Array.prototype.slice.call(track.children);
+      var all=Array.prototype.slice.call(track.querySelectorAll('.car-slide'));
       var dotsWrap=c.querySelector('.car-dots');
       var prev=c.querySelector('.car-prev');
       var next=c.querySelector('.car-next');
-      if(!slides.length)return;
-      var dots=slides.map(function(s,i){
-        var b=document.createElement('button');
-        b.type='button';b.className='car-dot';
-        b.setAttribute('aria-label','Go to screen '+(i+1));
-        b.addEventListener('click',function(){jump(i);});
-        if(dotsWrap)dotsWrap.appendChild(b);
-        return b;
-      });
+      var toggles=document.querySelectorAll('[data-theme-btn]');
+      var slides=[],dots=[];
+      function build(){
+        slides=all.filter(function(s){return !s.hidden;});
+        if(dotsWrap)dotsWrap.innerHTML='';
+        dots=slides.map(function(s,i){
+          var b=document.createElement('button');
+          b.type='button';b.className='car-dot';
+          b.setAttribute('aria-label','Go to screen '+(i+1));
+          b.addEventListener('click',function(){jump(i);});
+          if(dotsWrap)dotsWrap.appendChild(b);
+          return b;
+        });
+        track.scrollLeft=0;
+        sync();
+      }
+      function setTheme(t){
+        all.forEach(function(s){s.hidden=(s.getAttribute('data-theme')!==t);});
+        toggles.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-theme-btn')===t?'true':'false');});
+        build();
+      }
       function jump(i){
         var s=slides[i];if(!s)return;
         track.scrollTo({left:s.offsetLeft-(track.clientWidth-s.clientWidth)/2,behavior:'smooth'});
@@ -851,8 +916,9 @@
       },{passive:true});
       if(prev)prev.addEventListener('click',function(){jump(Math.max(0,current()-1));});
       if(next)next.addEventListener('click',function(){jump(Math.min(slides.length-1,current()+1));});
+      toggles.forEach(function(b){b.addEventListener('click',function(){setTheme(b.getAttribute('data-theme-btn'));});});
       window.addEventListener('resize',sync);
-      sync();
+      build();
     });
   })();
 </script>
