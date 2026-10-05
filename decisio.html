@@ -18,7 +18,7 @@
     --text:#EAF0F8; --muted:#8B98AD; --faint:#74829A;
     --gold:#D4A84A; --gold-2:#E8C56E;
     --green:#34D399; --green-2:#5FE3B4;
-    --ink:#0A111E;
+    --ink:#0A111E; --paper:#F5F6F8; --paper-2:#FFFFFF; --ink-strong:#0F1F3A; --ink-muted:#41506B; --line-on-paper:#E2E5EC; --gold-text:#8A6516;
     --radius:16px;
     --shadow:0 30px 80px -30px rgba(0,0,0,0.75);
     --maxw:1180px;
@@ -46,9 +46,9 @@
   .nav-links{display:flex;gap:2.2rem;list-style:none}
   .nav-links a{color:var(--muted);font-size:0.82rem;font-weight:500;letter-spacing:0.02em;transition:color .2s}
   .nav-links a:hover{color:var(--text)}
-  .nav-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--green);color:var(--ink);
+  .nav-cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--gold);color:var(--ink);
     padding:.55rem 1.2rem;border-radius:10px;font-size:.82rem;font-weight:700;letter-spacing:.01em;transition:transform .2s,box-shadow .2s}
-  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px -10px rgba(52,211,153,0.6)}
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 26px -10px rgba(212,168,74,.55)}
   .nav-cta svg{width:15px;height:15px}
 
   .eyebrow{display:inline-flex;align-items:center;gap:.7rem;font-size:.72rem;font-weight:600;letter-spacing:.22em;
@@ -58,8 +58,8 @@
   .btn{display:inline-flex;align-items:center;gap:.6rem;border-radius:11px;font-weight:700;font-size:.92rem;
     padding:.95rem 1.7rem;transition:transform .2s,box-shadow .2s,border-color .2s,color .2s;cursor:pointer;border:1px solid transparent}
   .btn svg{width:18px;height:18px}
-  .btn-green{background:var(--green);color:var(--ink)}
-  .btn-green:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px rgba(52,211,153,0.65)}
+  .btn-primary{background:var(--gold);color:var(--ink)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 34px -14px rgba(212,168,74,.55)}
   .btn-ghost{background:transparent;color:var(--text);border-color:var(--line)}
   .btn-ghost:hover{border-color:var(--gold);color:var(--gold-2)}
 
@@ -164,7 +164,7 @@
   .closing{padding:5.5rem 0;text-align:center;position:relative}
   .closing::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:560px;height:280px;background:radial-gradient(ellipse,rgba(52,211,153,.1),transparent 70%);pointer-events:none}
   .closing h2{font-size:clamp(2rem,4vw,3.2rem);font-weight:800;position:relative}
-  .closing h2 .g{color:var(--green-2)}
+  .closing h2 .g{color:var(--gold-2)}
   .closing p{color:var(--muted);margin:1.1rem auto 2.2rem;max-width:34rem;position:relative}
   .closing .hero-actions{justify-content:center;position:relative}
 
@@ -176,7 +176,7 @@
   .news-form{display:flex;gap:.7rem;max-width:430px;margin:0 auto;flex-wrap:wrap}
   .news-form input{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--line);color:var(--text);padding:.85rem 1rem;border-radius:10px;font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .2s}
   .news-form input:focus{border-color:var(--green)}
-  .news-form button{background:var(--green);color:var(--ink);border:none;padding:.85rem 1.5rem;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;transition:transform .2s}
+  .news-form button{background:var(--gold);color:var(--ink);border:none;padding:.85rem 1.5rem;border-radius:10px;font-weight:700;font-size:.85rem;cursor:pointer;transition:transform .2s}
   .news-form button:hover{transform:translateY(-1px)}
   .news-note{font-size:.76rem;color:var(--faint);margin-top:1rem}
   .news-note a{color:var(--gold-2)}
@@ -220,7 +220,7 @@
   .car-cap b{color:var(--text);font-weight:600;display:block;margin-bottom:.15rem;font-size:.95rem}
   .car-nav{display:flex;align-items:center;justify-content:center;gap:1.1rem;margin-top:1.6rem}
   .car-btn{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--text);display:grid;place-items:center;cursor:pointer;transition:border-color .2s,color .2s}
-  .car-btn:hover{border-color:var(--green);color:var(--green-2)}
+  .car-btn:hover{border-color:var(--gold);color:var(--gold-2)}
   .car-btn svg{width:18px;height:18px}
   .car-dots{display:flex;gap:.5rem;align-items:center}
   .car-dot{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer;transition:background .2s,transform .2s}
@@ -255,6 +255,16 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}.fade{animation:none;opacity:1;transform:none}*{transition:none!important}
   }
+
+  /* Light band — mirrors the Executive Briefing body: navy masthead, gold rule, light body */
+  section.on-paper{--text:var(--ink-strong);--muted:var(--ink-muted);--faint:var(--ink-muted);--line:var(--line-on-paper);--line-soft:var(--line-on-paper);--surface:var(--paper-2);--surface-2:var(--paper);--gold-2:var(--gold-text);
+    background:var(--paper);color:var(--ink-strong);border-top:5px solid var(--gold)}
+  .on-paper .eyebrow{color:var(--gold-text)}
+  .on-paper .eyebrow::before{background:var(--gold)}
+  .on-paper .flist svg{color:#0F7A57}
+  .on-paper .phone,.on-paper .tablet{box-shadow:0 34px 60px -30px rgba(15,31,58,.45),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
+  .on-paper .dev-glow::before{opacity:.45}
+  .showcase.on-paper{padding:4.5rem 0 4rem}
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/decisio.html">
@@ -458,7 +468,7 @@
         <h1 class="fade d1">You don't run meetings to take notes.<br>You run them to <span class="gold">make decisions.</span></h1>
         <p class="hero-sub fade d2">DECISIO.ai turns the decisions in your meetings into clear ownership — and ownership into follow-through that doesn't depend on your memory. Audio stays on your device; only the text transcript is sent for AI analysis.</p>
         <div class="hero-actions fade d2">
-          <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-green"><svg><use href="#i-apple"/></svg>Try free for 7 days</a>
+          <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 7 days</a>
           <a href="#why" class="btn btn-ghost">Why I built it</a>
         </div>
         <p class="cta-fine">Free download · First 7 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
@@ -478,7 +488,7 @@
   </div>
 </header>
 
-<section class="showcase">
+<section class="showcase on-paper">
   <div class="wrap">
     <div class="show-head">
       <div class="eyebrow">See it in action</div>
@@ -693,7 +703,7 @@
     <h2>Stop relying on your memory.<br>Start running on a <span class="g">system.</span></h2>
     <p>DECISIO.ai is on the App Store for iPhone and iPad. Record privately, decide clearly, and never lose a decision again.</p>
     <div class="hero-actions">
-      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-green"><svg><use href="#i-apple"/></svg>Try free for 7 days</a>
+      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 7 days</a>
       <a href="contact.html" class="btn btn-ghost">Contact us</a>
     </div>
         <p class="cta-fine">Free download · First 7 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
