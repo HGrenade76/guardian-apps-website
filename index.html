@@ -180,6 +180,9 @@
   .on-paper .flist svg{color:#0F7A57}
   .on-paper .phone,.on-paper .tablet{box-shadow:0 34px 60px -30px rgba(15,31,58,.45),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
   .on-paper .dev-glow::before{opacity:.45}
+
+  section.on-paper{--green-2:#0F7A57}
+  section.on-paper + section.on-paper{border-top:1px solid var(--line-on-paper)}
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/">
@@ -438,7 +441,7 @@
   </div>
 </section>
 
-<section class="sec who" id="who">
+<section class="sec who on-paper" id="who">
   <div class="wrap who-grid">
     <div class="sec-head">
       <div class="eyebrow">Who it's for</div>

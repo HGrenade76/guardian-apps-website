@@ -265,6 +265,27 @@
   .on-paper .phone,.on-paper .tablet{box-shadow:0 34px 60px -30px rgba(15,31,58,.45),inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1.5px rgba(0,0,0,.5)}
   .on-paper .dev-glow::before{opacity:.45}
   .showcase.on-paper{padding:4.5rem 0 4rem}
+
+  section.on-paper{--green-2:#0F7A57}
+  section.on-paper + section.on-paper{border-top:1px solid var(--line-on-paper)}
+  .on-paper .privacy-box{background:var(--paper-2);box-shadow:0 30px 70px -45px rgba(15,31,58,.35)}
+  .on-paper .privacy-box::before{opacity:.45}
+  .on-paper .factline{background:var(--paper-2)}
+
+  /* Reports */
+  .reports{padding:5.5rem 0}
+  .reports-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:3.5rem;align-items:center}
+  .reports h2{font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;line-height:1.12;margin-bottom:1rem}
+  .reports h2 .g{color:var(--gold-2)}
+  .reports-copy > p{color:var(--muted);font-size:1rem;max-width:34rem;margin-bottom:1.6rem}
+  .docs{position:relative;width:100%;max-width:560px;aspect-ratio:1/1;justify-self:center}
+  .doc{position:absolute;width:66%;height:auto;border-radius:6px;border:1px solid var(--line-on-paper);background:#fff;box-shadow:0 34px 60px -32px rgba(15,31,58,.5)}
+  .doc-b{left:0;top:9%;transform:rotate(-4deg)}
+  .doc-a{right:0;top:0;transform:rotate(3deg);z-index:2}
+  @media (max-width:860px){
+    .reports-grid{grid-template-columns:1fr;gap:2.2rem}
+    .docs{aspect-ratio:auto}.doc{position:relative;width:100%}.doc-b{display:none}.doc-a{transform:none}
+  }
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/decisio.html">
@@ -497,6 +518,10 @@
     <div class="car-wrap" data-carousel>
       <div class="car-track">
         <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-home-light.webp" alt="DECISIO.ai Home on iPhone — one-tap recording, the morning brief, and open, overdue, and decision counts" width="1242" height="2688" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Home</b>Record the meeting. Keep the decisions.</figcaption>
+        </figure>
+        <figure class="car-slide">
           <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-ask-light.webp" alt="Ask My Work on iPhone — search across meetings, decisions, and actions, or ask a question in plain English" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Ask My Work</b>Question months of meetings in plain English.</figcaption>
         </figure>
@@ -509,8 +534,16 @@
           <figcaption class="car-cap"><b>Action Register</b>Every commitment gets an owner and a date.</figcaption>
         </figure>
         <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-edit-action-light.webp" alt="Edit Action on iPhone — pick the owner from the meeting’s participants, set a due date and status" width="1242" height="2688" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Assign in one tap</b>The right owner, straight from the meeting.</figcaption>
+        </figure>
+        <figure class="car-slide">
           <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-weekly-light.webp" alt="Monday Mandate on iPhone — the week's summary, decisions, and what needs attention" width="1242" height="2688" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Monday Mandate</b>Where everything stands, before anyone asks.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-brief-light.webp" alt="Morning Brief on iPhone — the one thing to focus on today and what’s overdue" width="1242" height="2688" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Morning Brief</b>Your day, before it starts.</figcaption>
         </figure>
         <figure class="car-slide">
           <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-session-light.webp" alt="Session detail on iPhone — audio recording, participants, and an AI summary of the meeting" width="1242" height="2688" loading="lazy"></div></div>
@@ -519,6 +552,10 @@
         <figure class="car-slide">
           <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/ph-prep-preview.webp" alt="Agenda preview on iPhone — a clean, shareable agenda generated for the meeting" width="900" height="1948" loading="lazy"></div></div>
           <figcaption class="car-cap"><b>Agenda preview</b>A clean agenda, ready to send.</figcaption>
+        </figure>
+        <figure class="car-slide">
+          <div class="phone"><div class="phone-notch"></div><div class="phone-screen"><img src="assets/light/ph-siri-light.webp" alt="Siri &amp; Shortcuts settings on iPhone — start recording, read open actions, and hear today’s decisions by voice" width="1242" height="2688" loading="lazy"></div></div>
+          <figcaption class="car-cap"><b>Siri &amp; Shortcuts</b>Start recording with your voice.</figcaption>
         </figure>
       </div>
       <div class="car-nav">
@@ -531,7 +568,7 @@
   </div>
 </section>
 
-<section class="argument" id="why">
+<section class="argument on-paper" id="why">
   <div class="wrap argument-inner">
     <div class="eyebrow">Why this exists</div>
     <p class="lead">A decision gets made. Everyone nods. Then — nothing.</p>
@@ -544,7 +581,7 @@
   </div>
 </section>
 
-<section class="acts">
+<section class="acts on-paper">
   <div class="wrap">
     <div class="acts-head">
       <div class="eyebrow">How it works</div>
@@ -600,6 +637,25 @@
   </div>
 </section>
 
+<section class="reports on-paper">
+  <div class="wrap reports-grid">
+    <div class="reports-copy">
+      <div class="eyebrow">Executive-ready</div>
+      <h2>From the meeting<br>to a <span class="g">leadership-ready brief.</span></h2>
+      <p>One tap turns a session into an executive PDF — the bottom line, decisions, actions, risks, and open questions — ready to send to leadership.</p>
+      <ul class="mini">
+        <li><span class="chip"><svg><use href="#i-book"/></svg></span><span>Executive Briefing <small>— the bottom line first, for the people who weren't in the room</small></span></li>
+        <li><span class="chip"><svg><use href="#i-check"/></svg></span><span>Meeting Record <small>— participants, decisions, and the full summary on file</small></span></li>
+        <li><span class="chip"><svg><use href="#i-cal"/></svg></span><span>Calendar &amp; PDF <span class="pro">Pro</span></span></li>
+      </ul>
+    </div>
+    <div class="docs">
+      <img class="doc doc-b" src="assets/light/report-meeting-record.png" alt="DECISIO.ai Meeting Record PDF — navy masthead, participants, at-a-glance counts, and the meeting summary" width="972" height="1246" loading="lazy">
+      <img class="doc doc-a" src="assets/light/report-executive-brief.png" alt="DECISIO.ai Executive Briefing PDF — bottom line, at-a-glance counts of decisions, actions, risks, and open questions, and an executive summary" width="1142" height="1478" loading="lazy">
+    </div>
+  </div>
+</section>
+
 <section class="ipad-band">
   <div class="wrap">
     <div class="ipad-grid">
@@ -644,7 +700,7 @@
   </div>
 </section>
 
-<section class="privacy">
+<section class="privacy on-paper">
   <div class="wrap">
     <div class="privacy-box">
       <div>
@@ -663,7 +719,7 @@
   </div>
 </section>
 
-<section class="fulllist">
+<section class="fulllist on-paper">
   <div class="wrap two">
     <div>
       <div class="eyebrow">Full feature list</div>
@@ -691,7 +747,7 @@
   </div>
 </section>
 
-<section class="promise">
+<section class="promise on-paper">
   <div class="wrap">
     <h2>Prepare<span class="sep">·</span>Decide<span class="sep">·</span>Follow Through</h2>
     <p>Before the meeting. During it. And — finally — after.</p>
