@@ -49,7 +49,18 @@
 | **Both** | One word, two people. | Very generic; weak App Store search. |
 | **Sidekick** | The buddy framing. | Common word, many apps. |
 
-## Recommendation
+## Decision (6 Oct 2026)
+
+**TwoPlates.** Founder's choice. Quick checks on the day: no iOS app named TwoPlates or Two Plates found; twoplates.ca is a Canadian gym-apparel brand (different goods class); "Plates" and "Plates Gym" are live fitness apps (same category, different mark). None is a confirmed blocker; a formal search is still required.
+
+Formal checks to run before any public use:
+1. **USPTO:** go to tmsearch.uspto.gov, search `two plates`, `twoplates`, `2 plates`, `two plate` as word marks. Look at live marks in classes 009 (software), 041 (fitness training services), 042 (SaaS) and 044 (nutrition services). Note any live mark in those classes with "plate" in the fitness or software space and send the list to a trademark attorney for a clearance opinion; budget one to two hours of attorney time.
+2. **App Store:** search "TwoPlates", "Two Plates", "2 Plates" in the US App Store on an iPhone and at apps.apple.com; also search Google Play to avoid a future Android collision.
+3. **Domains and handles:** check twoplates.app, twoplates.fit, twoplates.com, gettwoplates.com; check @twoplates on Instagram, TikTok, X and Bluesky. Register the best available domain the same day.
+4. **Logo:** two stacked plate silhouettes that read as both barbell plates and dinner plates. Avoid the twoplates.ca apparel mark's styling.
+5. **File an intent-to-use application** in classes 009 and 042 once the clearance opinion is clean.
+
+## Earlier recommendation (superseded)
 1. **Repkin** as the working name. Coined, two syllables, family-coded but not family-limited, no fitness conflicts found, pairs with the Guardian Apps "private by default" voice.
 2. **TwoPlates** as the alternative if the formal search clears it; best story of the set.
 3. **Samegym** as the safe descriptive fallback.

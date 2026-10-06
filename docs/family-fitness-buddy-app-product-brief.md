@@ -1,8 +1,9 @@
-# Buddy Fitness Suite — Product Brief (v0.1)
+# TwoPlates — Product Brief (v0.2)
 
 **Prepared for:** Guardian Apps LLC
 **Date:** 6 October 2026
 **Builds on:** `family-fitness-buddy-app-concept-review.md` (market scan, evidence, compliance)
+**Working name:** TwoPlates (chosen 6 Oct 2026; formal trademark and App Store checks pending)
 **Platform:** iOS first · US first · subscription · AI-coached · private by default
 
 ---
@@ -10,6 +11,8 @@
 ## 1. Mission and one-liner
 
 **Mission.** Get parents into the gym with their kids (13+), and keep any two people training together, by giving each person a real individual programme inside one shared plan. Fitness is the product; the relationship is the outcome.
+
+**Name.** *TwoPlates*: two plates on the bar, two plates on the table, two people. Lifter slang for a 225 lb bench is a bonus.
 
 **One-liner.** *Two people. Two goals. One plan, one gym, one dinner table.*
 
@@ -93,11 +96,12 @@ Shared rest periods and "spot me" prompts keep the pair moving together.
 **Hydration.** Daily target from EFSA/IOM adequate intake adjusted for body weight and training days; one-tap logging; Apple Health `dietaryWater` read/write; reminder cadence; link to weigh-in validity (§4.3).
 
 ### 4.3 Biometrics
-- **Founder hardware (confirmed 6 Oct 2026):** Apple Watch Series 3 and Garmin fenix 8.
+- **Founder hardware (confirmed 6 Oct 2026):** Apple Watch Series 3, Garmin fenix 8 and Garmin Index S2 scale.
   - *Apple Watch Series 3* is capped at watchOS 8 and out of security support. It still pairs with iOS 18 and writes workouts, heart rate and steps to Apple Health, but a modern Watch companion app cannot target it. v1 Watch app targets watchOS 10+; the Series 3 contributes through Apple Health only.
-  - *Garmin fenix 8* becomes the primary wrist device for the founder. Path 1 (day one): Garmin Connect's Apple Health sync delivers workouts, heart rate, steps and sleep. Path 2 (apply in Phase 0): Garmin Health API partner access, which exposes daily summaries, sleep, stress, body battery, HRV status and activity details, and is approved per application in days to weeks. Known limit: Garmin does not accept structured strength sessions (sets, reps, weight) written back from third parties, so the app is the system of record for lifting and Garmin is the recovery and cardio source.
-  - Recovery signals from the fenix 8 (HRV status, body battery, sleep) feed the periodisation engine's deload triggers (see `periodisation-engine-spec.md` §6).
-- **Sources v1:** Apple Health as the hub (Apple Watch, Garmin Connect sync, Withings/Renpho/Eufy scales via their own Apple Health writes) plus the Garmin Health API once approved. Withings and other direct vendor APIs are a v2 item for mainstream launch.
+  - *Garmin fenix 8* is the primary wrist device. **The Garmin Connect Developer Program is paused for new applicants (since spring 2026, no reopening date), so the Health API is not available to us yet.** v1 routes, in order: (1) Garmin Connect's Apple Health sync for workouts, heart rate, steps, sleep, weight and, intermittently, body-fat %; (2) a small Connect IQ watch app plus the Connect IQ Mobile SDK to pull body battery and stress history into the phone for the deload triggers; (3) a wearable aggregator (Terra, Rook, Sahha, Fitrockr) only if (2) falls short; (4) apply to the Garmin programme the day it reopens, using the prepared application in `garmin-integration-guide.md`. Garmin does not accept strength sessions written back from third parties, so the app is the system of record for lifting.
+  - *Garmin Index S2* measures weight, body-fat %, BMI, skeletal muscle, bone mass and body-water %. Weight (reliably) and body-fat % (intermittently) reach Apple Health via Garmin Connect; body water and muscle mass do not. v1 offers a two-field manual entry for those, pre-filled from the last value, until an API route exists.
+  - Recovery signals (body battery, stress, sleep; HRV status when the API opens) feed the periodisation engine's deload triggers (see `periodisation-engine-spec.md` §6).
+- **Sources v1:** Apple Health as the hub (Apple Watch, Garmin Connect sync, Withings/Renpho/Eufy scales via their own Apple Health writes) plus Connect IQ for Garmin recovery data. Garmin Health API when the programme reopens; Withings and other direct vendor APIs are a v2 item for mainstream launch.
 - **Metrics:** weight, body-fat % estimate, lean mass, body-water (computed and labelled), waist, photos (adult, private, optional).
 - **Presentation:** 7-day moving averages, weekly change, "estimate" labels on composition, weigh-in protocol prompt (morning, post-void, before food/drink) with off-protocol readings flagged and excluded from the trend.
 - **Trend intelligence:** weekly card for adults: "Weight −0.4 kg/wk, lean mass flat, protein 1.9 g/kg: on track." Adjust targets from the trend, not from single readings.
@@ -135,7 +139,7 @@ Human coaches, public feed, Android, under-13, cross-household buddies, detailed
 **Sync.** CloudKit private database per member; CloudKit shared zone for the buddy-visible slice. No Guardian Apps server holds body or food data. Household membership and subscription state verified via StoreKit and CloudKit, not a custom account system. Export (CSV/JSON) and full delete in-app.
 
 **AI layers.**
-1. **Deterministic engine (owns safety).** Periodisation rules, rep/set/load bounds by age and goal, calorie and macro bounds, hydration targets, red-flag rules. Written and reviewed as code; versioned; unit-tested.
+1. **Deterministic engine (owns safety).** Periodisation rules, rep/set/load bounds by age and goal, calorie and macro bounds, hydration targets, red-flag rules. Written and reviewed as code; versioned; unit-tested. **Review panel:** the founder (fitness diploma) plus the founder's reviewers sign off `periodisation-engine-spec.md`; at least one reviewer should hold a youth strength and conditioning credential for the teen section.
 2. **On-device model (fast, private).** Apple Foundation Models for exercise substitution, coaching cues, meal swaps, natural-language food logging and tone-adjusted nudges. No data leaves the phone.
 3. **Cloud LLM (heavier generation).** Programme block generation and weekly meal-plan generation from a *de-identified* feature vector (goal, training age, equipment, lifts, constraints), returning structured JSON validated against the engine's bounds before anything is shown. No names, no birth dates, no body photos, no free-text teen content.
 
@@ -170,7 +174,7 @@ Human coaches, public feed, Android, under-13, cross-household buddies, detailed
 
 ## 8. Name
 
-See `naming-brief.md`. Working recommendation: **Repkin** (alternatives TwoPlates, Samegym), pending a formal trademark and App Store search. Phase 0 starts once the name is chosen (founder decision, 6 Oct 2026).
+**TwoPlates** (founder decision, 6 Oct 2026). Quick checks found no iOS app of that name; a Canadian apparel brand (twoplates.ca) and several "Plates" fitness apps exist in adjacent spaces. Formal USPTO and App Store checks and domain registration are the first Phase 0 tasks; see `naming-brief.md` for the procedure. Phase 0 can start.
 
 ---
 
@@ -189,9 +193,9 @@ See `naming-brief.md`. Working recommendation: **Repkin** (alternatives TwoPlate
 
 ## 10. Immediate next steps (updated 6 Oct 2026)
 
-1. ~~Confirm founder's hardware~~ Done: Apple Watch Series 3, Garmin fenix 8. Scale brand still to confirm.
-2. Exercise library: import free-exercise-db and eligible wger records, tag and curate to ~150 v1 movements. Build the synthetic demo household.
-3. ~~Periodisation spec~~ Drafted in `periodisation-engine-spec.md`; needs a certified S&C reviewer's sign-off.
-4. Name: run USPTO and App Store searches on Repkin, TwoPlates, Samegym; register the domain.
-5. Apply for Garmin Health API partner access in parallel with the name search.
-6. Start Phase 0 once the name is chosen.
+1. ~~Confirm founder's hardware~~ Done: Apple Watch Series 3, Garmin fenix 8, Garmin Index S2.
+2. Name: ~~choose~~ TwoPlates chosen. Run the USPTO and App Store checks in `naming-brief.md` §Decision; register twoplates.app / twoplates.fit.
+3. Spec review: founder and reviewers work through `periodisation-engine-spec.md` §10 checklist; record names and dates.
+4. Exercise library: import free-exercise-db and eligible wger records, tag and curate to ~150 v1 movements. Build the synthetic demo household.
+5. Garmin: enable Garmin Connect → Apple Health on the founder's phone and verify what arrives; set up a Garmin developer account for Connect IQ; watch for the Developer Program to reopen (`garmin-integration-guide.md`).
+6. Start Phase 0.

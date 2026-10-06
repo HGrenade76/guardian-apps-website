@@ -21,6 +21,8 @@
 
 **Round 2 (6 Oct 2026):** hardware is Apple Watch Series 3 + Garmin fenix 8 with early Garmin Connect integration requested; exercise library to be seeded from public-domain data with a synthetic demo household for novices; periodisation spec to be written for S&C review (`periodisation-engine-spec.md`); naming candidates requested (`naming-brief.md`); Phase 0 starts once a name is chosen.
 
+**Round 3 (6 Oct 2026):** name chosen: **TwoPlates**; scale is Garmin Index S2; Garmin Health API application to be walked through when reached (programme currently paused, guide prepared in `garmin-integration-guide.md`); founder (fitness diploma) and the founder's reviewers form the spec review panel.
+
 Section 7 below is retained as the original question list for the record.
 **Lens:** personal trainer / bodybuilding & toning coach, sports nutritionist, youth strength & conditioning, app compliance.
 

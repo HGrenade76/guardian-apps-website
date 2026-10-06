@@ -168,3 +168,5 @@ Swap rule: a swap must stay inside the slot and the member's equipment profile, 
 - [ ] Slot table covers the founder's gym (machines + dumbbells) and the teen pool
 - [ ] Nutrition bounds acceptable for adult recomposition and lean goals
 - [ ] Reviewer name, credential, date, signature
+
+Review panel (6 Oct 2026): the founder (fitness diploma) plus the founder's reviewers. Recommendation: at least one reviewer with a youth strength and conditioning credential (e.g. NSCA CSCS or equivalent) signs §4 specifically, and one with a nutrition credential signs §8.
