@@ -80,7 +80,13 @@ The first trial is two adults. The teen rules are built into the data model and 
 
 Shared rest periods and "spot me" prompts keep the pair moving together.
 
-**Logging.** Set-by-set weight, reps and RPE; rest timer; quick swap when a machine is taken; Apple Watch companion for logging from the wrist and heart rate. Auto-progression: double progression (reps then load) for adults; rep-range mastery before load for teens.
+**Logging and training record (confirmed requirement, 6 Oct 2026).** The app is the system of record for lifting; Garmin and Apple Health supply cardio, heart rate, sleep, steps and body data. The record must cover:
+- Set-by-set weight, reps and RPE for every exercise, with rest timer, quick swap when a machine is taken, and Apple Watch logging from the wrist.
+- **Last-time recall:** when an exercise opens, show the last session's weight, reps and RPE for each set, plus the prescribed target for today. Starting a set pre-fills the last values.
+- **Muscle groups per day:** every logged session is tagged with the muscle groups worked (from the exercise library tags), shown on the day card and in a weekly coverage view (sets per muscle group this week against the programme's target range) so both buddies can see what was trained and what is due.
+- **History:** per-exercise history (load, reps, estimated 1RM for adults, volume), personal records with dates, session notes, and a calendar of sessions. Full export to CSV/JSON.
+- **Imported workouts:** a Garmin or Apple Watch strength activity that arrives via Apple Health is matched to the logged session by time (heart rate and calories attached); if no session was logged it appears as an unplanned workout the user can tag by muscle group.
+- Auto-progression: double progression (reps then load) for adults; rep-range mastery before load for teens.
 
 **Adaptation.** Weekly review uses logged RPE, completed volume, body-weight trend and self-reported recovery to adjust next week's loads and volume. Deloads every 4–6 weeks or on fatigue signals.
 
