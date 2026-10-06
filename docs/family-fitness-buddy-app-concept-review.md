@@ -2,7 +2,24 @@
 
 **Prepared for:** Guardian Apps LLC
 **Date:** 6 October 2026
-**Status:** Discovery. No product decisions taken; open questions listed at the end.
+**Status:** Discovery complete. Decisions recorded below (6 Oct 2026); product brief in `family-fitness-buddy-app-product-brief.md`.
+
+## 0. Decisions (6 Oct 2026)
+
+| # | Question | Decision |
+|---|---|---|
+| 1 | First users | Founder and daughter (18, one year training together on machines and dumbbells). Both adults, so the first trial exercises the adult path end to end. |
+| 2 | Scope of "buddy" | Any two people. Parent–child is the hero story, not a constraint. |
+| 3 | Body data visibility | Private by default. Each adult sees their own numbers. A buddy, including a parent, does not see another member's calories, weight or body composition unless that member shares it. Teens 13–17 keep the behaviour-first view. |
+| 4 | Nutrition depth | Full suite: meal plans with per-person portions and one shopping list, plus food logging with barcode scanning, calories, macros and water. |
+| 5 | Hardware | Apple Watch and Garmin first via Apple Health. Direct vendor integrations later for mainstream release. |
+| 6 | Coaching | AI-generated and AI-adapted programming and nutrition. No human coach layer. |
+| 7 | Platform | iOS only for now. |
+| 8 | Business model | Subscription. |
+| 9 | Geography | US first. |
+| 10 | Validation | No external interviews; founder acts as the parent persona. Mission: get parents training in the gym with their 13+ kids, for fitness and for the relationship. |
+
+Section 7 below is retained as the original question list for the record.
 **Lens:** personal trainer / bodybuilding & toning coach, sports nutritionist, youth strength & conditioning, app compliance.
 
 ---
