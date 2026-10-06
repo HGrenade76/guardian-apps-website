@@ -23,6 +23,8 @@
 
 **Round 3 (6 Oct 2026):** name chosen: **TwoPlates**; scale is Garmin Index S2; Garmin Health API application to be walked through when reached (programme currently paused, guide prepared in `garmin-integration-guide.md`); founder (fitness diploma) and the founder's reviewers form the spec review panel.
 
+**Round 4 (6 Oct 2026):** confirmed by the founder: app is the lifting system of record with last-time recall and muscle-group coverage; Index S2 body water and muscle mass entered manually until an API route exists; TwoPlates formal checks run as the first Phase 0 task; review panel is the founder plus the founder's reviewers. All discovery questions are closed. Phase 0 is cleared to start.
+
 Section 7 below is retained as the original question list for the record.
 **Lens:** personal trainer / bodybuilding & toning coach, sports nutritionist, youth strength & conditioning, app compliance.
 
