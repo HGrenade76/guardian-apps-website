@@ -197,6 +197,10 @@ Human coaches, public feed, Android, under-13, cross-household buddies, detailed
 
 ---
 
+## 9a. Build status
+
+**6 Oct 2026 — Phase 0 scaffold pushed** to `HGrenade76/twoplates-ios` (main): TwoPlatesCore engine package with tests, SwiftUI app shell (SwiftData + CloudKit private DB, HealthKit, StoreKit 2), onboarding for two, Today/Train/Eat/Measure/Household, set-by-set logging with last-time recall and swaps, weekly muscle coverage, manual Index S2 entry, Apple Health import. 753-exercise library from free-exercise-db. Not yet compiled: first build happens on the founder's Mac per that repo's README.
+
 ## 10. Immediate next steps (updated 6 Oct 2026)
 
 1. ~~Confirm founder's hardware~~ Done: Apple Watch Series 3, Garmin fenix 8, Garmin Index S2.
