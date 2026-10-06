@@ -54,6 +54,12 @@ The first trial is two adults. The teen rules are built into the data model and 
 ## 4. Feature scope
 
 ### 4.1 Training (AI-programmed, individual, joint sessions)
+**Exercise library and demo content (decision, 6 Oct 2026).** Seed the library from public data and layer our own tags:
+- *free-exercise-db* (github.com/yuhonas/free-exercise-db): 800+ exercises with instructions, muscle tags, equipment and step images, released under the Unlicense (public domain, no attribution required). Primary seed.
+- *wger* exercise database: additional exercises, images and some videos under Creative Commons licences with per-record `license` and `license_author` fields. Use only records whose licence we can honour; show attribution in-app where required.
+- Our own tags added on import: `slot`, `teenPermitted`, `jointLoad`, swap group, coaching cues. Curate down to ~150 v1 movements; keep the rest searchable.
+- Novice demo: a first-run "tour" built on a synthetic demo household (two fictional buddies, six weeks of plausible logs, meals and trends) so a new user sees a living app before entering anything. Demo data is clearly labelled and deleted when the real household is created. Public-domain exercise images from the library illustrate the tour; no scraped video.
+
 **Onboarding per member:** goal (gain, recomposition, lean/tone, strength, general), training age, 3–4 recent lifts and loads, equipment profile (commercial gym machines, dumbbells, barbell, cables, bodyweight, home kit), days available, session length, injuries/limits, movement preferences.
 
 **Programme generation.** A rules-based periodisation engine builds a 4–6 week block from templates (upper/lower, full-body, push/pull/legs), then the AI layer personalises exercise selection, order and coaching notes within the rules. The engine, not the model, owns sets, reps, load and progression so programmes stay defensible.
@@ -87,7 +93,11 @@ Shared rest periods and "spot me" prompts keep the pair moving together.
 **Hydration.** Daily target from EFSA/IOM adequate intake adjusted for body weight and training days; one-tap logging; Apple Health `dietaryWater` read/write; reminder cadence; link to weigh-in validity (§4.3).
 
 ### 4.3 Biometrics
-- **Sources v1:** Apple Health only. Apple Watch (heart rate, workouts, steps), Garmin via Garmin Connect's Apple Health sync (weight, body fat where the device supports it), Withings/Renpho/Eufy scales via their own Apple Health writes. Direct vendor APIs (Garmin Health API, Withings API) are a v2 item for mainstream launch.
+- **Founder hardware (confirmed 6 Oct 2026):** Apple Watch Series 3 and Garmin fenix 8.
+  - *Apple Watch Series 3* is capped at watchOS 8 and out of security support. It still pairs with iOS 18 and writes workouts, heart rate and steps to Apple Health, but a modern Watch companion app cannot target it. v1 Watch app targets watchOS 10+; the Series 3 contributes through Apple Health only.
+  - *Garmin fenix 8* becomes the primary wrist device for the founder. Path 1 (day one): Garmin Connect's Apple Health sync delivers workouts, heart rate, steps and sleep. Path 2 (apply in Phase 0): Garmin Health API partner access, which exposes daily summaries, sleep, stress, body battery, HRV status and activity details, and is approved per application in days to weeks. Known limit: Garmin does not accept structured strength sessions (sets, reps, weight) written back from third parties, so the app is the system of record for lifting and Garmin is the recovery and cardio source.
+  - Recovery signals from the fenix 8 (HRV status, body battery, sleep) feed the periodisation engine's deload triggers (see `periodisation-engine-spec.md` §6).
+- **Sources v1:** Apple Health as the hub (Apple Watch, Garmin Connect sync, Withings/Renpho/Eufy scales via their own Apple Health writes) plus the Garmin Health API once approved. Withings and other direct vendor APIs are a v2 item for mainstream launch.
 - **Metrics:** weight, body-fat % estimate, lean mass, body-water (computed and labelled), waist, photos (adult, private, optional).
 - **Presentation:** 7-day moving averages, weekly change, "estimate" labels on composition, weigh-in protocol prompt (morning, post-void, before food/drink) with off-protocol readings flagged and excluded from the trend.
 - **Trend intelligence:** weekly card for adults: "Weight −0.4 kg/wk, lean mass flat, protein 1.9 g/kg: on track." Adjust targets from the trend, not from single readings.
@@ -158,14 +168,9 @@ Human coaches, public feed, Android, under-13, cross-household buddies, detailed
 
 ---
 
-## 8. Working names (to test, none checked for trademark)
+## 8. Name
 
-- **TwoRep** — two people, every rep.
-- **Spotter** — taken by multiple apps; avoid.
-- **Lift Together** — descriptive, likely crowded.
-- **Kin Strength** — leans into family; may limit the couples/friends market.
-- **PairFit** — plain, available-sounding.
-- **Guardian Fit** — reuses the house brand and the "guardian / parent" double meaning.
+See `naming-brief.md`. Working recommendation: **Repkin** (alternatives TwoPlates, Samegym), pending a formal trademark and App Store search. Phase 0 starts once the name is chosen (founder decision, 6 Oct 2026).
 
 ---
 
@@ -182,10 +187,11 @@ Human coaches, public feed, Android, under-13, cross-household buddies, detailed
 
 ---
 
-## 10. Immediate next steps
+## 10. Immediate next steps (updated 6 Oct 2026)
 
-1. Confirm founder's hardware: Apple Watch model, Garmin device(s), scale brand.
-2. Lock the v1 exercise library (~150 movements: machines, dumbbells, cables, barbell, bodyweight) with technique cues and swap groups.
-3. Write the periodisation engine rules as a spec table (goal × training age × equipment → template, volume, intensity, progression) for S&C review.
-4. Decide name shortlist and run a trademark/App Store search.
-5. Start Phase 0.
+1. ~~Confirm founder's hardware~~ Done: Apple Watch Series 3, Garmin fenix 8. Scale brand still to confirm.
+2. Exercise library: import free-exercise-db and eligible wger records, tag and curate to ~150 v1 movements. Build the synthetic demo household.
+3. ~~Periodisation spec~~ Drafted in `periodisation-engine-spec.md`; needs a certified S&C reviewer's sign-off.
+4. Name: run USPTO and App Store searches on Repkin, TwoPlates, Samegym; register the domain.
+5. Apply for Garmin Health API partner access in parallel with the name search.
+6. Start Phase 0 once the name is chosen.

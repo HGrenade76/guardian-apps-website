@@ -19,6 +19,8 @@
 | 9 | Geography | US first. |
 | 10 | Validation | No external interviews; founder acts as the parent persona. Mission: get parents training in the gym with their 13+ kids, for fitness and for the relationship. |
 
+**Round 2 (6 Oct 2026):** hardware is Apple Watch Series 3 + Garmin fenix 8 with early Garmin Connect integration requested; exercise library to be seeded from public-domain data with a synthetic demo household for novices; periodisation spec to be written for S&C review (`periodisation-engine-spec.md`); naming candidates requested (`naming-brief.md`); Phase 0 starts once a name is chosen.
+
 Section 7 below is retained as the original question list for the record.
 **Lens:** personal trainer / bodybuilding & toning coach, sports nutritionist, youth strength & conditioning, app compliance.
 
