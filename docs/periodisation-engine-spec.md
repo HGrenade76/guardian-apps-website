@@ -32,6 +32,14 @@
 
 **Joint sessions.** Both buddies receive the same template skeleton on shared days. Each slot resolves independently per member (exercise, load, reps). Rest periods are synchronised to the longer of the two prescriptions.
 
+**Proposed (under consideration, not yet built): split choice and muscle-named sessions.** Today the template is chosen only from days per week and sessions are labelled "Full body A/B/C". Hein wants people to choose how they pair muscles, and sessions named for what they hit. Proposal for the review panel:
+- `SplitPreference` on the member: *Coach picks* (default, current table) · *Full body* · *Upper / Lower* · *Push / Pull / Legs* · *Muscle pairs* · *One muscle a day*. Muscle pairs offers the classic pairings as chips, two per session: Chest + Triceps, Back + Biceps, Shoulders + Abs, Legs + Calves, Chest + Back, Legs + Biceps, Back + Triceps, Arms, Shoulders + Chest. One muscle a day offers Chest, Back, Shoulders, Arms, Legs, Core.
+- The engine keeps the weekly volume table as the invariant: whatever the split, each muscle group lands inside its weekly set range and gets at least one exposure every 3–4 days where the split allows; if the chosen split cannot meet the minimum at the chosen days per week (e.g. one muscle a day at 3 days), the app says so plainly and offers the nearest split that can.
+- Session names come from the content, never the template: "Chest + Triceps", "Legs", "Upper body", "Full body · lower focus". The friendly pass already needs this for the plain-words rule.
+- Teen rules unchanged: splits that isolate small muscles for a whole session (Arms, Shoulders + Abs) are not offered to teens; teens get Full body, Upper/Lower or Push/Pull/Legs only, same volume caps.
+- Coach suggestion: after four weeks the app may suggest a split change from evidence (a lagging group by set count or stalled progression, poor check-ins after long sessions, frequently skipped days) and from stated preference ("I want bigger arms"). Suggestions are shown with the reason and one tap to accept; never applied silently.
+- Buddies on different splits still share a day when both sessions share a slot (e.g. one on Upper, one on Chest + Triceps both have H-push), otherwise the live session runs as two independent sessions side by side.
+
 ---
 
 ## 3. Weekly volume, intensity and rep ranges (adults)
