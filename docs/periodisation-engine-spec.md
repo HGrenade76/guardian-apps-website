@@ -101,9 +101,9 @@ Rationale: NSCA 2009 youth position statement; AAP 2020 clinical report (Stricke
 **Proposed (under consideration): failure sets for adults.** Evidence (Refalo et al. 2023 meta-analysis; Robinson et al. 2024) shows hypertrophy is similar at 0–2 reps in reserve and that going to failure costs more fatigue and recovery than it returns, so failure is a tool, not the default. Proposal:
 - Adults only. Teen rule RIR ≥ 2 (§4) is untouched.
 - *Last set to failure* on at most 1–3 sets per session, only on isolation and machine or cable movements (curls, extensions, raises, pec deck, leg extension, leg curl, lat pulldown, rows on a machine), never on free-bar squat, deadlift, bench or overhead press. Optional *AMRAP* on the last working set of a compound is allowed as a progression test at RIR 0–1 with a spotter or safeties, once per exercise per block.
-- Scheduled in weeks 3–4 of a block, off in week 1 and during deloads; the deload monitor counts failure sets as 1.5 hard sets.
+- Cadence (Hein's decision): a block event, not a weekly habit. One *failure week* per block, the last loading week before the deload (week 4 of a 5-week block), and never two blocks in a row for the same muscle group. Off in every other week; the deload monitor counts failure sets as 1.5 hard sets. The calendar marks it "Push week" so the person sees it coming.
 - Endurance variant: rest-pause or myo-reps (one activation set, then 3–4 mini-sets of 3–5 reps with 15 s rest) on one isolation movement, for members whose goal is lean-out or endurance.
-- UI: a per-exercise toggle in the ⋯ menu, "Push the last set to failure", with a one-line why; the set row shows "to failure" instead of a rep target and the tick records reps achieved. Off by default; the coach suggests it where a group has stalled on double progression for two weeks.
+- UI: a per-exercise toggle in the ⋯ menu, "Push the last set to failure", with a one-line why; the set row shows "to failure" instead of a rep target and the tick records reps achieved. Off by default; the coach offers it at the start of each block for the groups that stalled on double progression in the previous block, and the person accepts per block.
 
 ---
 
