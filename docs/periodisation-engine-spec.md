@@ -185,3 +185,8 @@ Swap rule: a swap must stay inside the slot and the member's equipment profile, 
 - [ ] Reviewer name, credential, date, signature
 
 Review panel (6 Oct 2026): the founder (fitness diploma) plus the founder's reviewers. Recommendation: at least one reviewer with a youth strength and conditioning credential (e.g. NSCA CSCS or equivalent) signs §4 specifically, and one with a nutrition credential signs §8.
+
+## 2.4 Session types beyond lifting (proposal, 10 Oct 2026)
+A member may add cardio days (running, cycling, rowing, swimming) and conditioning days (CrossFit-style mixed work) to the lifting week. Cardio: Easy (20–60 min, talk pace), Intervals (4–10 rounds), Long (one a week, +10 % a week for three weeks, held on the deload week). Conditioning: warm-up, one skill or strength piece, one workout as AMRAP 12–20 min, For time ≤ 20 min, or EMOM 10–16 min, with two scaling steps per movement. Placement: non-lift days first; easy cardio may follow a lift; a conditioning day never precedes a lower-body day; the deload week halves interval and conditioning work.
+
+**Teen additions to §4 (require the panel's sign-off before they ship):** no Olympic lifts or box jumps; no For time; AMRAP and EMOM capped at 12 minutes with the effort capped at "could talk in short sentences"; loads at the technique-block level; a conditioning day counts as a hard day under the unchanged weekly hard-set cap; intervals at most 8 rounds, never sprint-to-failure; effort words only, no heart-rate zones.
