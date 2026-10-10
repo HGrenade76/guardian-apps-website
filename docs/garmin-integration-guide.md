@@ -1,6 +1,6 @@
 # Garmin Integration Guide — fenix 8 + Index S2
 
-**Date:** 6 October 2026. **Status of the Garmin Connect Developer Program: paused for new applicants** (since spring 2026, no reopening date announced as of September 2026). This guide records what we can do today, and the exact application steps to run the day the programme reopens.
+**Date:** 6 October 2026. **Update 10 October 2026:** the app no longer shows Garmin-branded rows; Garmin data reaches TwoPlates through Apple Health, live heart rate comes from a Garmin watch in Broadcast Heart Rate mode over Bluetooth, and the Health API application below waits for the programme to reopen (see the app repo's Design/DESIGN.md, Batch S). **Status of the Garmin Connect Developer Program: paused for new applicants** (since spring 2026, no reopening date announced as of September 2026). This guide records what we can do today, and the exact application steps to run the day the programme reopens.
 
 ---
 
