@@ -10,7 +10,9 @@
 
 ## 1. Mission and one-liner
 
-**Mission.** Get parents into the gym with their kids (13+), and keep any two people training together, by giving each person a real individual programme inside one shared plan. Fitness is the product; the relationship is the outcome.
+**Positioning (10 Oct 2026).** *TwoPlates: you and your training buddy, one plan each.* The buddy is sometimes a parent or a child (13+), sometimes a partner, sometimes just the person you train with; the app leads with buddies and keeps family only where it is literal (Family Sharing, the Family visibility tier, guardian rules for 13–17).
+
+**Mission.** Keep any two people training together, parents and teens included, by giving each person a real individual programme inside one shared plan. Fitness is the product; the relationship is the outcome.
 
 **Name.** *TwoPlates*: two plates on the bar, two plates on the table, two people. Lifter slang for a 225 lb bench is a bonus.
 

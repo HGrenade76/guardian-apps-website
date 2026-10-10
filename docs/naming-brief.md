@@ -3,6 +3,8 @@
 **Date:** 6 October 2026. Quick web and App Store search only; **a formal USPTO class 9/42 search and App Store name check are still required before any name is used.**
 
 ## Naming criteria
+Positioning since 10 Oct 2026: *you and your training buddy, one plan each*; buddy first, family included.
+
 1. Says "two people" or "together" without saying "couple" or "kids".
 2. Works for a parent and teen, a couple, two friends.
 3. One or two syllables, spellable when heard, available as a `.app` or `.fit` domain.
