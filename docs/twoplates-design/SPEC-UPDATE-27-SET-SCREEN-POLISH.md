@@ -26,5 +26,10 @@ After sets at 135 lb, the next set and the planned rows showed 5 lb, and Set 4 w
 - Elapsed time in its own pill beside ⋯ (36 pt high, 12 pt side padding, tabular digits, accent-tinted outline), turning amber past the planned session length.
 - With the number keypad open, the Log set bar sits above the keyboard (keyboard toolbar: "Done" and "Log set"); nothing is ever hidden behind the keypad.
 
+## 5b. Field sizing and the empty space (Hein, 11 Nov)
+- Keep the large reps and weight numbers. Field height about 68 pt (from 76), with the TARGET / FROM LAST caption tucked under the number.
+- The + and − controls are at least 44 × 44 pt each; tapping the upper half of a field's right side adds, the lower half subtracts. VoiceOver adjustable action unchanged.
+- Fill the space above the Log set bar with an **Up next** card: the next exercise's small figure, name and "4 × 8–12" (or the superset partner when in a pair). Tap opens that exercise's page. Hidden on the last exercise, replaced by "Last exercise · Finish when ready".
+
 ## 6. Tests and process
-Core tests for 1 to 3. UI tests: pre-fill after three sets, sanity prompt, warm-up × and Skip, header collapses after Set 1 and stays pinned, keypad shows Log set. Capture Set 1 (full hero), Set 3 (compact header), keypad open, and the progression cue on the iPhone in Graphite. STOP.
+Core tests for 1 to 3. UI tests: pre-fill after three sets, stepper hit areas at least 44 pt, Up next card shows the next exercise, sanity prompt, warm-up × and Skip, header collapses after Set 1 and stays pinned, keypad shows Log set. Capture Set 1 (full hero), Set 3 (compact header), keypad open, and the progression cue on the iPhone in Graphite. STOP.
