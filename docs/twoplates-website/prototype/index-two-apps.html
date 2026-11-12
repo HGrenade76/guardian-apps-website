@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Homepage update — two apps</title><style>
+/* Tokens copied from index.html so the page sits in the same family. */
+:root{--bg:#0A111E;--bg-top:#0E1A2C;--surface:#0F1B2D;--surface-2:#15243A;--line:rgba(255,255,255,.09);--text:#EAF0F8;--muted:#8B98AD;--gold:#D4A84A;--gold-2:#E8C56E;--green:#34D399;
+--paper:#F5F6F8;--paper-2:#FFFFFF;--ink-strong:#0F1F3A;--ink-muted:#41506B;--line-on-paper:#E2E5EC;--gold-text:#8A6516;
+/* TwoPlates accents (from the app's fixed data colours) */
+--tp-strength:#2F7A4C;--tp-light:#9FD3A8;--tp-run:#F28C28;
+--radius:16px;--maxw:1180px;
+--sans:-apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--serif:"Cormorant Garamond",Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 2rem}
+.eyebrow{display:flex;align-items:center;gap:.8rem;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";width:2.2rem;height:1px;background:var(--gold)}
+.g{color:var(--gold)}
+.serif{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.05}
+
+/* NAV (same structure as index.html) */
+nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2rem;background:rgba(10,17,30,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-logo{font-weight:800;font-size:1.05rem;letter-spacing:-.02em}.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{color:var(--muted);font-size:.82rem;font-weight:500}
+.nav-links a.on{color:var(--text)}
+.soon{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,74,.5);border-radius:6px;padding:.1rem .35rem;margin-left:.35rem;vertical-align:1px}
+.nav-cta{background:var(--gold);color:#0A111E;font-weight:700;font-size:.82rem;padding:.6rem 1.05rem;border-radius:10px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:5.5rem 0 5rem;background:radial-gradient(900px 500px at 78% 30%,rgba(212,168,74,.13),transparent 60%),linear-gradient(180deg,var(--bg-top),var(--bg))}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+.badge img{width:56px;height:56px;border-radius:14px;box-shadow:0 10px 30px -8px rgba(0,0,0,.8)}
+.badge b{font-size:1.25rem;letter-spacing:-.02em}.badge small{display:block;color:var(--muted);font-size:.78rem;font-weight:500}
+.hero h1{font-size:clamp(2.6rem,5.4vw,4.4rem);font-weight:800}
+.hero h1 .serif{font-size:1.12em;color:var(--gold-2)}
+.hero p.lede{margin-top:1.4rem;max-width:34rem;color:#B7C2D4;font-size:1.08rem}
+.wait{margin-top:2rem;display:flex;gap:.6rem;max-width:30rem}
+.wait input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:12px;padding:.95rem 1rem;font:inherit;font-size:.95rem}
+.wait button{background:var(--gold);color:#0A111E;font:inherit;font-weight:700;font-size:.92rem;border:0;border-radius:12px;padding:0 1.25rem;white-space:nowrap;cursor:pointer}
+.fine{margin-top:.8rem;color:var(--muted);font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.8rem}
+.chips span{font-size:.78rem;font-weight:600;color:#C9D3E2;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:999px;padding:.42rem .8rem}
+
+.stage{position:relative;height:600px}
+.plates{position:absolute;inset:0;margin:auto;width:560px;height:560px;opacity:.9}
+.phone{position:absolute;width:250px;border-radius:40px;padding:9px;background:linear-gradient(160deg,#3a3d44,#0b0c0f);box-shadow:0 40px 80px -30px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.12)}
+.phone img{border-radius:32px}
+.phone.a{left:6%;top:40px;transform:rotate(-6deg)}
+.phone.b{right:4%;top:0;transform:rotate(5deg)}
+.tag{position:absolute;font-size:.72rem;font-weight:700;letter-spacing:.06em;color:#0A111E;background:var(--gold-2);border-radius:999px;padding:.35rem .7rem;box-shadow:0 10px 20px -8px rgba(0,0,0,.6)}
+.preview-note{position:absolute;bottom:-6px;right:0;font-size:.7rem;color:var(--muted)}
+
+/* PAPER SECTIONS */
+.paper{background:var(--paper);color:var(--ink-strong)}
+.paper .eyebrow{color:var(--gold-text)}.paper .eyebrow::before{background:var(--gold-text)}
+.paper .g{color:var(--gold-text)}
+section.pad{padding:6rem 0}
+.why{display:grid;grid-template-columns:.9fr 1.1fr;gap:4rem;align-items:start}
+.why h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.why p{color:var(--ink-muted);font-size:1.05rem;margin-bottom:1rem}
+.why .sig{color:var(--ink-strong);font-weight:600}
+.quote{font-family:var(--serif);font-style:italic;font-size:1.65rem;line-height:1.3;color:var(--ink-strong);border-left:3px solid var(--gold);padding-left:1.2rem;margin:1.6rem 0}
+
+/* HOW IT WORKS */
+.how h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:40rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3rem}
+.step{background:var(--paper-2);border:1px solid var(--line-on-paper);border-radius:22px;padding:1.6rem 1.6rem 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font-size:.75rem;font-weight:800;color:var(--gold-text);letter-spacing:.1em}
+.step h3{font-size:1.35rem;margin:.5rem 0 .6rem}
+.step p{color:var(--ink-muted);font-size:.95rem}
+.step ul{list-style:none;margin:1rem 0 1.4rem;font-size:.88rem;color:var(--ink-strong)}
+.step li{padding:.35rem 0;border-top:1px solid var(--line-on-paper)}
+.step li b{color:var(--tp-strength)}
+.shot{margin-top:auto;align-self:center;width:78%;border-radius:28px 28px 0 0;padding:8px 8px 0;background:linear-gradient(160deg,#3a3d44,#0b0c0f)}
+.shot img{width:100%;border-radius:22px 22px 0 0;height:330px;object-fit:cover;object-position:top}
+
+/* TEEN SAFETY */
+.safe{background:radial-gradient(700px 400px at 15% 20%,rgba(52,211,153,.10),transparent 60%),var(--surface)}
+.safe-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:4rem;align-items:center}
+.safe h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.safe p.lede{color:#B7C2D4;margin-top:1rem}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.rule{border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:18px;padding:1.2rem}
+.rule svg{width:30px;height:30px;color:var(--green)}
+.rule b{display:block;margin:.6rem 0 .3rem}
+.rule span{color:var(--muted);font-size:.9rem}
+
+/* PRIVATE */
+.priv{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;margin-top:2.6rem}
+.pv svg{width:34px;height:34px;color:var(--gold-text)}
+.pv b{display:block;margin:.8rem 0 .3rem;font-size:1.02rem}
+.pv span{color:var(--ink-muted);font-size:.92rem}
+
+/* FAQ */
+.faq{max-width:52rem;margin-top:2.4rem}
+.faq details{border-top:1px solid var(--line-on-paper);padding:1.1rem 0}
+.faq details:last-child{border-bottom:1px solid var(--line-on-paper)}
+.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.faq summary::after{content:"+";color:var(--gold-text);font-size:1.3rem;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--ink-muted);margin-top:.6rem}
+
+/* CLOSING */
+.closing{text-align:center;padding:6rem 0;background:radial-gradient(700px 360px at 50% 0,rgba(212,168,74,.14),transparent 70%),var(--bg)}
+.closing img{width:96px;height:96px;border-radius:24px;margin:0 auto 1.6rem;box-shadow:0 20px 40px -14px rgba(0,0,0,.8)}
+.closing h2{font-size:clamp(2.2rem,4.4vw,3.4rem);font-weight:800}
+.closing .wait{margin:2rem auto 0}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0}
+.foot{display:flex;flex-wrap:wrap;gap:1.4rem 2.4rem;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.foot-brand{font-weight:800;color:var(--text)}.foot-brand span{color:var(--gold)}
+.foot-links{display:flex;gap:1.6rem;list-style:none}
+
+@media (max-width:900px){
+  .nav-links{display:none}
+  .wrap{padding:0 1rem}
+  nav{padding:.9rem 1rem}
+  .hero{padding:3rem 0 3rem}
+  .hero-grid,.why,.safe-grid{grid-template-columns:1fr;gap:2.4rem}
+  .stage{height:430px}
+  .plates{width:400px;height:400px}
+  .phone{width:180px;border-radius:30px;padding:7px}.phone img{border-radius:24px}
+  .phone.a{left:2%;top:30px}.phone.b{right:2%}
+  .steps,.priv{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  section.pad{padding:4rem 0}
+  .wait{flex-direction:column}.wait button{padding:.95rem}
+  .foot{flex-direction:column;align-items:flex-start}
+}
+
+.h2{padding:6rem 0 5rem;background:radial-gradient(900px 500px at 70% 20%,rgba(212,168,74,.10),transparent 60%),linear-gradient(180deg,var(--bg-top),var(--bg))}
+.h2 h1{font-size:clamp(2.6rem,5.4vw,4.4rem);font-weight:800;max-width:52rem}
+.h2 h1 .dim{color:#5d6b82}
+.h2 p{margin-top:1.4rem;max-width:40rem;color:#B7C2D4;font-size:1.08rem}
+.apps{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:3rem}
+.app{border-radius:24px;padding:2rem;display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-height:430px}
+.app.dec{background:linear-gradient(160deg,#13233a,#0c1626);border:1px solid var(--line)}
+.app.tp{background:linear-gradient(160deg,#1b1b1f,#0b0b0d);border:1px solid rgba(212,168,74,.35)}
+.app .top{display:flex;align-items:center;gap:1rem}
+.app .top img{width:64px;height:64px;border-radius:16px}
+.app h3{font-size:1.7rem}.app .k{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.state{position:absolute;top:1.6rem;right:1.6rem;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:.35rem .7rem}
+.state.live{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+.state.soon{background:rgba(212,168,74,.12);color:var(--gold-2);border:1px solid rgba(212,168,74,.45)}
+.app p{color:#B7C2D4}
+.app ul{list-style:none;color:#C9D3E2;font-size:.92rem}.app li{padding:.3rem 0}.app li::before{content:"✓  ";color:var(--green)}
+.app.tp li::before{color:var(--gold)}
+.app .acts{margin-top:auto;display:flex;gap:.7rem}
+.btn{font-weight:700;font-size:.88rem;padding:.8rem 1.1rem;border-radius:12px}
+.btn.p{background:var(--gold);color:#0A111E}.btn.gh{border:1px solid rgba(255,255,255,.2)}
+.note{margin-top:2.5rem;padding:1rem 1.2rem;border:1px dashed rgba(212,168,74,.5);border-radius:14px;color:var(--gold-2);font-size:.85rem;max-width:60rem}
+</style></head><body>
+<nav>
+  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
+  <ul class="nav-links">
+    <li><a href="decisio.html">DECISIO.ai</a></li>
+    <li><a href="twoplates.html" >TwoPlates<span class="soon">Soon</span></a></li>
+    <li><a href="index.html#philosophy">Philosophy</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="#apps" class="nav-cta">Our apps</a>
+</nav>
+<header class="h2"><div class="wrap">
+<div class="eyebrow">Guardian.Apps · iOS</div>
+<h1 style="margin-top:1.4rem">AI that solves real problems.<br><span class="dim">Not new ones.</span></h1>
+<p>We build a small number of apps, each for one real problem, and build them well. <b style="color:#EAF0F8">DECISIO.ai</b> for the decisions you make at work. <b style="color:#EAF0F8">TwoPlates</b>, coming soon, for the training you do together. Privacy-first. No bots. No noise.</p>
+<div class="apps" id="apps">
+ <div class="app dec"><span class="state live">On the App Store</span>
+  <div class="top"><img src="../../../assets/brand/decisio-mark-256.webp" alt=""><div><div class="k">Decision &amp; follow-through</div><h3>DECISIO.ai</h3></div></div>
+  <p>Turns every meeting into structured decisions, tracked actions and executive-ready briefs. Audio stays on your device.</p>
+  <ul><li>One-tap capture, no meeting bots</li><li>Action Register with owners and dates</li><li>Monday Mandate: what's overdue, before anyone asks</li></ul>
+  <div class="acts"><a class="btn p">Try free for 30 days</a><a class="btn gh">Explore the app</a></div></div>
+ <div class="app tp"><span class="state soon">Coming soon</span>
+  <div class="top"><img src="assets/twoplates/tp-icon-512.webp" alt=""><div><div class="k">Strength training for two</div><h3>TwoPlates</h3></div></div>
+  <p>A strength coach for you and the person you train with. One plan each, trained side by side. Safe for teens by design.</p>
+  <ul><li>A real program for each of you</li><li>Train together, live: whose turn, what to load</li><li>Teen rules built in: no calories, no weigh-ins</li></ul>
+  <div class="acts"><a class="btn p">Join the waitlist</a><a class="btn gh">Learn more</a></div></div>
+</div>
+<div class="note">Website agent: the "Our philosophy" bullet "Your audio and voice never leave your device" is DECISIO-specific. Reword to "Your data stays yours: audio, workouts and body data stay on your device or in your own iCloud." Philosophy, Who it's for and closing CTA stay DECISIO-led until TwoPlates launches.</div>
+</div></header></body></html>
