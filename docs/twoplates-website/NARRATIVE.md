@@ -17,12 +17,13 @@ A strength coach for you and the person you train with. Each of you gets a real 
 
 Fitness apps are built for one person. People who stick with training usually have someone next to them. Today two people with different bodies and goals either do the same workout or train alone with separate apps.
 
-## 4. The three things we promise (and only these)
+## 4. The four things we promise (and only these)
 
 | Promise | Proof on the page | Built today? |
 |---|---|---|
 | **One plan each** | Goal, kit (gym, home), days → a progressing program per person; Quick start | Yes |
 | **Train together, live** | Join a session, whose turn, what to change on the bar, lock-screen timer, Apple Health | Yes (being polished in TestFlight build 2) |
+| **Eat without the fuss** | A week of meals one question at a time, one dinner with a portion per person, grocery list by aisle (Reminders, share, print), prep day, swaps, teens get a plate without numbers | Yes (meal planner, groceries, prep day, Reminders export all shipped) |
 | **Safe for teens by design** | No calories, weigh-ins, BMI or body-fat for teens; at least 2 reps in reserve; technique first; parent sees effort, not body numbers | Yes, enforced in the engine |
 
 Supporting promise, inherited from Guardian Apps: **private by default** (your iCloud, no ads, no data selling, you choose what to share).
@@ -83,3 +84,7 @@ Shows the exercise library and the Lat Pulldown detail with the real 3D illustra
 **Newsletter subject:** "Our second app: TwoPlates"
 **Body (short):**
 > You know us for DECISIO.ai. Our second app is for the other part of the week: the gym. TwoPlates gives you and your training buddy a plan each, and lets you train it together, live. If you bring a teenager to the gym, the teen safety rules are built in and can't be switched off. It's in testing now. Join the waitlist for an early beta invite.
+
+## 10. Meals as a seller
+
+Meals are their own reason to download: many couples and families want "what's for dinner and what do we buy" solved before they want a training program. Lead the meals section with the table, not the macros: **One dinner for the table. A portion for each of you.** Don't show calories or macros in marketing (keeps it teen-safe and avoids diet-app positioning). Don't claim weight loss. Don't give a recipe count (the set is growing).

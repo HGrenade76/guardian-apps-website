@@ -8,10 +8,11 @@ Design and copy for adding TwoPlates to gap-apps.com as a coming-soon product. B
 |---|---|
 | `prototype/twoplates.html` | The full coming-soon page, ready to adapt. Same tokens and structure as `index.html`. Responsive (mobile under 900px). |
 | `prototype/index-two-apps.html` | The homepage hero and "Our apps" two-card block. |
-| `prototype/assets/twoplates/` | `tp-icon-512.webp` (app icon), `tp-og.png` (1200×630 share image), six app screens (`tp-screen-*.webp`), including `tp-screen-exercise.webp` and `tp-screen-library.webp` with the real MoveKit exercise illustrations. |
+| `prototype/assets/twoplates/` | `tp-icon-512.webp` (app icon), `tp-og.png` (1200×630 share image), eight app screens (`tp-screen-*.webp`), including `tp-screen-meals.webp` and `tp-screen-groceries.webp`, and `tp-screen-exercise.webp` and `tp-screen-library.webp` with the real MoveKit exercise illustrations. |
 | `mockups/twoplates-coming-soon-overview.png` | First screen, desktop and phone. |
 | `mockups/twoplates-coming-soon-desktop.png`, `-mobile.png` | Full page renders. |
 | `mockups/homepage-two-apps.png` | Homepage change (new headline). |
+| `mockups/twoplates-meals.png` | The "Eat without the fuss" section (meal plan and groceries). |
 | `mockups/twoplates-see-every-move.png` | The "See every move" section with real exercise illustrations. |
 | `NARRATIVE.md` | Positioning, what we may and may not claim, headlines, launch posts. |
 | `LEGAL-PLAN.md` | Terms and privacy plan (no legal page changes needed for the coming-soon page itself). |
