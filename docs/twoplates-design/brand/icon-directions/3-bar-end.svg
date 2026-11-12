@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".45" stop-color="#F5BE45"/><stop offset="1" stop-color="#B9780F"/></linearGradient><linearGradient id="silv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#D9DCE2"/><stop offset="1" stop-color="#9EA3AD"/></linearGradient><radialGradient id="bg" cx=".5" cy=".28" r=".95"><stop offset="0" stop-color="#34363D"/><stop offset=".6" stop-color="#16171B"/><stop offset="1" stop-color="#08080A"/></radialGradient><filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#000" flood-opacity=".55"/></filter>
+<linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F2F3F5"/><stop offset=".5" stop-color="#8E939C"/><stop offset="1" stop-color="#C9CCD2"/></linearGradient>
+<linearGradient id="gedge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C98A1A"/><stop offset="1" stop-color="#6E4504"/></linearGradient>
+<linearGradient id="sedge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9AEB7"/><stop offset="1" stop-color="#555A63"/></linearGradient></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/><path d="M0 0H1024V430C760 520 300 520 0 410Z" fill="#fff" opacity=".06"/>
+<g filter="url(#sh)">
+<rect x="96" y="490" width="832" height="44" rx="22" fill="url(#bar)"/>
+<ellipse cx="586" cy="512" rx="92" ry="300" fill="url(#sedge)"/><rect x="560" y="212" width="26" height="600" fill="url(#sedge)"/>
+<ellipse cx="560" cy="512" rx="92" ry="300" fill="url(#silv)"/><ellipse cx="560" cy="512" rx="30" ry="98" fill="#0B0B0D" opacity=".85"/>
+<ellipse cx="426" cy="512" rx="92" ry="300" fill="url(#gedge)"/><rect x="400" y="212" width="26" height="600" fill="url(#gedge)"/>
+<ellipse cx="400" cy="512" rx="92" ry="300" fill="url(#gold)"/><ellipse cx="400" cy="512" rx="30" ry="98" fill="#0B0B0D" opacity=".85"/>
+<rect x="96" y="490" width="250" height="44" rx="22" fill="url(#bar)"/>
+</g></svg>

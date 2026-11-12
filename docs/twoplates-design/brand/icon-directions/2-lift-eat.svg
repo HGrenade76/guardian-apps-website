@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".45" stop-color="#F5BE45"/><stop offset="1" stop-color="#B9780F"/></linearGradient><linearGradient id="silv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#D9DCE2"/><stop offset="1" stop-color="#9EA3AD"/></linearGradient><filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#000" flood-opacity=".55"/></filter>
+<linearGradient id="bgw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7E6B8"/><stop offset="1" stop-color="#E9B44A"/></linearGradient>
+<radialGradient id="iron" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#4A4C53"/><stop offset=".6" stop-color="#1D1E22"/><stop offset="1" stop-color="#0A0A0C"/></radialGradient>
+<radialGradient id="china" cx=".4" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4E6EA"/></radialGradient></defs>
+<rect width="1024" height="1024" fill="url(#bgw)"/>
+<g filter="url(#sh)">
+<circle cx="640" cy="560" r="250" fill="url(#china)"/>
+<circle cx="640" cy="560" r="180" fill="none" stroke="#D3D6DC" stroke-width="6"/>
+<circle cx="380" cy="470" r="250" fill="url(#iron)"/>
+<circle cx="380" cy="470" r="215" fill="none" stroke="#5A5C63" stroke-width="8"/><circle cx="380" cy="470" r="120" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="8"/>
+<circle cx="380" cy="470" r="64" fill="url(#gold)"/>
+<circle cx="380" cy="470" r="30" fill="#0A0A0C"/>
+</g></svg>

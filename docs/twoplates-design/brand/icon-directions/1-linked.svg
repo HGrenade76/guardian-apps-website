@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE7A3"/><stop offset=".45" stop-color="#F5BE45"/><stop offset="1" stop-color="#B9780F"/></linearGradient><linearGradient id="silv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#D9DCE2"/><stop offset="1" stop-color="#9EA3AD"/></linearGradient><radialGradient id="bg" cx=".5" cy=".28" r=".95"><stop offset="0" stop-color="#34363D"/><stop offset=".6" stop-color="#16171B"/><stop offset="1" stop-color="#08080A"/></radialGradient><filter id="sh" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#000" flood-opacity=".55"/></filter>
+<clipPath id="top"><rect x="0" y="0" width="1024" height="512"/></clipPath></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/><path d="M0 0H1024V430C760 520 300 520 0 410Z" fill="#fff" opacity=".06"/>
+<g filter="url(#sh)">
+<circle cx="632" cy="512" r="205" fill="none" stroke="url(#silv)" stroke-width="96"/>
+<circle cx="392" cy="512" r="205" fill="none" stroke="url(#gold)" stroke-width="96"/>
+<circle cx="632" cy="512" r="205" fill="none" stroke="url(#silv)" stroke-width="96" clip-path="url(#top)" stroke-dasharray="0" />
+</g>
+<g clip-path="url(#top)"><circle cx="632" cy="512" r="205" fill="none" stroke="#000" stroke-opacity=".0" stroke-width="96"/></g>
+</svg>

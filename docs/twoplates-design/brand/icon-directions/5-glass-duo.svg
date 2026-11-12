@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs>
+<linearGradient id="bg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1B1C21"/><stop offset=".55" stop-color="#2A2418"/><stop offset="1" stop-color="#8A5A0E"/></linearGradient>
+<radialGradient id="ga" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFE7A3" stop-opacity=".95"/><stop offset=".6" stop-color="#F2B232" stop-opacity=".85"/><stop offset="1" stop-color="#B9780F" stop-opacity=".9"/></radialGradient>
+<radialGradient id="gb" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".75"/><stop offset="1" stop-color="#C9CED8" stop-opacity=".35"/></radialGradient>
+<clipPath id="ca"><circle cx="420" cy="440" r="250"/></clipPath>
+<filter id="sh5" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="30" stdDeviation="30" flood-color="#000" flood-opacity=".5"/></filter></defs>
+<rect width="1024" height="1024" fill="url(#bg5)"/>
+<g filter="url(#sh5)">
+<circle cx="420" cy="440" r="250" fill="url(#ga)"/>
+<circle cx="610" cy="600" r="250" fill="url(#gb)"/>
+<circle cx="610" cy="600" r="250" fill="#FFF6DA" opacity=".55" clip-path="url(#ca)"/>
+</g>
+<circle cx="420" cy="440" r="248" fill="none" stroke="#FFF3C8" stroke-width="5" opacity=".9"/>
+<circle cx="610" cy="600" r="248" fill="none" stroke="#FFFFFF" stroke-width="5" opacity=".85"/>
+<circle cx="420" cy="440" r="64" fill="none" stroke="#FFF3C8" stroke-width="18" opacity=".9"/><circle cx="610" cy="600" r="64" fill="none" stroke="#FFFFFF" stroke-width="18" opacity=".8"/>
+<path d="M250 330 A210 210 0 0 1 470 232" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" opacity=".7"/>
+</svg>
