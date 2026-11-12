@@ -79,18 +79,18 @@
   <meta property="og:url" content="https://gap-apps.com/terms.html">
   <meta property="og:title" content="Disclaimer &amp; Terms of Use — Guardian Apps LLC">
   <meta property="og:description" content="The terms governing your use of DECISIO.ai and Guardian Apps LLC services, including AI disclaimers, acceptable use, and limitation of liability.">
-  <meta property="og:image" content="https://gap-apps.com/assets/gap-og.png">
+  <meta property="og:image" content="https://gap-apps.com/assets/gap-og-2026.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Guardian.Apps — AI that solves real problems. Not new ones.">
+  <meta property="og:image:alt" content="Guardian.Apps — Apps built for real people. Private by default.">
   <meta property="og:locale" content="en_US">
 
   <!-- X / Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Disclaimer &amp; Terms of Use — Guardian Apps LLC">
   <meta name="twitter:description" content="The terms governing your use of DECISIO.ai and Guardian Apps LLC services, including AI disclaimers, acceptable use, and limitation of liability.">
-  <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og.png">
-  <meta name="twitter:image:alt" content="Guardian.Apps — AI that solves real problems. Not new ones.">
+  <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og-2026.png">
+  <meta name="twitter:image:alt" content="Guardian.Apps — Apps built for real people. Private by default.">
 
   <!-- Icons & app identity -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -118,7 +118,7 @@
           "width": 512,
           "height": 512
         },
-        "image": "https://gap-apps.com/assets/gap-og.png",
+        "image": "https://gap-apps.com/assets/gap-og-2026.png",
         "email": "support@guardian-apps.com",
         "foundingDate": "2025",
         "address": {
@@ -162,16 +162,28 @@
   }
   </script>
 
+<link rel="stylesheet" href="assets/site-chrome.css">
+<script src="assets/site-chrome.js" defer></script>
 </head>
 <body>
-<nav>
-  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
-  <ul class="nav-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="products.html">Products</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a href="contact.html" class="nav-cta">Contact Us</a>
+<nav class="gn" aria-label="Main">
+  <a href="index.html" class="gn-logo">Guardian<span>.</span>Apps</a>
+  <button class="gn-burger" type="button" aria-expanded="false" aria-controls="gn-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="gn-menu" id="gn-menu">
+    <ul class="gn-links">
+      <li class="gn-dd">
+        <button class="gn-dd-btn" type="button" aria-expanded="false" aria-controls="gn-apps">Apps<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5l3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="gn-panel" id="gn-apps">
+          <a href="decisio.html" class="gn-app"><img src="assets/brand/decisio-mark-128.webp" alt="" width="40" height="40"><span><b>DECISIO.ai</b><small>Meeting decisions and follow-through</small></span></a>
+          <a href="twoplates.html" class="gn-app"><img src="assets/twoplates/tp-icon-128.webp" alt="" width="40" height="40"><span><b>TwoPlates<span class="soon">Soon</span></b><small>Strength training for two</small></span></a>
+          <a href="index.html#apps" class="gn-all">All apps →</a>
+        </div>
+      </li>
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="index.html#apps" class="gn-cta">Our apps</a>
+  </div>
 </nav>
 
 <div class="page-hero">
@@ -322,20 +334,34 @@
   </main>
 </div>
 
-<footer>
-  <a href="index.html" class="footer-brand">Guardian<span>.</span>Apps LLC</a>
-  <ul class="footer-links">
-    <li><a href="index.html">Home</a></li>
-    <li><a href="decisio.html">DECISIO.ai</a></li>
-    <li><a href="privacy.html">Privacy Policy</a></li>
-    <li><a href="terms.html">Terms</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <div class="footer-social">
-    <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
-    <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+<footer class="gf">
+  <div class="gf-in">
+    <div class="gf-top">
+      <div class="gf-brand">
+        <a href="index.html" class="gf-logo">Guardian<span>.</span>Apps</a>
+        <p>Apps built for real people. Private by default.</p>
+        <div class="gf-social">
+          <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+          <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+        </div>
+      </div>
+      <div class="gf-col"><div class="gf-h">Apps</div><ul>
+        <li><a href="decisio.html">DECISIO.ai</a></li>
+        <li><a href="products.html">DECISIO.ai features</a></li>
+        <li><a href="twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Company</div><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#philosophy">Philosophy</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Legal</div><ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul></div>
+    </div>
+    <div class="gf-bottom">© 2025–2026 Guardian Apps LLC</div>
   </div>
-  <span class="footer-copy">© 2025–2026 Guardian Apps LLC</span>
 </footer>
 </body>
 </html>

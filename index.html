@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through</title>
-<meta name="description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
+<title>Guardian.Apps: iPhone apps built for real people</title>
+<meta name="description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
 <meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -191,6 +191,37 @@
   .duo-back .duo-tag{left:10%}.duo-front .duo-tag{right:10%}
   .phone-screen.dark{background:#0A111E}
   @media (max-width:860px){.hero-duo{width:290px;margin-bottom:2rem}}
+  .soon{display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,74,.5);border-radius:6px;padding:.08rem .34rem;margin-left:.4rem;vertical-align:1px;line-height:1.4}
+  /* hero (two apps) */
+  .hero .hero-copy.wide{max-width:52rem}
+  .hero h1 .serif{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0;color:var(--gold-2);font-size:1.1em}
+  .hero-sub.wide{max-width:40rem}
+  .apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.6rem;margin-top:3rem}
+  .app{border-radius:24px;padding:2rem;display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-height:460px}
+  .app.dec{background:linear-gradient(160deg,#13233a,#0c1626);border:1px solid var(--line)}
+  .app.tp{background:linear-gradient(160deg,#1b1b1f,#0b0b0d);border:1px solid rgba(212,168,74,.35)}
+  .app .top{display:flex;align-items:center;gap:1rem}
+  .app .top img{width:64px;height:64px;border-radius:16px}
+  .app h3{font-size:1.7rem}.app .k{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.4}
+  .state{align-self:flex-start;font-size:.68rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:.35rem .7rem}
+  .state.live{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+  .state.soon-tag{background:rgba(212,168,74,.12);color:var(--gold-2);border:1px solid rgba(212,168,74,.45)}
+  .app p{color:#B7C2D4}
+  .app ul{list-style:none;color:#C9D3E2;font-size:.92rem}.app li{padding:.3rem 0}.app li::before{content:"✓  ";color:var(--green)}
+  .app.tp li::before{color:var(--gold)}
+  .app .acts{margin-top:auto;display:flex;gap:.7rem;flex-wrap:wrap}
+  .app .btn{padding:.8rem 1.1rem;font-size:.88rem}
+  @media (max-width:860px){.apps{grid-template-columns:1fr}.app{min-height:0;padding:1.6rem}}
+  /* promise */
+  .promise .sec-head{max-width:46rem}
+  .promise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+  .pr-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:#FFFFFF;border:1px solid var(--line-on-paper);color:var(--gold-text)}
+  .pr-ic svg{width:22px;height:22px}
+  .pr h3{font-size:1.05rem;font-weight:700;margin:1rem 0 .4rem;letter-spacing:-.01em}
+  .pr p{font-size:.92rem;color:var(--ink-muted);line-height:1.6}
+  @media (max-width:960px){.promise-grid{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.promise-grid{grid-template-columns:1fr}}
+
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/">
@@ -200,20 +231,20 @@
   <meta property="og:site_name" content="Guardian.Apps">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gap-apps.com/">
-  <meta property="og:title" content="Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through">
-  <meta property="og:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
-  <meta property="og:image" content="https://gap-apps.com/assets/gap-og.png">
+  <meta property="og:title" content="Guardian.Apps: iPhone apps built for real people">
+  <meta property="og:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
+  <meta property="og:image" content="https://gap-apps.com/assets/gap-og-2026.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Guardian.Apps — AI that solves real problems. Not new ones.">
+  <meta property="og:image:alt" content="Guardian.Apps — Apps built for real people. Private by default.">
   <meta property="og:locale" content="en_US">
 
   <!-- X / Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Guardian.Apps — DECISIO.ai · Meeting Decisions &amp; Follow-Through">
-  <meta name="twitter:description" content="Guardian.Apps builds DECISIO.ai — private, on-device meeting intelligence that turns decisions into follow-through. Free download, 30-day Pro trial.">
-  <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og.png">
-  <meta name="twitter:image:alt" content="Guardian.Apps — AI that solves real problems. Not new ones.">
+  <meta name="twitter:title" content="Guardian.Apps: iPhone apps built for real people">
+  <meta name="twitter:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
+  <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og-2026.png">
+  <meta name="twitter:image:alt" content="Guardian.Apps — Apps built for real people. Private by default.">
 
   <!-- Icons & app identity -->
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -241,7 +272,7 @@
           "width": 512,
           "height": 512
         },
-        "image": "https://gap-apps.com/assets/gap-og.png",
+        "image": "https://gap-apps.com/assets/gap-og-2026.png",
         "email": "support@guardian-apps.com",
         "foundingDate": "2025",
         "address": {
@@ -354,6 +385,8 @@
   }
   </script>
 
+<link rel="stylesheet" href="assets/site-chrome.css">
+<script src="assets/site-chrome.js" defer></script>
 </head>
 <body>
 
@@ -372,49 +405,68 @@
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
 </svg>
 
-<nav>
-  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
-  <ul class="nav-links">
-    <li><a href="decisio.html">The App</a></li>
-    <li><a href="#philosophy">Philosophy</a></li>
-    <li><a href="#who">Who It's For</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="nav-cta"><svg><use href="#i-apple"/></svg>Try free</a>
+<nav class="gn" aria-label="Main">
+  <a href="index.html" class="gn-logo">Guardian<span>.</span>Apps</a>
+  <button class="gn-burger" type="button" aria-expanded="false" aria-controls="gn-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="gn-menu" id="gn-menu">
+    <ul class="gn-links">
+      <li class="gn-dd">
+        <button class="gn-dd-btn" type="button" aria-expanded="false" aria-controls="gn-apps">Apps<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5l3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="gn-panel" id="gn-apps">
+          <a href="decisio.html" class="gn-app"><img src="assets/brand/decisio-mark-128.webp" alt="" width="40" height="40"><span><b>DECISIO.ai</b><small>Meeting decisions and follow-through</small></span></a>
+          <a href="twoplates.html" class="gn-app"><img src="assets/twoplates/tp-icon-128.webp" alt="" width="40" height="40"><span><b>TwoPlates<span class="soon">Soon</span></b><small>Strength training for two</small></span></a>
+          <a href="index.html#apps" class="gn-all">All apps →</a>
+        </div>
+      </li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="#apps" class="gn-cta">Our apps</a>
+  </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
-    <div class="hero-grid">
-      <div class="hero-copy">
-        <div class="eyebrow fade d1">Guardian.Apps · iOS</div>
-        <h1 class="fade d1">AI that solves real problems.<br><span class="g">Not new ones.</span></h1>
-        <p class="hero-sub fade d2">We build one thing, and build it well: DECISIO.ai — a private instrument for the people who run meetings, lead teams, and own the decisions that follow. Privacy-first. No bots. No noise.</p>
-        <div class="hero-actions fade d2">
-          <a href="decisio.html" class="btn btn-primary">See the app <svg><use href="#i-arrow"/></svg></a>
-          <a href="#philosophy" class="btn btn-ghost">Our philosophy</a>
-        </div>
-        <div class="hero-proof fade d3">
-          <span><b>On-device by design</b></span><span class="dot"></span>
-          <span><b>No meeting bots</b></span><span class="dot"></span>
-          <span><b>iPhone &amp; iPad</b></span>
-        </div>
+    <div class="hero-copy wide">
+      <div class="eyebrow fade d1">Guardian.Apps · iPhone &amp; iPad</div>
+      <h1 class="fade d1">Apps built for real people.<br><span class="serif">Private by default.</span></h1>
+      <p class="hero-sub wide fade d2">We make a few iPhone apps, each one designed around a real part of your week, and we build them well. <b style="color:var(--text)">DECISIO.ai</b> for the decisions you make at work. <b style="color:var(--text)">TwoPlates</b>, coming soon, for the training you do together. Your data stays yours.</p>
+    </div>
+    <div class="apps fade d3" id="apps">
+      <div class="app dec"><span class="state live">On the App Store</span>
+        <div class="top"><img src="assets/brand/decisio-mark-256.webp" alt="" width="64" height="64"><div><div class="k">Decision &amp; follow-through</div><h3>DECISIO.ai</h3></div></div>
+        <p>Turns every meeting into structured decisions, tracked actions and executive-ready briefs. Audio stays on your device.</p>
+        <ul><li>One-tap capture, no meeting bots</li><li>Action Register with owners and dates</li><li>Monday Mandate: what's overdue, before anyone asks</li></ul>
+        <div class="acts"><a class="btn btn-primary" href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener">Try free for 30 days</a><a class="btn btn-ghost" href="decisio.html">Explore the app</a></div>
       </div>
-      <div class="hero-duo fade d3">
-        <div class="phone duo-back">
-          <div class="phone-notch"></div>
-          <div class="phone-screen dark"><img src="assets/ph-actions.webp" alt="DECISIO.ai Action Register on iPhone in dark mode" width="900" height="1948" loading="eager"></div>
-          <span class="duo-tag">Dark</span>
-        </div>
-        <div class="phone dev-glow duo-front">
-          <div class="phone-notch"></div>
-          <div class="phone-screen"><img src="assets/light/ph-actions-light.webp" alt="DECISIO.ai Action Register on iPhone in light mode — open actions with owners, due dates, and status" width="1242" height="2688" loading="eager"></div>
-          <span class="duo-tag">Light</span>
-        </div>
+      <div class="app tp"><span class="state soon-tag">Coming soon</span>
+        <div class="top"><img src="assets/twoplates/tp-icon-512.webp" alt="" width="64" height="64"><div><div class="k">Strength training for two</div><h3>TwoPlates</h3></div></div>
+        <p>A strength coach for you and the person you train with. One plan each, trained side by side. Safe for teens by design.</p>
+        <ul><li>A real program for each of you</li><li>Train together, live: whose turn, what to load</li><li>Teen rules built in: no calories, no weigh-ins</li></ul>
+        <div class="acts"><a class="btn btn-primary" href="twoplates.html#waitlist">Join the waitlist</a><a class="btn btn-ghost" href="twoplates.html">Learn more</a></div>
       </div>
     </div>
   </div>
 </header>
+
+<section class="sec promise on-paper" id="promise">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Our promise</div>
+      <h2>Your data is <span class="g">yours.</span><br>In every app we make.</h2>
+    </div>
+    <div class="promise-grid">
+      <div class="pr"><div class="pr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg></div>
+        <h3>It stays with you</h3><p>Audio, workouts and body data stay on your device or in your own iCloud.</p></div>
+      <div class="pr"><div class="pr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h10M4 18h7"/></svg></div>
+        <h3>AI gets the text, not you</h3><p>When an app uses AI, only the text it needs is sent for analysis. Never your recordings.</p></div>
+      <div class="pr"><div class="pr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/></svg></div>
+        <h3>Never sold</h3><p>We don't sell, rent or trade your data. Not to advertisers, not to anyone.</p></div>
+      <div class="pr"><div class="pr-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="10" height="18" rx="2.5"/><path d="M11 18h2"/></svg></div>
+        <h3>Built the Apple way</h3><p>Native iPhone and iPad apps that work with iCloud, Siri and Apple Health.</p></div>
+    </div>
+  </div>
+</section>
 
 <section class="sec philosophy" id="philosophy">
   <div class="wrap phil-grid">
@@ -424,72 +476,19 @@
       <p>A family-built technology company focused on practical innovation over hype. Every feature is designed around a real workflow — not demo-room theatrics.</p>
     </div>
     <div class="pillars">
-      <div class="pillar green"><div class="pillar-ic"><svg><use href="#i-shield"/></svg></div><div><h4>Privacy-first architecture</h4><p>Your audio and voice never leave your device. Only the text needed for AI analysis is ever sent — never your recordings. You own your conversations.</p></div></div>
-      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-bolt"/></svg></div><div><h4>Purpose-built AI</h4><p>Every feature solves a specific professional problem — not a hypothetical use case cooked up in a boardroom.</p></div></div>
-      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-target"/></svg></div><div><h4>Zero training required</h4><p>Clean, intuitive experiences that fit naturally into your day. If it needs a manual, we didn't do our job.</p></div></div>
-      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-trend"/></svg></div><div><h4>Driven by real users</h4><p>Continuous improvement based on how professionals actually work — not engagement metrics or investor demos.</p></div></div>
+      <div class="pillar green"><div class="pillar-ic"><svg><use href="#i-target"/></svg></div><div><h4>Small on purpose</h4><p>A few apps, each built for one part of your week. We'd rather do fewer things and do them well.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-bolt"/></svg></div><div><h4>Built around real routines</h4><p>Every feature starts with something people actually do, at work or in the gym. Not a feature list someone dreamed up.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-check"/></svg></div><div><h4>Zero training required</h4><p>Clean, intuitive experiences that fit naturally into your day. If it needs a manual, we didn't do our job.</p></div></div>
+      <div class="pillar"><div class="pillar-ic"><svg><use href="#i-trend"/></svg></div><div><h4>Driven by real users</h4><p>We improve our apps based on how people actually use them — not engagement metrics or investor demos.</p></div></div>
     </div>
   </div>
 </section>
 
-<section class="sec showcase on-paper" id="products">
-  <div class="wrap">
-    <div class="show-copy">
-      <div class="badge">Decision &amp; Follow-Through · iOS</div>
-      <h2>DECISIO.ai</h2>
-      <p>The privacy-first app that turns every meeting into structured decisions, tracked actions, and executive-ready briefs. Audio stays on your device; only the text transcript is sent for AI analysis. No bots. No compromise.</p>
-      <ul class="flist">
-        <li><svg><use href="#i-check"/></svg>One-tap capture — audio never leaves your device</li>
-        <li><svg><use href="#i-check"/></svg>No meeting bots or third-party access</li>
-        <li><svg><use href="#i-check"/></svg>Action Register — every action gets an owner</li>
-        <li><svg><use href="#i-check"/></svg>Monday Mandate surfaces what's overdue, before anyone asks</li>
-        <li><svg><use href="#i-check"/></svg>Your instrument alone — no team rollout required</li>
-      </ul>
-      <div class="hero-actions">
-        <a href="decisio.html" class="btn btn-primary">Explore the app <svg><use href="#i-arrow"/></svg></a>
-        <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-ghost"><svg><use href="#i-apple"/></svg>Try free on the App Store</a>
-      </div>
-        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
-    </div>
-    <div class="media-tablet dev-glow"><div class="tablet"><div class="tablet-screen"><img src="assets/ipad-today.webp" alt="DECISIO.ai on iPad — the Today command center: the brief, today's meetings, open and overdue actions, and recent decisions" width="2000" height="1390" loading="lazy"></div></div></div>
-  </div>
-</section>
-
-<section class="sec who on-paper" id="who">
-  <div class="wrap who-grid">
-    <div class="sec-head">
-      <div class="eyebrow">Who it's for</div>
-      <h2>If your work involves <span class="g">decisions,</span><br>it's for you.</h2>
-      <p>Wherever decisions get made and have to be followed through — DECISIO.ai works the way leaders actually work.</p>
-    </div>
-    <div class="roles">
-      <div class="role"><svg><use href="#i-board"/></svg>Business leaders &amp; executives</div>
-      <div class="role"><svg><use href="#i-flag"/></svg>Project &amp; team managers</div>
-      <div class="role"><svg><use href="#i-user"/></svg>Consultants &amp; advisors</div>
-      <div class="role"><svg><use href="#i-rocket"/></svg>Entrepreneurs &amp; founders</div>
-      <div class="role"><svg><use href="#i-scale"/></svg>Compliance professionals</div>
-      <div class="role"><svg><use href="#i-trend"/></svg>Small business owners</div>
-    </div>
-  </div>
-</section>
-
-<section class="sec ctab">
-  <div class="wrap">
-    <h2>Less time managing.<br><span class="g">More time leading.</span></h2>
-    <p>One app, built with a single goal — to give you your time back, and your decisions a place to live.</p>
-    <div class="hero-actions">
-      <a href="https://apps.apple.com/us/app/decisio-ai/id6759219287" target="_blank" rel="noopener" class="btn btn-primary"><svg><use href="#i-apple"/></svg>Try free for 30 days</a>
-      <a href="contact.html" class="btn btn-ghost">Get in touch</a>
-    </div>
-        <p class="cta-fine">Free download · First 30 days of DECISIO Pro free · then $7.99/month or $79.99/year · Cancel anytime</p>
-  </div>
-</section>
-
-<section class="news">
+<section class="news" id="newsletter">
   <div class="wrap news-inner">
     <div class="eyebrow" style="justify-content:center">Stay in the loop</div>
-    <h2>Decisions, <span class="g">delivered.</span></h2>
-    <p>Product updates, new features, and the occasional note on building privacy-first tools. No spam, no noise — unsubscribe anytime.</p>
+    <h2>New apps and updates, <span class="g">first.</span></h2>
+    <p>News on our apps, what we're building next, and the occasional note on building privacy-first tools. No spam, unsubscribe anytime.</p>
     <iframe name="bd-iframe" title="newsletter" style="display:none"></iframe>
     <form id="newsletterForm" class="news-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
       <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
@@ -502,20 +501,33 @@
   </div>
 </section>
 
-<footer>
-  <div class="wrap foot">
-    <a href="index.html" class="foot-brand">Guardian<span>.</span>Apps LLC</a>
-    <ul class="foot-links">
-      <li><a href="decisio.html">DECISIO.ai</a></li>
-      <li><a href="privacy.html">Privacy Policy</a></li>
-      <li><a href="terms.html">Terms</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-    <div class="foot-social">
-      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
-      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+<footer class="gf">
+  <div class="gf-in">
+    <div class="gf-top">
+      <div class="gf-brand">
+        <a href="index.html" class="gf-logo">Guardian<span>.</span>Apps</a>
+        <p>Apps built for real people. Private by default.</p>
+        <div class="gf-social">
+          <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+          <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+        </div>
+      </div>
+      <div class="gf-col"><div class="gf-h">Apps</div><ul>
+        <li><a href="decisio.html">DECISIO.ai</a></li>
+        <li><a href="products.html">DECISIO.ai features</a></li>
+        <li><a href="twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Company</div><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#philosophy">Philosophy</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Legal</div><ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul></div>
     </div>
-    <span class="foot-copy">© 2025–2026 Guardian Apps LLC</span>
+    <div class="gf-bottom">© 2025–2026 Guardian Apps LLC</div>
   </div>
 </footer>
 
