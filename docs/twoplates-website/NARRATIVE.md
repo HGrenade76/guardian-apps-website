@@ -54,7 +54,7 @@ The "Why this exists" section shows this line in quotation marks, with Hein's na
 
 Because it's presented as Hein's own words, he approves it or rewords it before launch. Options:
 - Keep it as is.
-- Make it personal, for example: "I train with my wife and my daughter. Every app gave us the same workout, or made us train alone. So I built the one we wanted."
+- Make it personal, for example: "I train with [who you train with]. Every app gave us the same workout, or made us train alone. So I built the one we wanted."
 - Remove the quote and keep only the paragraph text (no quotation marks).
 
 Name family members only with their OK.
