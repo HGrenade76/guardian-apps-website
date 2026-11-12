@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TwoPlates — Strength training for two · Coming soon · Guardian.Apps</title>
+<meta name="description" content="TwoPlates is a strength and fitness coach for you and the person you train with. One plan each, trained side by side. Safe for teens by design. Coming soon to iPhone.">
+<meta name="theme-color" content="#0A111E">
+<link rel="canonical" href="https://gap-apps.com/twoplates.html">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Guardian.Apps">
+<meta property="og:type" content="website">
+<meta property="og:title" content="TwoPlates — Stronger together. Coming soon to iPhone.">
+<meta property="og:description" content="One plan each, trained side by side. For partners, friends, and parents with teens.">
+<meta property="og:image" content="https://gap-apps.com/assets/twoplates/tp-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TwoPlates — Two people. One plan each. Stronger together. Coming soon to iPhone.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://gap-apps.com/twoplates.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TwoPlates — Stronger together. Coming soon to iPhone.">
+<meta name="twitter:description" content="One plan each, trained side by side. For partners, friends, and parents with teens.">
+<meta name="twitter:image" content="https://gap-apps.com/assets/twoplates/tp-og.png">
+<meta name="twitter:image:alt" content="TwoPlates — Two people. One plan each. Stronger together. Coming soon to iPhone.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* Tokens copied from index.html so the page sits in the same family. */
+:root{--bg:#0A111E;--bg-top:#0E1A2C;--surface:#0F1B2D;--surface-2:#15243A;--line:rgba(255,255,255,.09);--text:#EAF0F8;--muted:#8B98AD;--gold:#D4A84A;--gold-2:#E8C56E;--green:#34D399;
+--paper:#F5F6F8;--paper-2:#FFFFFF;--ink-strong:#0F1F3A;--ink-muted:#41506B;--line-on-paper:#E2E5EC;--gold-text:#8A6516;
+/* TwoPlates accents (from the app's fixed data colours) */
+--tp-strength:#2F7A4C;--tp-light:#9FD3A8;--tp-run:#F28C28;
+--radius:16px;--maxw:1180px;
+--sans:-apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--serif:"Cormorant Garamond",Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 2rem}
+.eyebrow{display:flex;align-items:center;gap:.8rem;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";width:2.2rem;height:1px;background:var(--gold)}
+.g{color:var(--gold)}
+.serif{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.05}
+
+/* NAV (same structure as index.html) */
+nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2rem;background:rgba(10,17,30,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-logo{font-weight:800;font-size:1.05rem;letter-spacing:-.02em}.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{color:var(--muted);font-size:.82rem;font-weight:500}
+.nav-links a.on{color:var(--text)}
+.soon{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,74,.5);border-radius:6px;padding:.1rem .35rem;margin-left:.35rem;vertical-align:1px}
+.nav-cta{background:var(--gold);color:#0A111E;font-weight:700;font-size:.82rem;padding:.6rem 1.05rem;border-radius:10px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:5.5rem 0 5rem;background:radial-gradient(900px 500px at 78% 30%,rgba(212,168,74,.13),transparent 60%),linear-gradient(180deg,var(--bg-top),var(--bg))}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+.badge img{width:56px;height:56px;border-radius:14px;box-shadow:0 10px 30px -8px rgba(0,0,0,.8)}
+.badge b{font-size:1.25rem;letter-spacing:-.02em}.badge small{display:block;color:var(--muted);font-size:.78rem;font-weight:500}
+.hero h1{font-size:clamp(2.6rem,5.4vw,4.4rem);font-weight:800}
+.hero h1 .serif{font-size:1.12em;color:var(--gold-2)}
+.hero p.lede{margin-top:1.4rem;max-width:34rem;color:#B7C2D4;font-size:1.08rem}
+.wait{margin-top:2rem;display:flex;gap:.6rem;max-width:30rem}
+.wait input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:12px;padding:.95rem 1rem;font:inherit;font-size:.95rem}
+.wait button{background:var(--gold);color:#0A111E;font:inherit;font-weight:700;font-size:.92rem;border:0;border-radius:12px;padding:0 1.25rem;white-space:nowrap;cursor:pointer}
+.fine{margin-top:.8rem;color:var(--muted);font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.8rem}
+.chips span{font-size:.78rem;font-weight:600;color:#C9D3E2;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:999px;padding:.42rem .8rem}
+
+.stage{position:relative;height:600px}
+.plates{position:absolute;inset:0;margin:auto;width:560px;height:560px;opacity:.9}
+.phone{position:absolute;width:250px;border-radius:40px;padding:9px;background:linear-gradient(160deg,#3a3d44,#0b0c0f);box-shadow:0 40px 80px -30px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.12)}
+.phone img{border-radius:32px}
+.phone.a{left:6%;top:40px;transform:rotate(-6deg)}
+.phone.b{right:4%;top:0;transform:rotate(5deg)}
+.tag{position:absolute;font-size:.72rem;font-weight:700;letter-spacing:.06em;color:#0A111E;background:var(--gold-2);border-radius:999px;padding:.35rem .7rem;box-shadow:0 10px 20px -8px rgba(0,0,0,.6)}
+.preview-note{position:absolute;bottom:-6px;right:0;font-size:.7rem;color:var(--muted)}
+
+/* PAPER SECTIONS */
+.paper{background:var(--paper);color:var(--ink-strong)}
+.paper .eyebrow{color:var(--gold-text)}.paper .eyebrow::before{background:var(--gold-text)}
+.paper .g{color:var(--gold-text)}
+section.pad{padding:6rem 0}
+.why{display:grid;grid-template-columns:.9fr 1.1fr;gap:4rem;align-items:start}
+.why h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.why p{color:var(--ink-muted);font-size:1.05rem;margin-bottom:1rem}
+.why .sig{color:var(--ink-strong);font-weight:600}
+.quote{font-family:var(--serif);font-style:italic;font-size:1.65rem;line-height:1.3;color:var(--ink-strong);border-left:3px solid var(--gold);padding-left:1.2rem;margin:1.6rem 0}
+
+/* HOW IT WORKS */
+.how h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:40rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3rem}
+.step{background:var(--paper-2);border:1px solid var(--line-on-paper);border-radius:22px;padding:1.6rem 1.6rem 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font-size:.75rem;font-weight:800;color:var(--gold-text);letter-spacing:.1em}
+.step h3{font-size:1.35rem;margin:.5rem 0 .6rem}
+.step p{color:var(--ink-muted);font-size:.95rem}
+.step ul{list-style:none;margin:1rem 0 1.4rem;font-size:.88rem;color:var(--ink-strong)}
+.step li{padding:.35rem 0;border-top:1px solid var(--line-on-paper)}
+.step li b{color:var(--tp-strength)}
+.shot{margin-top:auto;align-self:center;width:78%;border-radius:28px 28px 0 0;padding:8px 8px 0;background:linear-gradient(160deg,#3a3d44,#0b0c0f)}
+.shot img{width:100%;border-radius:22px 22px 0 0;height:330px;object-fit:cover;object-position:top}
+
+/* TEEN SAFETY */
+.safe{background:radial-gradient(700px 400px at 15% 20%,rgba(52,211,153,.10),transparent 60%),var(--surface)}
+.safe-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:4rem;align-items:center}
+.safe h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.safe p.lede{color:#B7C2D4;margin-top:1rem}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.rule{border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:18px;padding:1.2rem}
+.rule svg{width:30px;height:30px;color:var(--green)}
+.rule b{display:block;margin:.6rem 0 .3rem}
+.rule span{color:var(--muted);font-size:.9rem}
+
+/* PRIVATE */
+.priv{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;margin-top:2.6rem}
+.pv svg{width:34px;height:34px;color:var(--gold-text)}
+.pv b{display:block;margin:.8rem 0 .3rem;font-size:1.02rem}
+.pv span{color:var(--ink-muted);font-size:.92rem}
+
+/* FAQ */
+.faq{max-width:52rem;margin-top:2.4rem}
+.faq details{border-top:1px solid var(--line-on-paper);padding:1.1rem 0}
+.faq details:last-child{border-bottom:1px solid var(--line-on-paper)}
+.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.faq summary::after{content:"+";color:var(--gold-text);font-size:1.3rem;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--ink-muted);margin-top:.6rem}
+
+/* CLOSING */
+.closing{text-align:center;padding:6rem 0;background:radial-gradient(700px 360px at 50% 0,rgba(212,168,74,.14),transparent 70%),var(--bg)}
+.closing img{width:96px;height:96px;border-radius:24px;margin:0 auto 1.6rem;box-shadow:0 20px 40px -14px rgba(0,0,0,.8)}
+.closing h2{font-size:clamp(2.2rem,4.4vw,3.4rem);font-weight:800}
+.closing .wait{margin:2rem auto 0}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0}
+.foot{display:flex;flex-wrap:wrap;gap:1.4rem 2.4rem;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.foot-brand{font-weight:800;color:var(--text)}.foot-brand span{color:var(--green)}
+.foot-links{display:flex;gap:1.6rem;list-style:none;flex-wrap:wrap}
+.foot-links a:hover{color:var(--gold-2)}
+.foot-social{display:flex;gap:1.1rem}
+.foot-social a{font-size:.76rem;color:#74829A}.foot-social a:hover{color:var(--green)}
+.foot-copy{font-size:.74rem;color:#74829A}
+.wait-ok{display:none;margin-top:2rem;max-width:30rem;border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);color:var(--green);border-radius:12px;padding:.95rem 1rem;font-weight:600;font-size:.95rem}
+.closing .wait-ok{margin:2rem auto 0}
+.nav-links a:hover{color:var(--text)}
+
+
+/* SEE EVERY MOVE */
+.move{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:center}
+.move h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.move h2 .serif{color:var(--gold-text);font-size:1.1em}
+.move p{color:var(--ink-muted);font-size:1.05rem;margin-top:1rem}
+.move ul{list-style:none;margin-top:1.4rem}.move li{padding:.5rem 0;border-top:1px solid var(--line-on-paper);font-size:.95rem}.move li b{color:var(--tp-strength);margin-right:.4rem}
+.duo{position:relative;height:560px}
+.duo .phone{width:250px}
+.duo .phone.a{left:2%;top:10px;transform:rotate(-4deg)}
+.duo .phone.b{right:2%;top:60px;transform:rotate(4deg)}
+.duo .lit{position:absolute;left:38%;bottom:6px;font-size:.72rem;font-weight:700;color:#b3261e;background:#fff3f2;border:1px solid rgba(214,69,69,.35);border-radius:999px;padding:.35rem .75rem}
+@media (max-width:900px){.move{grid-template-columns:1fr;gap:2rem}.duo{height:420px}.duo .phone{width:180px}}
+
+@media (max-width:900px){
+  .nav-links{display:none}
+  .wrap{padding:0 1rem}
+  nav{padding:.9rem 1rem}
+  .hero{padding:3rem 0 3rem}
+  .hero-grid,.why,.safe-grid{grid-template-columns:1fr;gap:2.4rem}
+  .stage{height:430px}
+  .plates{width:400px;height:400px}
+  .phone{width:180px;border-radius:30px;padding:7px}.phone img{border-radius:24px}
+  .phone.a{left:2%;top:30px}.phone.b{right:2%}
+  .tag.buddy{display:none}
+  .steps,.priv{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  section.pad{padding:4rem 0}
+  .wait{flex-direction:column}.wait button{padding:.95rem}
+  .foot{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+<iframe name="bd-iframe" title="Waitlist signup" style="display:none"></iframe>
+
+<nav>
+  <a href="index.html" class="nav-logo">Guardian<span>.</span>Apps</a>
+  <ul class="nav-links">
+    <li><a href="decisio.html">The App</a></li>
+    <li><a href="twoplates.html" class="on" aria-current="page">TwoPlates<span class="soon">Soon</span></a></li>
+    <li><a href="index.html#philosophy">Philosophy</a></li>
+    <li><a href="index.html#who">Who It's For</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="#waitlist" class="nav-cta">Join the waitlist</a>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="badge"><img src="assets/twoplates/tp-icon-512.webp" alt="TwoPlates app icon"><div><b>TwoPlates</b><small>Coming soon · iPhone</small></div></div>
+      <h1>Two people.<br>One plan each.<br><span class="serif">Stronger together.</span></h1>
+      <p class="lede">TwoPlates is a strength coach for you and the person you train with: a partner, a friend, or the teenager you're bringing to the gym for the first time. You each get a real program built around your own goal, and you train it side by side.</p>
+      <form class="wait wl-form" id="waitlist" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
+        <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
+        <input type="hidden" name="embed" value="1">
+        <input type="hidden" name="tag" value="twoplates-waitlist">
+        <button type="submit">Join the waitlist</button>
+      </form>
+      <div class="wait-ok" role="status">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
+      <p class="fine">One email when TwoPlates launches, and an early invite to the beta. Unsubscribe anytime. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
+      <div class="chips"><span>One plan each</span><span>Train together, live</span><span>Safe for teens by design</span><span>Private by default</span></div>
+    </div>
+    <div class="stage">
+      <!-- Illustration: two weight plates, overlapping. Gold = you, graphite = your buddy. -->
+      <svg class="plates" viewBox="0 0 560 560" fill="none" aria-hidden="true">
+        <defs>
+          <radialGradient id="pg" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="#D4A84A" stop-opacity="0"/><stop offset=".9" stop-color="#D4A84A" stop-opacity=".22"/><stop offset="1" stop-color="#D4A84A" stop-opacity="0"/></radialGradient>
+          <radialGradient id="pk" cx=".5" cy=".5" r=".5"><stop offset=".55" stop-color="#8B98AD" stop-opacity="0"/><stop offset=".9" stop-color="#8B98AD" stop-opacity=".18"/><stop offset="1" stop-color="#8B98AD" stop-opacity="0"/></radialGradient>
+        </defs>
+        <circle cx="200" cy="300" r="190" fill="url(#pg)"/>
+        <circle cx="200" cy="300" r="190" stroke="#D4A84A" stroke-opacity=".55" stroke-width="1.5"/>
+        <circle cx="200" cy="300" r="150" stroke="#D4A84A" stroke-opacity=".3" stroke-width="1"/>
+        <circle cx="200" cy="300" r="34" stroke="#D4A84A" stroke-opacity=".6" stroke-width="2"/>
+        <circle cx="360" cy="250" r="190" fill="url(#pk)"/>
+        <circle cx="360" cy="250" r="190" stroke="#8B98AD" stroke-opacity=".5" stroke-width="1.5"/>
+        <circle cx="360" cy="250" r="150" stroke="#8B98AD" stroke-opacity=".25" stroke-width="1"/>
+        <circle cx="360" cy="250" r="34" stroke="#8B98AD" stroke-opacity=".55" stroke-width="2"/>
+        <path d="M200 300 L360 250" stroke="#E8C56E" stroke-opacity=".7" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      <div class="phone a"><img src="assets/twoplates/tp-screen-home.webp" alt="TwoPlates home screen: today's planned Pull day"></div>
+      <div class="phone b"><img src="assets/twoplates/tp-screen-set.webp" alt="TwoPlates set screen: logging a set with the rest timer"></div>
+      <span class="tag" aria-hidden="true" style="left:2%;top:8px">Your plan</span>
+      <span class="tag buddy" aria-hidden="true" style="right:2%;top:500px;background:#C9D3E2">Your buddy's turn</span>
+      <span class="preview-note">Design preview. The final app may differ.</span>
+    </div>
+  </div>
+</header>
+
+<section class="paper pad">
+  <div class="wrap why">
+    <div>
+      <div class="eyebrow">Why this exists</div>
+      <h2>Fitness apps are built for one. <span class="g">People train in twos.</span></h2>
+    </div>
+    <div>
+      <p>Most people who stick with training have someone next to them: a partner on the bench, a friend who texts "you coming?", a parent bringing a teenager into the gym for the first time.</p>
+      <p>Every app we tried pretended the other person wasn't there. One plan, one goal, one phone. So two people with different bodies and different goals ended up doing the same workout, or doing it alone.</p>
+      <p>TwoPlates gives each of you a program that fits your goal, your equipment and your week, then puts you on the same floor: who's up next, what to change on the bar, and when it's your turn.</p>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad how" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Plan apart. <span class="g">Train together.</span> See it add up.</h2>
+    <div class="steps">
+      <div class="step"><span class="n">01</span><h3>Your plan, built for you</h3><p>Tell it your goal, your gym or home kit, and the days you can train. TwoPlates builds a program that progresses week to week, for each of you.</p>
+        <ul><li><b>✓</b> Strength, muscle, recomposition or general fitness</li><li><b>✓</b> Gym, home, or both</li><li><b>✓</b> Quick start when you just want to train today</li></ul>
+        <div class="shot"><img src="assets/twoplates/tp-screen-quick.webp" alt="Quick start: pick a focus and a time"></div></div>
+      <div class="step"><span class="n">02</span><h3>Train side by side</h3><p>Start a session together. Each of you sees your own sets and loads; the rest timer tells you whose turn it is and what to change on the bar.</p>
+        <ul><li><b>✓</b> One bar or two stations</li><li><b>✓</b> Lock-screen timer and "your turn" alerts</li><li><b>✓</b> Logs your workouts to Apple Health</li></ul>
+        <div class="shot"><img src="assets/twoplates/tp-screen-set.webp" alt="Set screen with rest timer"></div></div>
+      <div class="step"><span class="n">03</span><h3>Watch it add up</h3><p>A weekly view of what you both did: sessions, streaks, personal records, and a 30-day map that makes consistency visible.</p>
+        <ul><li><b>✓</b> Weekly progress ring and streaks</li><li><b>✓</b> PRs and "vs last time"</li><li><b>✓</b> Nudge your buddy, not nag them</li></ul>
+        <div class="shot"><img src="assets/twoplates/tp-screen-log.webp" alt="Weekly log with heat map"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" id="exercises" style="padding-top:2rem">
+  <div class="wrap move">
+    <div>
+      <div class="eyebrow">See every move</div>
+      <h2>Every exercise, shown.<br><span class="serif">Every muscle, lit up.</span></h2>
+      <p>Over 500 exercises, each with a looping 3D demonstration and the muscles it works highlighted in red. Not sure about your form between sets? Tap the exercise and watch it, slowed down if you like.</p>
+      <ul><li><b>✓</b>Looping motion demos, with slow motion</li><li><b>✓</b>Main and supporting muscles highlighted</li><li><b>✓</b>Short step-by-step cues, no essays</li><li><b>✓</b>Swap any exercise for one that fits your kit</li></ul>
+    </div>
+    <div class="duo">
+      <div class="phone a"><img src="assets/twoplates/tp-screen-library.webp" alt="Exercise library, Back tab, with illustrated exercises"></div>
+      <div class="phone b"><img src="assets/twoplates/tp-screen-exercise.webp" alt="Lat Pulldown with the lats highlighted"></div>
+    </div>
+  </div>
+</section>
+
+<section class="safe pad">
+  <div class="wrap safe-grid">
+    <div>
+      <div class="eyebrow">Safe for teens by design</div>
+      <h2>Bringing your teen? <span class="g">The rules are built in.</span></h2>
+      <p class="lede">Teens 13 to 17 join through a parent's household. Their experience is about technique, confidence and showing up, never about numbers on a body. These rules aren't settings. Nobody can switch them off, not even a parent.</p>
+    </div>
+    <div class="rules">
+      <div class="rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><b>No calories, no weigh-ins</b><span>Teens never see calories, deficits, goal weight, BMI or body-fat.</span></div>
+      <div class="rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h3M17 12h3M7 8v8M17 8v8M7 12h10"/></svg><b>Reps in reserve, always</b><span>Every set leaves at least two good reps in the tank. No max-out testing.</span></div>
+      <div class="rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-3.5 4-5 7-5s5.8 1.5 7 5"/></svg><b>Technique first</b><span>Master the rep range before the load goes up.</span></div>
+      <div class="rule"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><b>Parent as coach, not auditor</b><span>Parents see sessions and effort. Body numbers stay private to the teen.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" id="private">
+  <div class="wrap">
+    <div class="eyebrow">Private by default</div>
+    <h2 style="font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:44rem">Your body data is yours. <span class="g">Same promise as everything we build.</span></h2>
+    <div class="priv">
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><b>Stored in your iCloud</b><span>Your training syncs through your own iCloud account. We don't keep your workouts on our servers.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l16 16M9.5 5.5A9 9 0 0121 12a9 9 0 01-2 3M6 7a9 9 0 00-3 5 9 9 0 0012 8"/></svg><b>No ads. Ever.</b><span>We don't sell, rent or trade your data, and we never use it for advertising.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="3"/><circle cx="16" cy="11" r="2.5"/><path d="M3 19c.8-3 3.2-4.5 6-4.5s5.2 1.5 6 4.5M15 15c2.3 0 4.3 1.1 5 4"/></svg><b>You choose what to share</b><span>Share sessions with your buddy. Body metrics stay private unless you share them.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s-7-4.4-7-10a4 4 0 017-2.6A4 4 0 0119 11c0 5.6-7 10-7 10z"/></svg><b>Works with Apple Health</b><span>Your workouts land in Apple Health with your permission, and you can turn it off anytime.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <div class="faq">
+      <details open><summary>When does TwoPlates launch?</summary><p>We're testing it with families and training partners now. Join the waitlist and you'll be the first to know, with an early invite to the beta.</p></details>
+      <details><summary>Do we both need an iPhone?</summary><p>Yes, each of you uses TwoPlates on your own iPhone, so you each see your own plan, loads and timer while you train together.</p></details>
+      <details><summary>Is it for couples, friends or families?</summary><p>All of them. TwoPlates works for any two people who train together. Family features, like teen rules and one household subscription, switch on when you need them.</p></details>
+      <details><summary>How old do you need to be?</summary><p>13 and up. Teens 13 to 17 join through a parent's household, with built-in safety rules.</p></details>
+      <details><summary>How much will it cost?</summary><p>We'll share pricing before launch. Waitlist members hear first.</p></details>
+      <details><summary>Android? Apple Watch? Garmin or Strava?</summary><p>TwoPlates launches on iPhone with Apple Health. Watch and other connections are on the roadmap; we'll announce them when they're ready, not before.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <img src="assets/twoplates/tp-icon-512.webp" alt="">
+    <h2>Find your buddy.<br><span class="serif g" style="font-size:1.1em">Get on the list.</span></h2>
+    <form class="wait wl-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
+      <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
+      <input type="hidden" name="embed" value="1">
+      <input type="hidden" name="tag" value="twoplates-waitlist">
+      <button type="submit">Join the waitlist</button>
+    </form>
+    <div class="wait-ok" role="status">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
+    <p class="fine">Coming soon to iPhone · Private by default · No ads, ever</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <a href="index.html" class="foot-brand">Guardian<span>.</span>Apps LLC</a>
+    <ul class="foot-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="decisio.html">DECISIO.ai</a></li>
+      <li><a href="twoplates.html">TwoPlates</a></li>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="foot-social">
+      <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+      <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+    </div>
+    <span class="foot-copy">© 2025–2026 Guardian Apps LLC</span>
+  </div>
+</footer>
+
+<script>
+  (function(){document.querySelectorAll('.wl-form').forEach(function(form){
+   form.addEventListener('submit',function(){var i=form.querySelector('input[name="email"]');if(!i.value)return;
+   setTimeout(function(){form.style.display='none';var ok=form.nextElementSibling;if(ok)ok.style.display='block';},400);});});})();
+</script>
+</body>
+</html>
