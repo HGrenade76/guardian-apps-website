@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><radialGradient id="bg" cx=".5" cy=".15" r="1.05"><stop offset="0" stop-color="#3B3D44"/><stop offset=".55" stop-color="#15161A"/><stop offset="1" stop-color="#08080A"/></radialGradient><radialGradient id="iron" cx=".28" cy=".18" r="1.05"><stop offset="0" stop-color="#FFF4C9"/><stop offset=".22" stop-color="#F9D06A"/><stop offset=".55" stop-color="#D99A1E"/><stop offset=".85" stop-color="#93590A"/><stop offset="1" stop-color="#5E3804"/></radialGradient>
+<linearGradient id="goldLin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFEFB2"/><stop offset=".35" stop-color="#F7C548"/><stop offset=".7" stop-color="#D08F15"/><stop offset="1" stop-color="#8E5608"/></linearGradient>
+<linearGradient id="ironRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0B0"/><stop offset=".5" stop-color="#E3A22A"/><stop offset="1" stop-color="#7A4807"/></linearGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#C3C7CE"/><stop offset="1" stop-color="#6B7079"/></linearGradient>
+<linearGradient id="steelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#BFC3CA"/><stop offset="1" stop-color="#7A7F88"/></linearGradient><filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#000" flood-opacity="0.6"/></filter>
+<radialGradient id="glass" cx=".3" cy=".2" r="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".92"/><stop offset=".6" stop-color="#E6E9EE" stop-opacity=".62"/><stop offset="1" stop-color="#9FA5AF" stop-opacity=".55"/></radialGradient>
+<clipPath id="g"><circle cx="388" cy="470" r="268"/></clipPath></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g filter="url(#drop)"><circle cx="388" cy="470" r="268" fill="url(#iron)"/>
+<circle cx="388" cy="470" r="252" fill="none" stroke="url(#ironRim)" stroke-width="22" opacity=".9"/>
+<circle cx="388" cy="470" r="147" fill="none" stroke="url(#ironRim)" stroke-width="6" opacity=".55"/>
+<circle cx="388" cy="470" r="69" fill="url(#steel)"/><circle cx="388" cy="470" r="29" fill="#0B0B0D" opacity=".85"/>
+<path d="M173.8 392.0 A228 228 0 0 1 310.0 255.8" fill="none" stroke="#FFFBE6" stroke-width="13" stroke-linecap="round" opacity=".9"/></g>
+<g filter="url(#drop)"><circle cx="642" cy="566" r="268" fill="url(#glass)"/>
+<circle cx="642" cy="566" r="252" fill="none" stroke="#FFFFFF" stroke-width="22" opacity=".9"/>
+<circle cx="642" cy="566" r="147" fill="none" stroke="#FFFFFF" stroke-width="6" opacity=".55"/>
+<circle cx="642" cy="566" r="69" fill="url(#steel)"/><circle cx="642" cy="566" r="29" fill="#0B0B0D" opacity=".85"/>
+<path d="M435.4 469.6 A228 228 0 0 1 583.0 345.8" fill="none" stroke="#FFFFFF" stroke-width="13" stroke-linecap="round" opacity=".9"/></g>
+<circle cx="642" cy="566" r="268" fill="#F7C548" opacity=".22" clip-path="url(#g)"/>
+<circle cx="642" cy="566" r="266" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/>
+</svg>

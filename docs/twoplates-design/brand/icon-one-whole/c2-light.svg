@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><radialGradient id="bg" cx=".5" cy=".15" r="1.05"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#EFEFEB"/><stop offset="1" stop-color="#D7D7D1"/></radialGradient><radialGradient id="iron" cx=".28" cy=".18" r="1.05"><stop offset="0" stop-color="#FFF4C9"/><stop offset=".22" stop-color="#F9D06A"/><stop offset=".55" stop-color="#D99A1E"/><stop offset=".85" stop-color="#93590A"/><stop offset="1" stop-color="#5E3804"/></radialGradient>
+<linearGradient id="goldLin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFEFB2"/><stop offset=".35" stop-color="#F7C548"/><stop offset=".7" stop-color="#D08F15"/><stop offset="1" stop-color="#8E5608"/></linearGradient>
+<linearGradient id="ironRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0B0"/><stop offset=".5" stop-color="#E3A22A"/><stop offset="1" stop-color="#7A4807"/></linearGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#C3C7CE"/><stop offset="1" stop-color="#6B7079"/></linearGradient>
+<linearGradient id="steelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#BFC3CA"/><stop offset="1" stop-color="#7A7F88"/></linearGradient><filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#000" flood-opacity="0.26"/></filter>
+<clipPath id="above"><rect x="0" y="0" width="1024" height="780"/></clipPath></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g filter="url(#drop)">
+ <path d="M337.9 429.0 A178 178 0 1 1 669.2 475.6 L 372 780" fill="none" stroke="url(#goldLin)" stroke-width="124" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#above)"/>
+ <path d="M307.1 317.4 A218 218 0 0 1 481.7 176.1" fill="none" stroke="#FFF7D6" stroke-width="12" stroke-linecap="round" opacity=".8"/>
+ 
+ <rect x="236" y="752" width="552" height="56" rx="28" fill="url(#goldLin)"/>
+ <rect x="182" y="650" width="82" height="260" rx="30" fill="#2B2D33"/>
+ <rect x="760" y="650" width="82" height="260" rx="30" fill="#2B2D33"/>
+ <rect x="150" y="700" width="40" height="160" rx="16" fill="#2B2D33" opacity=".8"/>
+ <rect x="834" y="700" width="40" height="160" rx="16" fill="#2B2D33" opacity=".8"/>
+</g></svg>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024"><defs><radialGradient id="bg" cx=".5" cy=".15" r="1.05"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#EFEFEB"/><stop offset="1" stop-color="#D7D7D1"/></radialGradient><radialGradient id="iron" cx=".28" cy=".18" r="1.05"><stop offset="0" stop-color="#FFF4C9"/><stop offset=".22" stop-color="#F9D06A"/><stop offset=".55" stop-color="#D99A1E"/><stop offset=".85" stop-color="#93590A"/><stop offset="1" stop-color="#5E3804"/></radialGradient>
+<linearGradient id="goldLin" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFEFB2"/><stop offset=".35" stop-color="#F7C548"/><stop offset=".7" stop-color="#D08F15"/><stop offset="1" stop-color="#8E5608"/></linearGradient>
+<linearGradient id="ironRim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0B0"/><stop offset=".5" stop-color="#E3A22A"/><stop offset="1" stop-color="#7A4807"/></linearGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#C3C7CE"/><stop offset="1" stop-color="#6B7079"/></linearGradient>
+<linearGradient id="steelV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#BFC3CA"/><stop offset="1" stop-color="#7A7F88"/></linearGradient><filter id="drop" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="26" stdDeviation="30" flood-color="#000" flood-opacity="0.26"/></filter>
+<radialGradient id="china" cx=".8" cy=".15" r="1.1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".5" stop-color="#F3F4F6"/><stop offset=".85" stop-color="#D5D8DE"/><stop offset="1" stop-color="#B2B7C0"/></radialGradient>
+<radialGradient id="ironWell" cx=".3" cy=".25" r=".9"><stop offset="0" stop-color="#F6C752"/><stop offset="1" stop-color="#A86A0C"/></radialGradient>
+<radialGradient id="chinaWell" cx=".7" cy=".25" r=".9"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#E4E7EC"/></radialGradient>
+<clipPath id="L"><rect x="0" y="0" width="500.0" height="1024"/></clipPath>
+<clipPath id="R"><rect x="524.0" y="0" width="1024" height="1024"/></clipPath></defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<g filter="url(#drop)">
+ <g clip-path="url(#L)">
+  <circle cx="512" cy="512" r="360" fill="url(#iron)"/>
+  <circle cx="512" cy="512" r="344" fill="none" stroke="url(#ironRim)" stroke-width="30"/>
+  <circle cx="512" cy="512" r="237" fill="url(#ironWell)"/>
+  <circle cx="512" cy="512" r="237" fill="none" stroke="#FFF0B8" stroke-opacity=".7" stroke-width="5"/>
+  <circle cx="512" cy="512" r="86" fill="url(#steel)"/>
+  <circle cx="512" cy="512" r="74" fill="none" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="4"/>
+  <path d="M213.4 415.0 A314 314 0 0 1 425.4 210.2" fill="none" stroke="#FFFBE6" stroke-width="14" stroke-linecap="round" opacity=".85"/>
+ </g>
+ <g clip-path="url(#R)">
+  <circle cx="512" cy="512" r="360" fill="url(#china)"/>
+  <circle cx="512" cy="512" r="237" fill="url(#chinaWell)"/>
+  <circle cx="512" cy="512" r="237" fill="none" stroke="#AEB3BC" stroke-width="5"/>
+  <circle cx="512" cy="512" r="312" fill="none" stroke="#D9A632" stroke-width="7"/>
+  <path d="M616.4 190.5 A338 338 0 0 1 825.4 385.4" fill="none" stroke="#fff" stroke-width="15" stroke-linecap="round"/>
+ </g>
+</g></svg>
