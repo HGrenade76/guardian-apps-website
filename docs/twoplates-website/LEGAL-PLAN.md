@@ -2,6 +2,13 @@
 
 Recommendation from the design and planning assistant. **Not legal advice.** TwoPlates handles health and fitness data and accounts for teens (13–17), so have a lawyer review the final texts before the App Store launch.
 
+## Earlier draft in the app repo
+
+`twoplates-ios/docs/TWOPLATES-LEGAL-ADDITIONS.md` (October) has plain-language TwoPlates text for the terms and privacy pages, written as sections to add to the existing pages. **Reuse that text as the body of the new TwoPlates pages below.** The difference is only where it lives: separate TwoPlates pages, so the App Store privacy URL describes only TwoPlates. Update it on three points:
+- It says Health data "stays on your device and in your iCloud". Change this once the Xcode agent confirms what syncs (App Review Guideline 5.1.3: no personal health information in iCloud).
+- It mentions a 14-day full-access period and a "Buddy plan". Keep that in sync with App Store Connect.
+- It says no TwoPlates server. The Strava relay is a server; describe it (passes tokens, stores nothing).
+
 ## Short answer
 
 **Keep one company-wide Terms and Privacy, and add TwoPlates-specific pages linked from them.** Don't fold TwoPlates into the DECISIO wording, and don't make a fully separate legal set either.

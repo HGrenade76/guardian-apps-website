@@ -130,6 +130,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .foot-brand{font-weight:800;color:var(--text)}.foot-brand span{color:var(--gold)}
 .foot-links{display:flex;gap:1.6rem;list-style:none}
 
+
+/* SEE EVERY MOVE */
+.move{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:center}
+.move h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.move h2 .serif{color:var(--gold-text);font-size:1.1em}
+.move p{color:var(--ink-muted);font-size:1.05rem;margin-top:1rem}
+.move ul{list-style:none;margin-top:1.4rem}.move li{padding:.5rem 0;border-top:1px solid var(--line-on-paper);font-size:.95rem}.move li b{color:var(--tp-strength);margin-right:.4rem}
+.duo{position:relative;height:560px}
+.duo .phone{width:250px}
+.duo .phone.a{left:2%;top:10px;transform:rotate(-4deg)}
+.duo .phone.b{right:2%;top:60px;transform:rotate(4deg)}
+.duo .lit{position:absolute;left:38%;bottom:6px;font-size:.72rem;font-weight:700;color:#b3261e;background:#fff3f2;border:1px solid rgba(214,69,69,.35);border-radius:999px;padding:.35rem .75rem}
+@media (max-width:900px){.move{grid-template-columns:1fr;gap:2rem}.duo{height:420px}.duo .phone{width:180px}}
+
 @media (max-width:900px){
   .nav-links{display:none}
   .wrap{padding:0 1rem}
@@ -233,6 +247,21 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
       <div class="step"><span class="n">03</span><h3>Watch it add up</h3><p>A weekly view of what you both did: sessions, streaks, personal records, and a 30-day map that makes consistency visible.</p>
         <ul><li><b>✓</b> Weekly progress ring and streaks</li><li><b>✓</b> PRs and "vs last time"</li><li><b>✓</b> Nudge your buddy, not nag them</li></ul>
         <div class="shot"><img src="assets/twoplates/tp-screen-log.webp" alt="Weekly log with heat map"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" id="exercises" style="padding-top:2rem">
+  <div class="wrap move">
+    <div>
+      <div class="eyebrow">See every move</div>
+      <h2>Every exercise, shown.<br><span class="serif">Every muscle, lit up.</span></h2>
+      <p>Over 500 exercises, each with a looping 3D demonstration and the muscles it works highlighted in red. Not sure about your form between sets? Tap the exercise and watch it, slowed down if you like.</p>
+      <ul><li><b>✓</b>Looping motion demos, with slow motion</li><li><b>✓</b>Main and supporting muscles highlighted</li><li><b>✓</b>Short step-by-step cues, no essays</li><li><b>✓</b>Swap any exercise for one that fits your kit</li></ul>
+    </div>
+    <div class="duo" aria-hidden="true">
+      <div class="phone a"><img src="assets/twoplates/tp-screen-library.webp" alt="Exercise library, Back tab, with illustrated exercises"></div>
+      <div class="phone b"><img src="assets/twoplates/tp-screen-exercise.webp" alt="Lat Pulldown with the lats highlighted"></div>
     </div>
   </div>
 </section>

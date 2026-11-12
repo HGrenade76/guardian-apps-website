@@ -46,9 +46,18 @@ Same as DECISIO's site: short sentences, plain words, confident, no hype. Add wa
 - Teens: **Bringing your teen? The rules are built in.**
 - Closing: **Find your buddy. *Get on the list.***
 
-## 7. Founder note (Hein to write or approve)
+## 7. Founder note (Hein to approve)
 
-The prototype has a draft quote and paragraph signed "Hein Ellis, founder, Guardian Apps". **This is placeholder wording written by the designer.** Hein should rewrite it in his own words before it goes live; a real line about training with his own buddy beats anything written for him. Don't name family members on the site without their OK.
+The "Why this exists" section shows this line in quotation marks, with Hein's name under it:
+
+> "I wanted one app where we each get our own program, and still train as a team."
+
+Because it's presented as Hein's own words, he approves it or rewords it before launch. Options:
+- Keep it as is.
+- Make it personal, for example: "I train with my wife and my daughter. Every app gave us the same workout, or made us train alone. So I built the one we wanted."
+- Remove the quote and keep only the paragraph text (no quotation marks).
+
+Name family members only with their OK.
 
 ## 8. Homepage change (gap-apps.com)
 
@@ -56,7 +65,15 @@ The homepage says "We build one thing". Replace with:
 
 > We build a small number of apps, each for one real problem, and build them well. **DECISIO.ai** for the decisions you make at work. **TwoPlates**, coming soon, for the training you do together. Privacy-first. No bots. No noise.
 
-Add the two-card "Our apps" block (`mockups/homepage-two-apps.png`). Hein's call: the hero line "AI that solves real problems" fits DECISIO but not TwoPlates. Option: **"Apps that solve real problems. Not new ones."**
+Add the two-card "Our apps" block (`mockups/homepage-two-apps.png`).
+
+**New company headline (Hein agreed to drop the problem statement):**
+> **Apps built for real people.** *Private by default.*
+
+Alternates if he wants to compare: "Made for real people. Private by design." · "Real apps for real life." · "Small apps. Real people. Your data stays yours."
+
+## 8b. See every move (new section)
+Shows the exercise library and the Lat Pulldown detail with the real 3D illustration, lats highlighted. Message: every exercise is shown, every muscle is lit up, form help between sets. Claim "over 500 exercises" (582 MoveKit clips ship today).
 
 ## 9. Launch posts (Bluesky, Mastodon, newsletter)
 
