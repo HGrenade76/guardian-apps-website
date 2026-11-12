@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TwoPlates — Strength training for two · Coming soon · Guardian.Apps</title>
-<meta name="description" content="TwoPlates is a strength and fitness coach for you and the person you train with. One plan each, trained side by side. Safe for teens by design. Coming soon to iPhone.">
+<meta name="description" content="TwoPlates is a strength coach and meal planner for you and the person you train with. One plan each, trained side by side, one shared meal plan and grocery list. Safe for teens by design. Coming soon to iPhone.">
 <meta name="theme-color" content="#0A111E">
 <link rel="canonical" href="https://gap-apps.com/twoplates.html">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -165,7 +165,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .duo .phone.a{left:2%;top:10px;transform:rotate(-4deg)}
 .duo .phone.b{right:2%;top:60px;transform:rotate(4deg)}
 .duo .lit{position:absolute;left:38%;bottom:6px;font-size:.72rem;font-weight:700;color:#b3261e;background:#fff3f2;border:1px solid rgba(214,69,69,.35);border-radius:999px;padding:.35rem .75rem}
-@media (max-width:900px){.move{grid-template-columns:1fr;gap:2rem}.duo{height:420px}.duo .phone{width:180px}}
+#meals .move{grid-template-columns:1.15fr 1fr}
+@media (max-width:900px){#meals .move{grid-template-columns:1fr}#meals .duo{order:2}.move{grid-template-columns:1fr;gap:2rem}.duo{height:420px}.duo .phone{width:180px}}
 
 @media (max-width:900px){
   .nav-links{display:none}
@@ -225,10 +226,10 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
     <div>
       <div class="badge"><img src="assets/twoplates/tp-icon-512.webp" alt="TwoPlates app icon"><div><b>TwoPlates</b><small>Coming soon · iPhone</small></div></div>
       <h1>Two people.<br>One plan each.<br><span class="serif">Stronger together.</span></h1>
-      <p class="lede">TwoPlates is a strength coach for you and the person you train with: a partner, a friend, or the teenager you're bringing to the gym for the first time. You each get a real program built around your own goal, and you train it side by side.</p>
+      <p class="lede">TwoPlates is a strength coach for you and the person you train with: a partner, a friend, or the teenager you're bringing to the gym for the first time. You each get a real program built around your own goal, you train it side by side, and you eat from one meal plan with a portion sized for each of you.</p>
       <div class="cta-row"><a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20TwoPlates&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20TwoPlates.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20train%20with%20%28partner%20/%20friend%20/%20my%20teen%29%3A%20%0AWhere%20I%20train%20%28gym%20/%20home%20/%20both%29%3A%20%0A%0AThanks%21">Help us test</a></div>
       <p class="fine">Both open your email app with a short note to us. Waitlist: one email when TwoPlates launches. Testers: adults only; if you train with a teen, the parent signs up for the household. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
-      <div class="chips"><span>One plan each</span><span>Train together, live</span><span>Safe for teens by design</span><span>Private by default</span></div>
+      <div class="chips"><span>One plan each</span><span>Train together, live</span><span>Meals and groceries</span><span>Safe for teens by design</span><span>Private by default</span></div>
     </div>
     <div class="stage">
       <!-- Illustration: two weight plates, overlapping. Gold = you, graphite = your buddy. -->
@@ -301,6 +302,21 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
     <div class="duo">
       <div class="phone a"><img src="assets/twoplates/tp-screen-library.webp" alt="Exercise library, Back tab, with illustrated exercises"></div>
       <div class="phone b"><img src="assets/twoplates/tp-screen-exercise.webp" alt="Lat Pulldown with the lats highlighted"></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" id="meals" style="padding-top:2rem">
+  <div class="wrap move">
+    <div class="duo">
+      <div class="phone a"><img src="assets/twoplates/tp-screen-meals.webp" alt="This week's meals: one dinner with a portion for each person"></div>
+      <div class="phone b"><img src="assets/twoplates/tp-screen-groceries.webp" alt="Grocery list sorted by aisle, built from the week's meals"></div>
+    </div>
+    <div>
+      <div class="eyebrow">Eat without the fuss</div>
+      <h2>One dinner for the table.<br><span class="serif">A portion for each of you.</span></h2>
+      <p>Training is half of it. Pick your breakfasts, lunches and dinners for the week, one question at a time, and TwoPlates sizes each person's portion to their own goal. The grocery list builds itself, sorted by aisle.</p>
+      <ul><li><b>✓</b>A week of meals that fit how you train</li><li><b>✓</b>Same dinner for everyone, portions for each person</li><li><b>✓</b>Grocery list by aisle: send it to Reminders, share or print it</li><li><b>✓</b>Prep day for batch cooking, with steps and timers</li><li><b>✓</b>Swaps for what you don't eat. No forbidden foods.</li><li><b>✓</b>Teens get a plate, never numbers</li></ul>
     </div>
   </div>
 </section>
