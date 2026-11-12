@@ -184,6 +184,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   .wait{flex-direction:column}.wait button{padding:.95rem}
   .foot{flex-direction:column;align-items:flex-start}
 }
+.wait-btn{display:inline-block;margin-top:2rem;background:var(--gold);color:#0A111E;font-weight:700;font-size:.95rem;border-radius:12px;padding:1rem 1.6rem;transition:transform .2s,box-shadow .2s}
+.wait-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px -12px rgba(212,168,74,.6)}
 /* room for the fixed site nav */
 .hero{padding-top:9.5rem}
 @media (max-width:900px){.hero{padding-top:6.5rem}}
@@ -192,7 +194,6 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 <script src="assets/site-chrome.js" defer></script>
 </head>
 <body>
-<iframe name="bd-iframe" title="Waitlist signup" style="display:none"></iframe>
 
 <nav class="gn" aria-label="Main">
   <a href="index.html" class="gn-logo">Guardian<span>.</span>Apps</a>
@@ -220,14 +221,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
       <div class="badge"><img src="assets/twoplates/tp-icon-512.webp" alt="TwoPlates app icon"><div><b>TwoPlates</b><small>Coming soon · iPhone</small></div></div>
       <h1>Two people.<br>One plan each.<br><span class="serif">Stronger together.</span></h1>
       <p class="lede">TwoPlates is a strength coach for you and the person you train with: a partner, a friend, or the teenager you're bringing to the gym for the first time. You each get a real program built around your own goal, and you train it side by side.</p>
-      <form class="wait wl-form" id="waitlist" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
-        <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
-        <input type="hidden" name="embed" value="1">
-        <input type="hidden" name="tag" value="twoplates-waitlist">
-        <button type="submit">Join the waitlist</button>
-      </form>
-      <div class="wait-ok" role="status">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
-      <p class="fine">One email when TwoPlates launches, and an early invite to the beta. Unsubscribe anytime. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
+      <a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a>
+      <p class="fine">Opens your email app with a short note to us. Hit send and we'll email you once when TwoPlates launches, with an early beta invite. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
       <div class="chips"><span>One plan each</span><span>Train together, live</span><span>Safe for teens by design</span><span>Private by default</span></div>
     </div>
     <div class="stage">
@@ -352,13 +347,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   <div class="wrap">
     <img src="assets/twoplates/tp-icon-512.webp" alt="">
     <h2>Find your buddy.<br><span class="serif g" style="font-size:1.1em">Get on the list.</span></h2>
-    <form class="wait wl-form" action="https://buttondown.com/api/emails/embed-subscribe/MyGuardianApps" method="post" target="bd-iframe">
-      <input type="email" name="email" placeholder="you@example.com" aria-label="Email address" required>
-      <input type="hidden" name="embed" value="1">
-      <input type="hidden" name="tag" value="twoplates-waitlist">
-      <button type="submit">Join the waitlist</button>
-    </form>
-    <div class="wait-ok" role="status">✓ &nbsp;Thanks! Check your inbox to confirm your subscription.</div>
+    <a class="wait-btn" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a>
     <p class="fine">Coming soon to iPhone · Private by default · No ads, ever</p>
   </div>
 </section>
@@ -393,10 +382,5 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   </div>
 </footer>
 
-<script>
-  (function(){document.querySelectorAll('.wl-form').forEach(function(form){
-   form.addEventListener('submit',function(){var i=form.querySelector('input[name="email"]');if(!i.value)return;
-   setTimeout(function(){form.style.display='none';var ok=form.nextElementSibling;if(ok)ok.style.display='block';},400);});});})();
-</script>
 </body>
 </html>
