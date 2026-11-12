@@ -186,6 +186,11 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 }
 .wait-btn{display:inline-block;margin-top:2rem;background:var(--gold);color:#0A111E;font-weight:700;font-size:.95rem;border-radius:12px;padding:1rem 1.6rem;transition:transform .2s,box-shadow .2s}
 .wait-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px -12px rgba(212,168,74,.6)}
+.cta-row{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem;align-items:center}
+.cta-row .wait-btn{margin-top:0}
+.closing .cta-row{justify-content:center}
+.test-btn{display:inline-block;border:1px solid rgba(255,255,255,.22);color:var(--text);font-weight:700;font-size:.95rem;border-radius:12px;padding:1rem 1.5rem;transition:border-color .2s,color .2s}
+.test-btn:hover{border-color:var(--gold);color:var(--gold-2)}
 /* room for the fixed site nav */
 .hero{padding-top:9.5rem}
 @media (max-width:900px){.hero{padding-top:6.5rem}}
@@ -221,8 +226,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
       <div class="badge"><img src="assets/twoplates/tp-icon-512.webp" alt="TwoPlates app icon"><div><b>TwoPlates</b><small>Coming soon · iPhone</small></div></div>
       <h1>Two people.<br>One plan each.<br><span class="serif">Stronger together.</span></h1>
       <p class="lede">TwoPlates is a strength coach for you and the person you train with: a partner, a friend, or the teenager you're bringing to the gym for the first time. You each get a real program built around your own goal, and you train it side by side.</p>
-      <a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a>
-      <p class="fine">Opens your email app with a short note to us. Hit send and we'll email you once when TwoPlates launches, with an early beta invite. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
+      <div class="cta-row"><a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20TwoPlates&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20TwoPlates.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20train%20with%20%28partner%20/%20friend%20/%20my%20teen%29%3A%20%0AWhere%20I%20train%20%28gym%20/%20home%20/%20both%29%3A%20%0A%0AThanks%21">Help us test</a></div>
+      <p class="fine">Both open your email app with a short note to us. Waitlist: one email when TwoPlates launches. Testers: adults only; if you train with a teen, the parent signs up for the household. <a href="privacy.html" style="text-decoration:underline">Privacy</a></p>
       <div class="chips"><span>One plan each</span><span>Train together, live</span><span>Safe for teens by design</span><span>Private by default</span></div>
     </div>
     <div class="stage">
@@ -334,6 +339,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
     <div class="eyebrow">Questions</div>
     <div class="faq">
       <details open><summary>When does TwoPlates launch?</summary><p>We're testing it with families and training partners now. Join the waitlist and you'll be the first to know, with an early invite to the beta.</p></details>
+      <details><summary>Can I help test it?</summary><p>Yes, please. Tap "Help us test" and send the short email. Tell us the email on your Apple account and we'll send you a TestFlight invite. Testers need to be adults; if you train with a teen, the parent signs up for the household.</p></details>
       <details><summary>Do we both need an iPhone?</summary><p>Yes, each of you uses TwoPlates on your own iPhone, so you each see your own plan, loads and timer while you train together.</p></details>
       <details><summary>Is it for couples, friends or families?</summary><p>All of them. TwoPlates works for any two people who train together. Family features, like teen rules and one household subscription, switch on when you need them.</p></details>
       <details><summary>How old do you need to be?</summary><p>13 and up. Teens 13 to 17 join through a parent's household, with built-in safety rules.</p></details>
@@ -347,7 +353,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   <div class="wrap">
     <img src="assets/twoplates/tp-icon-512.webp" alt="">
     <h2>Find your buddy.<br><span class="serif g" style="font-size:1.1em">Get on the list.</span></h2>
-    <a class="wait-btn" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a>
+    <div class="cta-row"><a class="wait-btn" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20TwoPlates%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20TwoPlates%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20TwoPlates&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20TwoPlates.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20train%20with%20%28partner%20/%20friend%20/%20my%20teen%29%3A%20%0AWhere%20I%20train%20%28gym%20/%20home%20/%20both%29%3A%20%0A%0AThanks%21">Help us test</a></div>
     <p class="fine">Coming soon to iPhone · Private by default · No ads, ever</p>
   </div>
 </section>
