@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="1024" height="1024"><defs>
+<radialGradient id="bg" cx=".5" cy=".3" r=".9"><stop offset="0" stop-color="#34343a"/><stop offset="1" stop-color="#060607"/></radialGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".42" stop-color="#ffcf5c"/><stop offset=".56" stop-color="#c38317"/><stop offset="1" stop-color="#ffda80"/></linearGradient>
+<linearGradient id="goldBevel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8dc"/><stop offset=".5" stop-color="#e2a632"/><stop offset="1" stop-color="#6e4204"/></linearGradient>
+<linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a3803"/><stop offset=".3" stop-color="#b8790f"/><stop offset=".55" stop-color="#ffd77a"/><stop offset=".75" stop-color="#b8790f"/><stop offset="1" stop-color="#4a2e02"/></linearGradient>
+<radialGradient id="rub" cx=".38" cy=".28" r=".85"><stop offset="0" stop-color="#404046"/><stop offset=".55" stop-color="#18181b"/><stop offset="1" stop-color="#050506"/></radialGradient>
+<radialGradient id="ao" cx=".5" cy=".5" r=".5"><stop offset=".84" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient>
+<linearGradient id="steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".45" stop-color="#a8aaaf"/><stop offset=".55" stop-color="#5e6066"/><stop offset="1" stop-color="#e2e3e6"/></linearGradient>
+<radialGradient id="dome" cx=".36" cy=".28" r=".85"><stop offset="0" stop-color="#fff7d6"/><stop offset=".35" stop-color="#ffd166"/><stop offset=".75" stop-color="#d18f1c"/><stop offset="1" stop-color="#8a5508"/></radialGradient>
+<radialGradient id="spec" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<filter id="blur5" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+<filter id="blur2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2"/></filter>
+<filter id="emboss" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy=".9" stdDeviation=".35" flood-color="#000" flood-opacity=".95"/><feDropShadow dx="0" dy="-.35" stdDeviation=".15" flood-color="#fff6d0" flood-opacity=".45"/></filter>
+<filter id="raised2" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx=".3" dy="1.3" stdDeviation=".5" flood-color="#3a2402" flood-opacity=".75"/><feDropShadow dx="0" dy="-.5" stdDeviation=".2" flood-color="#fff3c4" flood-opacity=".7"/></filter>
+<path id="aT" d="M33,100 A67,67 0 0 1 167,100"/><path id="aB" d="M39,100 A61,61 0 0 0 161,100"/>
+</defs>
+<rect width="200" height="200" fill="url(#bg)"/>
+<circle cx="100" cy="96" r="92" fill="#f2b232" opacity=".16" filter="url(#blur5)"/>
+<g transform="translate(100 97) scale(.94) translate(-100 -100)"><ellipse cx="103" cy="115" rx="84" ry="80" fill="#000" opacity=".75" filter="url(#blur5)"/>
+<!-- plate thickness: the side band -->
+<circle cx="100" cy="107" r="82" fill="url(#side)"/>
+<path d="M179.21 128.22 A82 82 0 0 1 20.79 128.22" fill="none" stroke="#2a1a01" stroke-opacity=".6" stroke-width=".8"/>
+<!-- gold rim face with bevel -->
+<circle cx="100" cy="100" r="82" fill="url(#gold)"/>
+<circle cx="100" cy="100" r="81.2" fill="none" stroke="url(#goldBevel)" stroke-width="1.6"/>
+<!-- rubber face, recessed inside the gold rim -->
+<circle cx="100" cy="100" r="79.5" fill="#1a1206"/>
+<circle cx="100" cy="100.8" r="78.6" fill="url(#rub)"/>
+<circle cx="100" cy="100.8" r="78.6" fill="url(#ao)"/>
+<!-- grooves: dark above, light below = cut into the plate -->
+<circle cx="100" cy="99.6" r="62" fill="none" stroke="#000" stroke-opacity=".8" stroke-width="2"/>
+<circle cx="100" cy="100.9" r="62" fill="none" stroke="#fff" stroke-opacity=".09" stroke-width="1"/>
+<circle cx="100" cy="99.6" r="45" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="1.7"/>
+<circle cx="100" cy="100.8" r="45" fill="none" stroke="#fff" stroke-opacity=".08" stroke-width=".9"/>
+<!-- embossed lettering -->
+<g filter="url(#emboss)">
+<text font-family="-apple-system,Inter,'SF Pro Display',system-ui,sans-serif" font-size="13.5" font-weight="800" letter-spacing="3.4" fill="url(#gold)"><textPath href="#aT" startOffset="50%" text-anchor="middle">TWOPLATES</textPath></text>
+<text font-family="-apple-system,Inter,'SF Pro Display',system-ui,sans-serif" font-size="10" font-weight="700" letter-spacing="2.8" fill="#d6d7dc"><textPath href="#aB" startOffset="50%" text-anchor="middle">STRONGER TOGETHER</textPath></text>
+</g>
+<!-- raised hub: shadow on the plate, steel collar, gold dome -->
+<circle cx="102" cy="105" r="36" fill="#000" opacity=".7" filter="url(#blur2)"/>
+<circle cx="100" cy="102.2" r="35" fill="#3c3d42"/>
+<circle cx="100" cy="100" r="35" fill="url(#steel)"/>
+<circle cx="100" cy="100" r="34.4" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width=".7"/>
+<circle cx="100" cy="100.6" r="31" fill="#2a1a02" opacity=".55"/>
+<circle cx="100" cy="100" r="30.5" fill="url(#dome)"/>
+<circle cx="100" cy="100" r="30.1" fill="none" stroke="#fff6d6" stroke-opacity=".75" stroke-width=".7"/>
+<text x="100" y="116.5" text-anchor="middle" font-family="-apple-system,Inter,'SF Pro Display',system-ui,sans-serif" font-weight="900" font-size="46" fill="#1a1206" filter="url(#raised2)">2</text>
+<ellipse cx="88" cy="83" rx="11" ry="6" fill="url(#spec)" opacity=".55" transform="rotate(-30 88 83)"/>
+<!-- light: rim highlight top-left, soft sheen on the rubber -->
+<path d="M21.76 79.04 A81 81 0 0 1 72.30 23.88" fill="none" stroke="#fffbe8" stroke-opacity=".9" stroke-width="1.6" stroke-linecap="round"/>
+<path d="M52.87 78.02 A52 52 0 0 1 82.21 51.14" fill="none" stroke="#fff" stroke-opacity=".14" stroke-width="4" stroke-linecap="round"/>
+</g></svg>
