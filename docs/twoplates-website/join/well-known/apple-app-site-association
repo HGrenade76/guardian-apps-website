@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["KFK8WZ5447.com.guardianapps.twoplates"],
+        "components": [
+          { "/": "/twoplates/join*", "comment": "TwoPlates buddy invites" }
+        ]
+      }
+    ]
+  }
+}
