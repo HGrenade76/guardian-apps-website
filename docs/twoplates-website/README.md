@@ -17,6 +17,9 @@ Design and copy for adding TwoPlates to gap-apps.com as a coming-soon product. B
 | `NARRATIVE.md` | Positioning, what we may and may not claim, headlines, launch posts. |
 | `LEGAL-PLAN.md` | Terms and privacy plan (no legal page changes needed for the coming-soon page itself). |
 
+## Icon
+The TwoPlates icon on the site is the 3D gold-rim icon (same as the app from build 3): `tp-icon-512.webp` (pages), `tp-icon-1024.png` (master), `tp-apple-touch-180.png` (only for TwoPlates pages' apple-touch-icon), and `tp-og.png` (share image) all use it. Never use older TwoPlates icon files. The Guardian.Apps site favicon stays as it is.
+
 ## Tasks
 
 1. **Add `twoplates.html`** at the site root from the prototype. Copy `prototype/assets/twoplates/` to `/assets/twoplates/`. Keep the canonical, Open Graph and Twitter tags.
