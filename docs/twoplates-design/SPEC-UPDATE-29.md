@@ -17,3 +17,11 @@ Mockups: `mockups/31a-home-done.png`, `31b-home-planned.png`, `31c-quick-start.p
 - Filled button: "Start Pull · 45 min". Text link under it: "Start empty and add as I go".
 - Reusable workout building stays in My program; Quick start never saves a template unless the person chooses "Save as a day" at the end of the session.
 - Teen members: same sheet; generated sets keep ≥2 reps in reserve.
+
+## 3. Quick start with a buddy (added 13 Nov, mockup 31d)
+Hein found Quick start skips straight to the workout with no way to bring a buddy.
+- New first row on the Quick start sheet: **TRAINING WITH**: "Just me", one chip per buddy (avatar + name), "+ Invite". Single select; defaults to the buddy remembered for this weekday (same memory as Start session), else Just me.
+- With a buddy chosen, a line under the chips: "Sharing one bar · Two stations ▾" (same One bar / Two stations choice as Start session).
+- The preview becomes **one plan each**: "Pull · 45 min · one plan each", then a line per person with their own exercises, sets and reps (teen rules apply to a teen's line).
+- Button: "Start Pull together · 45 min". It starts the same together session as Start session (invite or join notification, chips with names, "Log on this phone" if the buddy hasn't joined).
+- "Start empty and add as I go" keeps the chosen buddy.
