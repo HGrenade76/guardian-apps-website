@@ -1,38 +1,38 @@
-# Spec update 30 — Calm pages (fewer boxes, cleaner, modern)
+# Spec update 30 (revised 14 Nov) — Flat, modern pages
 
-Tester feedback (13 Nov): "too many button-looking cards", pages feel overwhelming and old; Buddies is bland; Dinner has too many big boxes. The stats tiles are liked.
-Mockups: `mockups/32-calm-home.png`, `32-calm-buddies.png`, `32-calm-meals.png` (side by side: `32-calm-compare.png`).
+Supersedes the first version of this spec and mockups 32-calm-*. Hein, after reviewing 18 screens of build 3: "the cards and round edges look 1960s, not modern, and make the app look so busy." Only actions get a button shape; everything else sits flat on the page.
+Mockups: `mockups/33-flat-a-train.png`, `33-flat-b-surprise.png`, `33-flat-c-meals.png`, `33-flat-d-recipe.png` (together: `33-flat-compare.png`).
 
-## 1. The rules (app-wide)
-1. **Content sits on the page, not in boxes.** Type size, weight and spacing separate sections, not containers.
-2. **Boxes only for three things:** the one hero per screen, data tiles in a grid (like My stats and Home "This week"), and media (photos, clips). Nothing else gets a card.
-3. **Lists are plain rows** on the page background: avatar or icon, title, one grey line, chevron or tick; hairline dividers (1 px, 8 % ink); no shadow, no glass, no per-row card.
-4. **One filled button per screen** (ink #1C1D21, white text). Secondary actions are text links ("+ Add", "Resend", "See all") in ink or gold text, or toolbar icons. Never a card that is really a button.
-5. **Section titles** 20 pt bold, 26 pt above, 6 pt below. Large page title 34 pt.
-6. **One photo per page at most**, used full-bleed at the top (Meals) or inside the hero; tiles never carry photos.
-7. **Choices that switch views** (Today / Week / Groceries) are a text tab row with an underline, not a boxed segmented control.
-8. **Tab bar:** soft pill behind the selected tab, filled symbol, no outline (as in build 3 notes).
-9. Teen rules unchanged.
+## 1. The look (app-wide)
+1. **Page:** one flat background (#F5F5F2 light). No glass, no blurred gradient blobs, no shadows on content.
+2. **Content is never in a card.** Lists, meals, exercises, days, people, settings, ingredients, method, status, explanations: plain rows or text on the page, separated by spacing, small caps section labels (12 pt, 0.7 tracking, grey) and 1 px hairlines (9 % ink).
+3. **Only actions are button-shaped:** the one primary button (ink #15181D, white text, **14 pt corner radius, not a pill**, 52 pt tall), and small controls you tap (chips, steppers, segmented choices: **8 pt radius**, flat fill, no shadow). Secondary actions are text in gold-ink (#8F6100) or a plain icon (swap ⇄, ↻, ♡, ⋯) with no circle around it.
+4. **Allowed containers, only these:** number tiles in a grid (My stats, Your week): 12 pt radius, white, no shadow; media (photo header, map, exercise picture): edge to edge or 8 pt radius.
+5. **Thumbnails** 52 pt square, 8 pt radius.
+6. **Tab bar:** flat bar with a top hairline; selected tab = filled symbol + ink label. No floating capsule, no outline circle.
+7. **Type:** large title 32 pt bold; row title 16 pt semibold; grey line 13–14 pt.
+8. Teen rules unchanged.
 
-## 2. Home (32-calm-home)
-- Hero card: today's session with the illustration, "With Lenaigh" when a buddy is set, filled "Start Pull day".
-- Quick start · Pick a day · Surprise me become one line of text links with icons under the hero (no cards). Done-today state from Spec 29 keeps "Train again?" as this same link row with a heading.
-- "This week": four white data tiles (Training 1 of 3 with bar, Habits 0 of 5 with bar, Tonight's dinner, Buddies latest). No photos on tiles. Tiles open their page.
-- Sync line under the grid.
+## 2. Screen by screen (Hein's review, numbers as he sent them)
+1 & 11 **Home:** keep Start/Carry on, Quick start, Pick a day, Surprise me (as compact flat buttons). Photo tiles → number tiles without photos (Your week, Habits, Tonight, Buddies); My program and My stats move to Train. While a session runs, hide Quick start, Pick a day and Surprise me.
+2 **iCloud sync:** "✓ Synced 2 min ago" + two small buttons (Try again now, Copy details); technical lines under a "Details" disclosure, plain text.
+3 **Meals home (mockup c):** photo header; Plan / Shop / Prep / Eat as a plain step list with a connecting line, ticks for done, grey for not yet; one primary for the next step.
+4 **Plan:** day chips stay; meal cards → plain rows (meal, dish, time · serves) with a plain swap icon; macro numbers as small number tiles (adults only).
+5 **Recipe (mockup d):** Cooking for as a plain row with a flat stepper; Ingredients and Method as plain sections; add primary **Start cooking · step by step**.
+6 **Train / Your program (mockup a):** chips → one meta line; days → plain rows with thumbnail, weekday and status; "+ Add a session" as a text link; primary Start <today's session>.
+7 **Cardio day:** Outdoors / At the gym / No equipment → plain rows; Repeat stays a button.
+8 **Outdoors list:** already right; the model for every list.
+9 **Run pre-start:** fill the empty page with plain lines: what the effort means, last long run, shoes, audio cues. Keep Start and "Done without the phone? Enter it".
+10 **Live run:** map edge to edge; Discard moves into ⋯ with a confirm.
+12 **How did it go?:** label "Time · 1 min"; one 5-step effort selector, no duplicate labels.
+13 **Run done:** remove the repeat "How did it go?"; See your run as a secondary text button; Done the only primary.
+14 **Quick start:** preview as a plain list, one exercise per line.
+15/16 **Pick a day:** Program as one line "Push, pull, legs · Change"; days as plain rows with the tick circle.
+17 **Surprise me (mockup b):** exercises as plain rows with a plain swap icon; time as flat segmented choice.
+18 **Exercise detail:** How to as plain numbered steps.
 
-## 3. Buddies (32-calm-buddies)
-- Hero without a box: you and your buddy side by side, each in a weekly ring (sessions done of planned), "2 together this month" between them. Filled "Train with Lenaigh".
-- Activity: plain rows: who did what, key numbers, time; a 👏 reaction on the right (tap to send, count shown). Pending invites appear here ("Your wife was invited · Not joined yet · Resend").
-- People: plain rows (relationship, training days, status); "+ Add" text link in the section title.
-- Circles: plain rows below People.
-- More than one buddy: the duo hero shows the buddy picked for today (remembered per weekday), swipe for the others.
-
-## 4. Meals (32-calm-meals)
-- Full-bleed photo header of tonight's dinner (Moments "dinner" photo until per-dish photos exist), with name, time, and portion chips per person (teen: "plate", no numbers). Filled "Start cooking".
-- Text tabs: Today · Week · Groceries · 21.
-- Today: plain rows: meal time on the left, dish and one grey line, a tick to mark eaten or cooked. Adults may show kcal in the grey line if they have targets.
-- Water: one row: amount, thin bar, "+ 8 oz" pill.
-- Log a meal or food: toolbar "+" button, not a card.
-
-## 5. Everywhere else
-Apply the rules to every tab and sheet. Keep data tiles where the content is numbers in a grid (My stats, Your week). Report each screen changed with before and after captures.
+## 3. Bugs and coaching fixes seen in the review (hotfix, not build 4)
+- Run screens titled "Walk" when Run was picked (pre-start and live).
+- "Push, pull, legs, 3× a week" shows only Push day and Long run; Pull and Leg days missing; Day 1 Wed / Day 2 Mon order.
+- Isolation moves got 4 sets (Machine Lat Pullover 4 × 10–15); rule is 3 × 10–15.
+- Surprise me opened with an isolation move (Reverse Pec Deck) and gave 5 × 5–8 rows in a 45 min session; main lifts first, 3–4 working sets.
