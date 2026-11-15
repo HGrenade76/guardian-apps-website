@@ -210,3 +210,7 @@ Five rules and one data change. Nothing in §4, §8 or §9 changes, and no teen 
 4. **Equipment follows where the person trains.** At home, only their ticked home kit; gym equipment only under Show all equipment, marked Gym. The generator, Surprise me and swaps follow the same rule.
 5. **"Make it longer" on the person's own program** may take a day past 7 exercises (up to 10, 8 for a teen, as before), because it is their choice. The preview shows each changed day's new length ("Upper: 9 exercises, about 85 min") before Apply. The 7 cap stays for generated days.
 6. **Teen exclusion list** (data, under the existing §4 exercise-pool rule). Machine Goblet Sissy Squat is not teen-permitted (high knee load), so a teen never gets it in a generated day, Surprise me, Quick start, a picker or a swap, and the library hides it from a teen.
+
+## Apple Health writes (15 Nov 2026, mirrors the twoplates-ios copy, §9)
+- Lifts: one workout with the exercise segments, no rest pauses (workout time = elapsed). Effort from reps in reserve (10 − average RIR). Runs: auto-pause stops only.
+- **Teens:** a teen's workout is written with time, effort and heart rate only; never energy, distance or route. Heart rate is the teen's own data on their own phone and is not shown in TwoPlates; Fitness may chart it. *Pending review panel sign-off.*
