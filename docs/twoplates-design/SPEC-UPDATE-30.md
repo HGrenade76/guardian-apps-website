@@ -36,3 +36,7 @@ Mockups: `mockups/33-flat-a-train.png`, `33-flat-b-surprise.png`, `33-flat-c-mea
 - "Push, pull, legs, 3× a week" shows only Push day and Long run; Pull and Leg days missing; Day 1 Wed / Day 2 Mon order.
 - Isolation moves got 4 sets (Machine Lat Pullover 4 × 10–15); rule is 3 × 10–15.
 - Surprise me opened with an isolation move (Reverse Pec Deck) and gave 5 × 5–8 rows in a 45 min session; main lifts first, 3–4 working sets.
+
+## 4. Page colour matches the illustrations (15 Nov, mockup 33-flat-f-background)
+The exercise illustrations and clips are rendered on #ECEEE9. The flat page was #F5F5F2, so every picture showed as a pale box. Change the light page background (and the flat tab bar) to **#ECEEE9** so pictures sit straight on the page with no box, no radius and no backing fill. White stays for number tiles and the outlined action blocks, so they lift slightly off the page.
+Dark mode: the pictures are light, so they keep an 8 pt rounded frame there until dark-background versions exist (separate decision, not this build).
