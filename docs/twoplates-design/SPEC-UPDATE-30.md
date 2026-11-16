@@ -8,7 +8,7 @@ Mockups: `mockups/33-flat-a-train.png`, `33-flat-b-surprise.png`, `33-flat-c-mea
 2. **Content is never in a card.** Lists, meals, exercises, days, people, settings, ingredients, method, status, explanations: plain rows or text on the page, separated by spacing, small caps section labels (12 pt, 0.7 tracking, grey) and 1 px hairlines (9 % ink).
 3. **Only actions are button-shaped:** the one primary button (ink #15181D, white text, **14 pt corner radius, not a pill**, 52 pt tall), and small controls you tap (chips, steppers, segmented choices: **8 pt radius**, flat fill, no shadow). Secondary actions are text in gold-ink (#8F6100) or a plain icon (swap ⇄, ↻, ♡, ⋯) with no circle around it.
 4. **Allowed containers, only these:** number tiles in a grid (My stats, Your week): 12 pt radius, white, no shadow; media (photo header, map, exercise picture): edge to edge or 8 pt radius.
-5. **Thumbnails** 52 pt square, 8 pt radius.
+5. **Thumbnails** (revised 16 Nov, Hein: too small): **72 pt** in exercise lists (day preview, Surprise me, Quick start preview, library, swap sheet, picker), 56 pt in compact rows (Home buddies, Train days). The figure fills the frame: crop each still to its figure's bounds plus 8 % padding (use the framing audit data), never letterboxed in empty backdrop. On #ECEEE9 no radius; in Dark an 8 pt frame.
 6. **Tab bar:** flat bar with a top hairline; selected tab = filled symbol + ink label. No floating capsule, no outline circle.
 7. **Type:** large title 32 pt bold; row title 16 pt semibold; grey line 13–14 pt.
 8. Teen rules unchanged.
