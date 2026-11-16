@@ -214,3 +214,8 @@ Five rules and one data change. Nothing in §4, §8 or §9 changes, and no teen 
 ## Apple Health writes (15 Nov 2026, mirrors the twoplates-ios copy, §9)
 - Lifts: one workout with the exercise segments, no rest pauses (workout time = elapsed). Effort from reps in reserve (10 − average RIR). Runs: auto-pause stops only.
 - **Teens:** a teen's workout is written with time, effort and heart rate only; never energy, distance or route. Heart rate is the teen's own data on their own phone and is not shown in TwoPlates; Fitness may chart it. *Pending review panel sign-off.*
+
+## Rules added 16 Nov 2026 (mirrors the twoplates-ios copy)
+1. **Load source.** A planned load comes from the last logged *working* sets for that exercise (warm-ups and early sets under 90 % of the session's heaviest never count), then a grip or width variant's history, then an adult's reference lift, and only then the empty bar. The set screen names the source ("From Wide-Grip Barbell Bench Press last week", "From your reference lift"); "First time · start light" only with no history at all. Teens never get the reference-lift line.
+2. **Saved-program sets.** An adult's accessory or isolation row in a saved program reads as 3 working sets unless the person set the count themselves (that choice is now recorded). Nothing stored is rewritten; teens keep their own table.
+3. **Staple main lifts at a gym.** Main slots use staples (bench or incline press, overhead press with barbell or dumbbells, rows, pulldown, squat, deadlift). Niche variants (kettlebell military press, floor press and similar) appear only as swaps or for matching home kit. Applies to Quick start, Surprise me and generated weeks.
