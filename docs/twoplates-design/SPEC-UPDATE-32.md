@@ -3,7 +3,7 @@
 Mockups: `mockups/34-t-train.png`, `34-t-goal.png`, `34-t-progress.png`, `34-t-quick.png` (together `34-tabs-compare.png`). Hein liked Meals' "Food this week" photo header and wants the same on other tabs.
 
 ## 1. Photo headers (Train, Pick a goal, Progress)
-- Full-bleed photo, about 220–260 pt, dark gradient at the bottom, white title block (small caps line, 30 pt title, one grey line), status bar and ⋯ in white.
+- Full-bleed photo, **the same 240 pt height on every tab (Meals included)**, title block at the same position, dark gradient at the bottom, white title block (small caps line, 30 pt title, one grey line), status bar and ⋯ in white.
 - Train: gym interior with machines; title = program name; line = "3× a week · Advanced · Gym · with Lenaigh"; Start <today> stays the one primary button.
 - Pick a goal: dumbbell rack or similar; program names unchanged (Lean and strong, Back to it, Bigger arms, Service ready, Move freely…). Each program row shows a picture of the equipment it uses (machine, cable, dumbbells, rack; a pull-up bar for bodyweight programs).
 - Progress: kettlebells, plates or a rack; title "Your week".
