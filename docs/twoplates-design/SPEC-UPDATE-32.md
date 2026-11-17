@@ -13,7 +13,7 @@ Mockups: `mockups/34-t-train.png`, `34-t-goal.png`, `34-t-progress.png`, `34-t-q
 Week ring and summary → ALL STATS tiles (See all ›) → LAST 30 DAYS heat map → THIS WEEK (collapsible, Hide/Show) → NEXT WEEK (collapsible, collapsed by default). Collapse state remembered.
 
 ## 3. Time choices
-20 · 30 · 45 · 60 · 75+ in Quick start and Surprise me (75+ plans about 75–90 min).
+20 · 30 · 45 · 60 · 75+ in Quick start and Surprise me. 75+ means "up to 90 if the day allows", never filler: set and exercise caps unchanged; adult main lifts rest 2:30 (3:00 on a strength goal); a shared-bar session counts taking turns. The preview shows the honest estimate rounded to 5 ("about 70 min"). Typical at Mid: 62–73 min alone, 81–88 with a shared bar, Full body 85–90.
 
 ## 4. Quick start sheet
 Sections TRAINING WITH, FOCUS, TIME and the preview separated by hairlines with 14 pt padding; preview as a plain list, one exercise per line, a labelled block per person.
