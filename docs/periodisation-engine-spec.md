@@ -222,3 +222,6 @@ Five rules and one data change. Nothing in §4, §8 or §9 changes, and no teen 
 
 ## 75+ sessions (17 Nov 2026, mirrors the twoplates-ios copy)
 75+ = "up to 90 if the day allows". Exercise and set caps are unchanged (no filler). Adult main lifts rest 2:30, or 3:00 on a strength goal; a shared-bar session counts taking turns in the estimate. The preview shows the honest estimate rounded to 5 minutes.
+
+## One time estimate (19 Nov 2026, mirrors the twoplates-ios copy)
+Every session length the app shows (program day, Quick start, Surprise me, Make it longer, 75+) comes from one estimator: working sets × (set time + rest for that exercise's role), warm-ups, changeovers, and taking turns on a shared bar. Plans generated before this change keep their stored budget; newly generated plans use the estimator.
