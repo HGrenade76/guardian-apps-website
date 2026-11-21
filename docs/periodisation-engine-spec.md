@@ -230,3 +230,7 @@ Every session length the app shows (program day, Quick start, Surprise me, Make 
 1. **Strength days in new programs:** at least 3 exercises (main lift 3–5 sets at 3:00 rest, a second lift 3 sets, two accessories as a superset at 60–90 s). Default 60 min; at 45 min the main lift drops to 3 sets so the accessories fit. Running programs keep their budget.
 2. **75+ fill:** only Push, Pull, Legs, Upper and Full body fill toward 75–90 min. Core and Arms cap near 45 min and show the honest estimate with a short note.
 3. **Training together:** One bar = same exercises in the same order, each lifter with own sets, reps, loads and rest (teen sets follow §4; swap anything not teen-permitted). Two stations = own plans ordered by slot so both work the same muscle group at the same time, on different equipment where the kit allows.
+
+## Rules added 21 Nov 2026 (mirrors the twoplates-ios copy)
+1. **Logged sets are never deleted by a flow action.** Restart keeps every logged set and the start time; Remove buddy keeps that person's sessions on the phone ("with <name> (removed)"); Move or Skip on a day with logged sets finishes and saves what was logged; only a session with no logged sets may be discarded.
+2. **§4 teen permissions default:** after a move to a new container or any loss of the guardian's approval record, every teen permission is off until the guardian approves again; old values on the phone never switch anything on. The guardian sees "Review <teen>'s permissions" until saved. *Pending review panel sign-off.*
