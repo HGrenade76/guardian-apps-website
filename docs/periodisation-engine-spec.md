@@ -225,3 +225,8 @@ Five rules and one data change. Nothing in §4, §8 or §9 changes, and no teen 
 
 ## One time estimate (19 Nov 2026, mirrors the twoplates-ios copy)
 Every session length the app shows (program day, Quick start, Surprise me, Make it longer, 75+) comes from one estimator: working sets × (set time + rest for that exercise's role), warm-ups, changeovers, and taking turns on a shared bar. Plans generated before this change keep their stored budget; newly generated plans use the estimator.
+
+## Rules added 20 Nov 2026 (mirrors the twoplates-ios copy)
+1. **Strength days in new programs:** at least 3 exercises (main lift 3–5 sets at 3:00 rest, a second lift 3 sets, two accessories as a superset at 60–90 s). Default 60 min; at 45 min the main lift drops to 3 sets so the accessories fit. Running programs keep their budget.
+2. **75+ fill:** only Push, Pull, Legs, Upper and Full body fill toward 75–90 min. Core and Arms cap near 45 min and show the honest estimate with a short note.
+3. **Training together:** One bar = same exercises in the same order, each lifter with own sets, reps, loads and rest (teen sets follow §4; swap anything not teen-permitted). Two stations = own plans ordered by slot so both work the same muscle group at the same time, on different equipment where the kit allows.
