@@ -4,33 +4,82 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MileGuard Privacy Policy · Guardian Apps</title>
-<style>
-  :root { --brand: #0d6b5c; --text: #1d1d1f; --muted: #5f6368; }
-  body { margin: 0; font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; color: var(--text); background: #fff; }
-  main { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
-  h1 { font-size: 34px; line-height: 1.2; margin: 0 0 6px; }
-  h2 { font-size: 21px; margin: 36px 0 8px; color: var(--brand); }
-  p, li { margin: 0 0 12px; }
-  ul { padding-left: 22px; }
-  .meta { color: var(--muted); margin-bottom: 28px; }
-  .summary { background: #f0f6f4; border-radius: 14px; padding: 18px 22px; margin: 24px 0; }
-  .summary p { margin: 0; }
-  a { color: var(--brand); }
-  @media (prefers-color-scheme: dark) {
-    body { background: #111; color: #eee; }
-    .summary { background: #1b2a27; }
-    .meta { color: #a0a0a0; }
-    h2, a { color: #5cc4ad; }
-  }
-</style>
+<meta name="theme-color" content="#0A111E">
 <link rel="icon" href="/favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --bg: #0A111E; --surface: #0F1B2D; --surface2: #15243A; --border: rgba(255,255,255,0.08); --text: #EAF0F8; --muted: #8B98AD; --accent: #34D399; --accent2: #D4A84A; }
+  html { scroll-behavior: smooth; }
+  body { background: radial-gradient(70% 55% at 80% -2%,rgba(212,168,74,0.09),transparent 55%),radial-gradient(60% 50% at -5% 10%,rgba(52,211,153,0.06),transparent 55%),linear-gradient(180deg,#0E1A2C 0%,#0A111E 38%,#0A111E 100%) fixed; color: var(--text); font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-weight: 400; line-height: 1.7; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E"); opacity: 0.4; pointer-events: none; z-index: 0; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1rem 5%; border-bottom: 1px solid var(--border); background: rgba(10,17,30,0.72); backdrop-filter: blur(20px); }
+  .nav-logo { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.35rem; font-weight: 600; letter-spacing: 0.05em; color: var(--text); text-decoration: none; } .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.02em; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { background: var(--accent); border: 1px solid var(--accent); color: var(--bg); padding: 0.5rem 1.4rem; font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; transition: background 0.25s, color 0.25s; text-decoration: none; }
+  .nav-cta:hover { background: var(--accent); color: var(--bg); }
+  .page-hero { position: relative; padding: 140px 5% 60px; border-bottom: 1px solid var(--border); background: var(--surface); }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+  .eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
+  .page-hero h1 { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 300; line-height: 1.1; margin-bottom: 1rem; }
+  .page-hero h1 strong { font-weight: 700; }
+  .meta { display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.2rem; }
+  .meta-item { font-size: 0.8rem; color: var(--muted); }
+  .meta-item span { color: var(--accent); font-weight: 500; }
+  .layout { position: relative; z-index: 1; display: grid; grid-template-columns: 220px 1fr; gap: 0; max-width: 1200px; margin: 0 auto; padding: 4rem 5%; align-items: start; }
+  .toc { position: sticky; top: 100px; background: var(--surface); border: 1px solid var(--border); padding: 1.5rem; }
+  .toc-title { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 1rem; }
+  .toc ul { list-style: none; }
+  .toc ul li a { display: block; font-size: 0.78rem; color: var(--muted); text-decoration: none; padding: 0.4rem 0; border-bottom: 1px solid var(--border); transition: color 0.2s, padding-left 0.2s; }
+  .toc ul li:last-child a { border-bottom: none; }
+  .toc ul li a:hover { color: var(--accent); padding-left: 0.4rem; }
+  .content { padding-left: 4rem; }
+  .legal-section { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+  .legal-section:last-child { border-bottom: none; }
+  .section-num { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); font-weight: 500; margin-bottom: 0.6rem; }
+  .legal-section h2 { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.7rem; font-weight: 600; margin-bottom: 1.2rem; line-height: 1.2; }
+  .legal-section h3 { font-size: 0.95rem; font-weight: 600; color: var(--text); margin: 1.4rem 0 0.6rem; }
+  .legal-section p { font-size: 0.92rem; color: var(--muted); line-height: 1.75; margin-bottom: 0.8rem; }
+  .legal-section ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; margin: 0.8rem 0; }
+  .legal-section ul li { font-size: 0.9rem; color: var(--muted); padding-left: 1.2rem; position: relative; line-height: 1.65; }
+  .legal-section ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+  .legal-section strong { color: var(--text); font-weight: 500; }
+  .legal-section a { color: var(--accent); text-decoration: none; }
+  .legal-section a:hover { text-decoration: underline; }
+  .highlight-box { background: var(--surface2); border-left: 2px solid var(--accent); padding: 1.2rem 1.5rem; margin: 1.2rem 0; }
+  .highlight-box p { margin-bottom: 0; }
+  .commitments { background: linear-gradient(180deg,var(--surface2) 0%,var(--surface) 100%); border: 1px solid rgba(52,211,153,0.28); border-left: 2px solid var(--accent); padding: 2rem 2.2rem; margin-bottom: 3rem; padding-bottom: 2.2rem; }
+  .commitments .section-num { color: var(--accent2); }
+  .commitments h2 { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.2; }
+  .commitments-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.3rem 2.2rem; }
+  .commitment { display: flex; gap: 0.85rem; align-items: flex-start; }
+  .commitment .check { color: var(--accent); font-size: 1rem; line-height: 1.5; flex-shrink: 0; font-weight: 700; }
+  .commitment p { margin: 0; font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+  .commitment p strong { color: var(--text); font-weight: 600; }
+  @media (max-width: 600px) { .commitments-grid { grid-template-columns: 1fr; } .commitments { padding: 1.5rem; } }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 1.2rem 0; }
+  th { background: var(--surface2); color: var(--text); font-weight: 500; padding: 0.8rem 1rem; text-align: left; border: 1px solid var(--border); font-size: 0.8rem; }
+  td { padding: 0.75rem 1rem; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  .contact-box { background: var(--surface); border: 1px solid rgba(52,211,153,0.2); padding: 2rem; margin-top: 1.5rem; }
+  .contact-box h3 { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 0.8rem; }
+  footer { border-top: 1px solid var(--border); background: var(--surface); padding: 2.5rem 5%; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; position: relative; z-index: 1; }
+  .footer-brand { font-family: -apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--text); text-decoration: none; } .footer-brand span { color: var(--accent); }
+  .footer-links { display: flex; gap: 2rem; list-style: none; }
+  .footer-links a { font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent); }
+  .footer-social { display: flex; gap: 1.2rem; }
+  .footer-social a { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-social a:hover { color: var(--accent); }
+  .footer-copy { font-size: 0.75rem; color: var(--muted); }
+  @media (max-width: 900px) { .nav-links { display: none; } .layout { grid-template-columns: 1fr; } .toc { position: static; margin-bottom: 2rem; } .content { padding-left: 0; } footer { flex-direction: column; align-items: flex-start; } }
+
+  .cta-fine{display:inline-block;max-width:40rem;margin-top:.95rem;font-size:.8rem;line-height:1.5;color:var(--faint);font-weight:500;letter-spacing:.01em}
+  .cta-fine b{color:var(--muted);font-weight:600}
+</style>
 <link rel="stylesheet" href="/assets/site-chrome.css">
 <script src="/assets/site-chrome.js" defer></script>
-<style>
-  body { padding-top: 64px; }
-  footer.gf { background: #0A111E; }
-</style>
 </head>
 <body>
 <nav class="gn" aria-label="Main">
@@ -52,14 +101,34 @@
     <a href="/index.html#apps" class="gn-cta">Our apps</a>
   </div>
 </nav>
-<main>
-<h1>MileGuard Privacy Policy</h1>
-<p class="meta">Guardian Apps LLC · Effective November 22, 2026</p>
 
-<div class="summary">
-<p>MileGuard records your drives so you can keep a mileage log. Your drives stay on your iPhone and in your own iCloud account. We don't have accounts, we don't run ads, we don't use analytics or tracking, and we never sell your data.</p>
+<div class="page-hero">
+  <div class="eyebrow">Legal</div>
+  <h1>MileGuard Privacy <strong>Policy</strong></h1>
+  <div class="meta">
+    <div class="meta-item">Guardian Apps LLC · Effective <span>November 22, 2026</span></div>
+  </div>
 </div>
 
+<div class="layout">
+  <aside class="toc">
+    <div class="toc-title">Contents</div>
+    <ul>
+      <li><a href="#mg-what-mileguard-collects-and-why">What MileGuard collects and why</a></li>
+      <li><a href="#mg-where-your-data-is-kept">Where your data is kept</a></li>
+      <li><a href="#mg-what-is-sent-to-our-server">What is sent to our server</a></li>
+      <li><a href="#mg-purchases">Purchases</a></li>
+      <li><a href="#mg-what-we-don-t-do">What we don't do</a></li>
+      <li><a href="#mg-keeping-and-deleting-your-data">Keeping and deleting your data</a></li>
+      <li><a href="#mg-children">Children</a></li>
+      <li><a href="#mg-your-rights">Your rights</a></li>
+      <li><a href="#mg-changes">Changes</a></li>
+      <li><a href="#mg-contact">Contact</a></li>
+    </ul>
+  </aside>
+  <main class="content">
+    <div class="highlight-box"><p>MileGuard records your drives so you can keep a mileage log. Your drives stay on your iPhone and in your own iCloud account. We don't have accounts, we don't run ads, we don't use analytics or tracking, and we never sell your data.</p></div>
+    <div class="legal-section" id="mg-what-mileguard-collects-and-why">
 <h2>What MileGuard collects and why</h2>
 <ul>
   <li><strong>Location while you drive.</strong> MileGuard uses your iPhone's location to record the route and distance of each drive. It asks for "Always" access so drives are recorded when the app is closed. Location is only recorded during a drive, not while you're parked or walking.</li>
@@ -67,10 +136,12 @@
   <li><strong>What you enter.</strong> Trip purposes, clients, toll amounts, saved places, vehicles, odometer readings, your name and business name (for your reports), and your settings.</li>
   <li><strong>Toll statements you import.</strong> When you import a CSV from your toll provider, it is read on your iPhone to match tolls to drives. The file itself is not uploaded anywhere.</li>
 </ul>
-
+    </div>
+    <div class="legal-section" id="mg-where-your-data-is-kept">
 <h2>Where your data is kept</h2>
 <p>Your drives and everything you enter are stored on your iPhone. If you're signed in to iCloud, they are also synced to your <em>private</em> iCloud database so they survive a new phone and appear on your other devices. That database belongs to your Apple account. Guardian Apps cannot see or access it. Apple's handling of iCloud data is covered by <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</p>
-
+    </div>
+    <div class="legal-section" id="mg-what-is-sent-to-our-server">
 <h2>What is sent to our server</h2>
 <p>MileGuard uses a small Guardian Apps server for two things. Neither one involves an account, and nothing is linked to your name.</p>
 <ul>
@@ -78,10 +149,12 @@
   <li><strong>In-car display.</strong> When a drive starts, the app sends our server a push token and the drive's start time so Apple's push service can show the drive on your lock screen and CarPlay Dashboard. The token is used for that one notification and is not stored.</li>
 </ul>
 <p>Our server is hosted by Fly.io, whose systems may briefly keep standard request logs such as IP addresses for security and reliability. We do not use those logs to identify or profile anyone.</p>
-
+    </div>
+    <div class="legal-section" id="mg-purchases">
 <h2>Purchases</h2>
 <p>MileGuard Pro is sold through Apple. Apple handles payment, and we never see your payment details. The app only receives confirmation of whether your subscription is active.</p>
-
+    </div>
+    <div class="legal-section" id="mg-what-we-don-t-do">
 <h2>What we don't do</h2>
 <ul>
   <li>No user accounts, no sign-in, no email collection.</li>
@@ -89,35 +162,53 @@
   <li>No analytics or crash-reporting SDKs that send your data to third parties.</li>
   <li>We never sell, rent or share your personal information for marketing.</li>
 </ul>
-
+    </div>
+    <div class="legal-section" id="mg-keeping-and-deleting-your-data">
 <h2>Keeping and deleting your data</h2>
 <p>Your data stays until you delete it. You can delete any drive in the app. Deleting the app removes the data on your iPhone. To remove the iCloud copy, go to Settings → [your name] → iCloud → Manage Account Storage → MileGuard → Delete Data. Because we don't hold your drives on our servers, there is nothing for us to delete on our side, but you can contact us with any request.</p>
-
+    </div>
+    <div class="legal-section" id="mg-children">
 <h2>Children</h2>
 <p>MileGuard is meant for adult drivers keeping business mileage records. It is not directed to children under 13, and we do not knowingly collect information from them.</p>
-
+    </div>
+    <div class="legal-section" id="mg-your-rights">
 <h2>Your rights</h2>
 <p>Depending on where you live, you may have the right to know what personal information is processed about you, to ask for it to be corrected or deleted, and to opt out of its sale. We don't sell personal information, and almost everything MileGuard handles is under your control on your own devices. Contact us for anything else and we'll respond within 30 days.</p>
-
+    </div>
+    <div class="legal-section" id="mg-changes">
 <h2>Changes</h2>
 <p>If this policy changes, we'll update the date at the top and, for meaningful changes, let you know in the app.</p>
-
+    </div>
+    <div class="legal-section" id="mg-contact">
 <h2>Contact</h2>
 <p>Guardian Apps LLC<br>Houston, Texas, USA<br><a href="mailto:privacy@gap-apps.com">privacy@gap-apps.com</a></p>
-</main>
+    </div>
+  </main>
+</div>
+
 <footer class="gf">
   <div class="gf-in">
     <div class="gf-top">
       <div class="gf-brand">
         <a href="/index.html" class="gf-logo">Guardian<span>.</span>Apps</a>
         <p>Apps built for real people. Private by default.</p>
+        <div class="gf-social">
+          <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+          <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+        </div>
       </div>
+      <div class="gf-col"><div class="gf-h">Apps</div><ul>
+        <li><a href="/decisio.html">DECISIO.ai</a></li>
+        <li><a href="/products.html">DECISIO.ai features</a></li>
+        <li><a href="/twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+      </ul></div>
       <div class="gf-col"><div class="gf-h">Company</div><ul>
         <li><a href="/index.html">Home</a></li>
+        <li><a href="/index.html#philosophy">Philosophy</a></li>
         <li><a href="/contact.html">Contact</a></li>
       </ul></div>
       <div class="gf-col"><div class="gf-h">Legal</div><ul>
-        <li><a href="https://gap-apps.com/privacy.html">Guardian Apps Privacy Policy</a></li>
+        <li><a href="https://gap-apps.com/privacy.html">Privacy Policy</a></li>
         <li><a href="/terms.html">Terms</a></li>
       </ul></div>
     </div>
