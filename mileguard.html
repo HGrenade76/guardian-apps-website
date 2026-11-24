@@ -207,6 +207,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .score-list li b{color:var(--gold-text)}
 @media (max-width:900px){.car{grid-template-columns:1fr;gap:2rem}}
 .gn .gn-cta{background:#3DDC97;color:#06231A!important}
+/* COMPARE */
+.cmp{margin-top:2.4rem;overflow-x:auto;border:1px solid var(--line-on-paper);border-radius:20px;background:var(--paper-2)}
+.cmp table{width:100%;min-width:560px;border-collapse:collapse;font-size:.95rem}
+.cmp th,.cmp td{padding:1rem 1.2rem;text-align:center;border-bottom:1px solid var(--line-on-paper)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp th{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.cmp th.us{color:var(--gold-text)}
+.cmp td:first-child,.cmp th:first-child{text-align:left;color:var(--ink-strong)}
+.cmp td.us{background:rgba(14,138,99,.07);font-weight:700;color:var(--gold-text)}
+.cmp .yes{font-size:1.15rem;font-weight:800;color:var(--gold-text)}
+.cmp .no{color:#9AA3B2}
+.cmp-note{margin-top:.9rem;font-size:.78rem;color:var(--ink-muted)}
+.cmp-note a{text-decoration:underline}
+
 </style>
 <link rel="stylesheet" href="assets/site-chrome.css">
 <script src="assets/site-chrome.js" defer></script>
@@ -281,6 +295,26 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
         <ul><li><b>✓</b> Answers Schedule C Part IV</li><li><b>✓</b> Standard rate vs actual expenses</li><li><b>✓</b> Monthly log ready to send to your accountant</li></ul>
         <div class="shot"><img src="assets/mileguard/mg-screen-reports-light.webp" alt="Year-end tax summary comparing the two methods"></div></div>
     </div>
+  </div>
+</section>
+
+<section class="paper pad" id="compare" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">How it compares</div>
+    <h2 style="font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:44rem">What MileGuard does <span class="g">that others don't.</span></h2>
+    <div class="cmp">
+      <table>
+        <thead><tr><th scope="col"></th><th scope="col" class="us">MileGuard</th><th scope="col">MileIQ</th><th scope="col">Everlance</th></tr></thead>
+        <tbody>
+          <tr><td>No account or sign-up needed</td><td class="us"><span class="yes" aria-label="Yes">✓</span></td><td><span class="no" aria-label="No">—</span></td><td><span class="no" aria-label="No">—</span></td></tr>
+          <tr><td>Your drives stay in your own iCloud, not on the app maker's servers</td><td class="us"><span class="yes" aria-label="Yes">✓</span></td><td><span class="no" aria-label="No">—</span></td><td><span class="no" aria-label="No">—</span></td></tr>
+          <tr><td>Toll roads spotted on business drives</td><td class="us"><span class="yes" aria-label="Yes">✓</span></td><td><span class="no" aria-label="No">—</span></td><td><span class="no" aria-label="No">—</span></td></tr>
+          <tr><td>Driving score: braking, acceleration, speeding</td><td class="us"><span class="yes" aria-label="Yes">✓</span></td><td><span class="no" aria-label="No">—</span></td><td><span class="no" aria-label="No">—</span></td></tr>
+          <tr><td>Price per year</td><td class="us">$49.99</td><td>$139.92</td><td>$89.99 <small>(Starter)</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cmp-note">Based on each app's published plans, help pages and App Store listing, November 2026. Individual plans, billed yearly: <a href="https://mileiq.com/pricing" target="_blank" rel="noopener">MileIQ pricing</a>, <a href="https://www.everlance.com/pricing.html" target="_blank" rel="noopener">Everlance pricing</a>. MileIQ and Everlance are trademarks of their owners.</p>
   </div>
 </section>
 
