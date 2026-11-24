@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Guardian.Apps: iPhone apps built for real people</title>
-<meta name="description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
+<meta name="description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, plus TwoPlates, a strength coach for two, and MileGuard, a mileage log for work, both coming soon.">
 <meta name="theme-color" content="#0A111E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -196,7 +196,7 @@
   .hero .hero-copy.wide{max-width:52rem}
   .hero h1 .serif{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0;color:var(--gold-2);font-size:1.1em}
   .hero-sub.wide{max-width:40rem}
-  .apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:1.6rem;margin-top:3rem}
+  .apps{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem;margin-top:3rem}
   .app{border-radius:24px;padding:2rem;display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;min-height:460px}
   .app.dec{background:linear-gradient(160deg,#13233a,#0c1626);border:1px solid var(--line)}
   .app.tp{background:linear-gradient(160deg,#1b1b1f,#0b0b0d);border:1px solid rgba(212,168,74,.35)}
@@ -212,6 +212,27 @@
   .app .acts{margin-top:auto;display:flex;gap:.7rem;flex-wrap:wrap}
   .app .btn{padding:.8rem 1.1rem;font-size:.88rem}
   @media (max-width:860px){.apps{grid-template-columns:1fr}.app{min-height:0;padding:1.6rem}}
+  .app.mg{background:linear-gradient(160deg,#0f2620,#08120f);border:1px solid rgba(61,220,151,.35)}
+  .app.mg li::before{color:#3DDC97}
+  .state.mg-tag{background:rgba(61,220,151,.12);color:#5FE3B4;border:1px solid rgba(61,220,151,.45)}
+  .btn.mg-btn{background:#3DDC97;color:#06231A;border-color:#3DDC97}
+  .mg-band{padding:40px 0 110px}
+  .mg-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:3rem;align-items:center}
+  .mg-band .eyebrow{color:#5FE3B4}
+  .mg-band h2{font-size:clamp(2rem,3.8vw,2.9rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-top:.8rem}
+  .mg-band .g2{color:#5FE3B4}
+  .mg-band p{color:var(--muted);margin-top:1.1rem;max-width:30rem}
+  .mg-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.4rem}
+  .mg-chips span{font-size:.8rem;color:#C9D3E2;border:1px solid var(--line);border-radius:999px;padding:.35rem .8rem}
+  .mg-band .acts{display:flex;gap:.7rem;flex-wrap:wrap;margin-top:1.8rem}
+  .mg-stage{position:relative;height:560px}
+  .mg-ph{position:absolute;width:232px;border-radius:38px;padding:8px;background:linear-gradient(160deg,#3a3d44,#0b0c0f);box-shadow:0 40px 80px -30px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.12)}
+  .mg-ph img{width:100%;border-radius:30px;display:block}
+  .mg-ph.l{left:0;top:70px;transform:rotate(-7deg)}
+  .mg-ph.c{left:50%;margin-left:-128px;top:0;width:256px;z-index:2}
+  .mg-ph.r{right:0;top:80px;transform:rotate(7deg)}
+  @media (max-width:900px){.mg-grid{grid-template-columns:1fr}.mg-stage{height:420px}.mg-ph{width:160px;border-radius:28px;padding:6px}.mg-ph img{border-radius:22px}.mg-ph.c{width:176px;margin-left:-88px}}
+
   /* promise */
   .promise .sec-head{max-width:46rem}
   .promise-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
@@ -232,7 +253,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gap-apps.com/">
   <meta property="og:title" content="Guardian.Apps: iPhone apps built for real people">
-  <meta property="og:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
+  <meta property="og:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, plus TwoPlates, a strength coach for two, and MileGuard, a mileage log for work, both coming soon.">
   <meta property="og:image" content="https://gap-apps.com/assets/gap-og-2026.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -242,7 +263,7 @@
   <!-- X / Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Guardian.Apps: iPhone apps built for real people">
-  <meta name="twitter:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, and TwoPlates, a strength coach for two, coming soon.">
+  <meta name="twitter:description" content="Guardian.Apps makes private iPhone apps for real parts of your week: DECISIO.ai for meeting decisions and follow-through, plus TwoPlates, a strength coach for two, and MileGuard, a mileage log for work, both coming soon.">
   <meta name="twitter:image" content="https://gap-apps.com/assets/gap-og-2026.png">
   <meta name="twitter:image:alt" content="Guardian.Apps — Apps built for real people. Private by default.">
 
@@ -415,6 +436,7 @@
         <div class="gn-panel" id="gn-apps">
           <a href="decisio.html" class="gn-app"><img src="assets/brand/decisio-mark-128.webp" alt="" width="40" height="40"><span><b>DECISIO.ai</b><small>Meeting decisions and follow-through</small></span></a>
           <a href="twoplates.html" class="gn-app"><img src="assets/twoplates/tp-icon-128.webp" alt="" width="40" height="40"><span><b>TwoPlates<span class="soon">Soon</span></b><small>Strength training for two</small></span></a>
+          <a href="mileguard.html" class="gn-app"><img src="assets/mileguard/mg-icon-128.webp" alt="" width="40" height="40"><span><b>MileGuard<span class="soon">Soon</span></b><small>Mileage log for work</small></span></a>
           <a href="index.html#apps" class="gn-all">All apps →</a>
         </div>
       </li>
@@ -430,7 +452,7 @@
     <div class="hero-copy wide">
       <div class="eyebrow fade d1">Guardian.Apps · iPhone &amp; iPad</div>
       <h1 class="fade d1">Apps built for real people.<br><span class="serif">Private by default.</span></h1>
-      <p class="hero-sub wide fade d2">We make a few iPhone apps, each one designed around a real part of your week, and we build them well. <b style="color:var(--text)">DECISIO.ai</b> for the decisions you make at work. <b style="color:var(--text)">TwoPlates</b>, coming soon, for the training you do together. Your data stays yours.</p>
+      <p class="hero-sub wide fade d2">We make a few iPhone apps, each one designed around a real part of your week, and we build them well. <b style="color:var(--text)">DECISIO.ai</b> for the decisions you make at work. <b style="color:var(--text)">TwoPlates</b> for the training you do together, and <b style="color:var(--text)">MileGuard</b> for the miles you drive for work, both coming soon. Your data stays yours.</p>
     </div>
     <div class="apps fade d3" id="apps">
       <div class="app dec"><span class="state live">On the App Store</span>
@@ -445,9 +467,32 @@
         <ul><li>A real program for each of you</li><li>Train together, live: whose turn, what to load</li><li>One meal plan, a portion for each, groceries done</li><li>Teen rules built in: no calories, no weigh-ins</li></ul>
         <div class="acts"><a class="btn btn-primary" href="twoplates.html#waitlist">Join the waitlist</a><a class="btn btn-ghost" href="twoplates.html">Learn more</a></div>
       </div>
+      <div class="app mg"><span class="state mg-tag">Coming soon · In beta</span>
+        <div class="top"><img src="assets/mileguard/mg-icon-512.webp" alt="" width="64" height="64"><div><div class="k">Mileage log for work</div><h3>MileGuard</h3></div></div>
+        <p>Records every work drive on its own, starts with CarPlay, and keeps tolls, parking, meals and receipts with the drive. Tax summary ready at year end.</p>
+        <ul><li>Starts and stops with your car</li><li>Toll roads spotted, statements matched</li><li>Year-end tax summary for your preparer</li></ul>
+        <div class="acts"><a class="btn btn-primary mg-btn" href="mileguard.html#waitlist">Join the waitlist</a><a class="btn btn-ghost" href="mileguard.html">Learn more</a></div>
+      </div>
     </div>
   </div>
 </header>
+
+<section class="mg-band" id="mileguard">
+  <div class="wrap mg-grid">
+    <div>
+      <div class="eyebrow">New · Coming soon</div>
+      <h2>Every work mile logged.<br><span class="g2">Tax time already done.</span></h2>
+      <p>MileGuard starts when your car connects and stops when you park. Swipe each drive business or personal. Tolls, parking, fuel, meals and receipts stay with the drive, and the year-end summary is ready for your tax preparer.</p>
+      <div class="mg-chips"><span>Records on its own</span><span>Works with CarPlay</span><span>Toll roads spotted</span><span>Year-end tax summary</span><span>Driving score</span></div>
+      <div class="acts"><a class="btn btn-primary mg-btn" href="mileguard.html">See MileGuard</a><a class="btn btn-ghost" href="mileguard.html#waitlist">Join the waitlist</a></div>
+    </div>
+    <div class="mg-stage" aria-label="MileGuard screens">
+      <div class="mg-ph l"><img src="assets/mileguard/mg-screen-driving.webp" alt="MileGuard My Driving score" loading="lazy"></div>
+      <div class="mg-ph c"><img src="assets/mileguard/mg-screen-home.webp" alt="MileGuard home: this month's miles and business value" loading="lazy"></div>
+      <div class="mg-ph r"><img src="assets/mileguard/mg-screen-reports.webp" alt="MileGuard year-end tax summary" loading="lazy"></div>
+    </div>
+  </div>
+</section>
 
 <section class="sec promise on-paper" id="promise">
   <div class="wrap">
@@ -516,6 +561,7 @@
         <li><a href="decisio.html">DECISIO.ai</a></li>
         <li><a href="products.html">DECISIO.ai features</a></li>
         <li><a href="twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+        <li><a href="mileguard.html">MileGuard<span class="soon">Soon</span></a></li>
       </ul></div>
       <div class="gf-col"><div class="gf-h">Company</div><ul>
         <li><a href="index.html">Home</a></li>

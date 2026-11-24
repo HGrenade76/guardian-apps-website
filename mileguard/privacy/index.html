@@ -92,6 +92,7 @@
         <div class="gn-panel" id="gn-apps">
           <a href="/decisio.html" class="gn-app"><img src="/assets/brand/decisio-mark-128.webp" alt="" width="40" height="40"><span><b>DECISIO.ai</b><small>Meeting decisions and follow-through</small></span></a>
           <a href="/twoplates.html" class="gn-app"><img src="/assets/twoplates/tp-icon-128.webp" alt="" width="40" height="40"><span><b>TwoPlates<span class="soon">Soon</span></b><small>Strength training for two</small></span></a>
+          <a href="/mileguard.html" class="gn-app"><img src="/assets/mileguard/mg-icon-128.webp" alt="" width="40" height="40"><span><b>MileGuard<span class="soon">Soon</span></b><small>Mileage log for work</small></span></a>
           <a href="/index.html#apps" class="gn-all">All apps →</a>
         </div>
       </li>
@@ -106,7 +107,7 @@
   <div class="eyebrow">Legal</div>
   <h1>MileGuard Privacy <strong>Policy</strong></h1>
   <div class="meta">
-    <div class="meta-item">Guardian Apps LLC · Effective <span>November 22, 2026</span></div>
+    <div class="meta-item">Guardian Apps LLC · Effective <span>November 23, 2026</span></div>
   </div>
 </div>
 
@@ -116,6 +117,8 @@
     <ul>
       <li><a href="#mg-what-mileguard-collects-and-why">What MileGuard collects and why</a></li>
       <li><a href="#mg-where-your-data-is-kept">Where your data is kept</a></li>
+      <li><a href="#mg-files-you-keep">Files you keep</a></li>
+      <li><a href="#mg-other-services">Other services</a></li>
       <li><a href="#mg-what-is-sent-to-our-server">What is sent to our server</a></li>
       <li><a href="#mg-purchases">Purchases</a></li>
       <li><a href="#mg-what-we-don-t-do">What we don't do</a></li>
@@ -133,7 +136,9 @@
 <ul>
   <li><strong>Location while you drive.</strong> MileGuard uses your iPhone's location to record the route and distance of each drive. It asks for "Always" access so drives are recorded when the app is closed. Location is only recorded during a drive, not while you're parked or walking.</li>
   <li><strong>Motion activity.</strong> Motion data tells MileGuard when you start and stop driving. It is used on your iPhone only and never leaves it.</li>
-  <li><strong>What you enter.</strong> Trip purposes, clients, toll amounts, saved places, vehicles, odometer readings, your name and business name (for your reports), and your settings.</li>
+  <li><strong>What you enter.</strong> Trip purposes, clients, toll and parking amounts, business meals and who was there, fuel and car costs, receipt photos, saved places, vehicles (including plate number, VIN and usual driver), odometer readings, your name and business name (for your reports), an email address for your monthly report, and your settings.</li>
+  <li><strong>Camera and photos.</strong> Used only when you photograph or pick a receipt. The photo is stored with the drive or cost it belongs to.</li>
+  <li><strong>Contacts.</strong> Used only when you pick a vehicle's usual driver. MileGuard receives the one contact you choose and keeps just the name.</li>
   <li><strong>Toll statements you import.</strong> When you import a CSV from your toll provider, it is read on your iPhone to match tolls to drives. The file itself is not uploaded anywhere.</li>
 </ul>
     </div>
@@ -141,11 +146,24 @@
 <h2>Where your data is kept</h2>
 <p>Your drives and everything you enter are stored on your iPhone. If you're signed in to iCloud, they are also synced to your <em>private</em> iCloud database so they survive a new phone and appear on your other devices. That database belongs to your Apple account. Guardian Apps cannot see or access it. Apple's handling of iCloud data is covered by <a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>.</p>
     </div>
+    <div class="legal-section" id="mg-files-you-keep">
+<h2>Files you keep</h2>
+<p>If "Save files" is on (Settings → Files you keep), MileGuard writes your monthly drive logs, year-end summaries and receipt photos as ordinary files to a MileGuard folder in your iCloud Drive, or to another folder you choose, such as OneDrive, Google Drive or Dropbox. Those files belong to you and are handled by that storage provider under its own privacy policy. They stay when you delete MileGuard, and MileGuard never deletes them. If you send your monthly log to your accountant or employer, it goes from your own Mail app; we don't see it.</p>
+    </div>
+    <div class="legal-section" id="mg-other-services">
+<h2>Other services the app uses directly</h2>
+<ul>
+  <li><strong>Apple Maps.</strong> Addresses you type, and the start and end points of drives, are sent to Apple to suggest addresses, name places and measure distances (<a href="https://www.apple.com/legal/privacy/">Apple's Privacy Policy</a>).</li>
+  <li><strong>NHTSA vehicle lookup.</strong> If you look up a vehicle, the make, year or VIN you enter is sent to the U.S. National Highway Traffic Safety Administration's public vPIC service to fill in the make and model.</li>
+</ul>
+    </div>
     <div class="legal-section" id="mg-what-is-sent-to-our-server">
 <h2>What is sent to our server</h2>
-<p>MileGuard uses a small Guardian Apps server for two things. Neither one involves an account, and nothing is linked to your name.</p>
+<p>MileGuard uses a small Guardian Apps server for the checks below. None of them involves an account, and nothing is linked to your name. Each request is signed with Apple's App Attest, which proves it comes from the genuine MileGuard app without identifying you.</p>
 <ul>
   <li><strong>Toll check.</strong> For drives you mark as Business, the app sends the drive's route points (latitude, longitude and time) to our server to check whether the route used a toll road. Our server passes a sample of those points to the OpenStreetMap Overpass service (<a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy">privacy policy</a>) to look up toll roads. If toll pricing is enabled, the route may also be sent to Google's Routes API to estimate the toll amount (<a href="https://policies.google.com/privacy">privacy policy</a>). Routes are processed in memory to answer the request and are not stored by us. You can turn this off in Settings → Tolls.</li>
+  <li><strong>Speed-limit check (driving score).</strong> If driving insights are on, the app sends points from the faster parts of a drive (latitude, longitude and time) to our server, which looks up posted speed limits from OpenStreetMap Overpass. The points are processed in memory and not stored. Your driving score, hard braking and speeding events are worked out and kept on your iPhone and in your own iCloud; we never see them. You can turn this off in Settings → Driving insights.</li>
+  <li><strong>Mileage rates.</strong> The app downloads the current official mileage rates. No personal data is sent.</li>
   <li><strong>In-car display.</strong> When a drive starts, the app sends our server a push token and the drive's start time so Apple's push service can show the drive on your lock screen and CarPlay Dashboard. The token is used for that one notification and is not stored.</li>
 </ul>
 <p>Our server is hosted by Fly.io, whose systems may briefly keep standard request logs such as IP addresses for security and reliability. We do not use those logs to identify or profile anyone.</p>
@@ -165,7 +183,7 @@
     </div>
     <div class="legal-section" id="mg-keeping-and-deleting-your-data">
 <h2>Keeping and deleting your data</h2>
-<p>Your data stays until you delete it. You can delete any drive in the app. Deleting the app removes the data on your iPhone. To remove the iCloud copy, go to Settings → [your name] → iCloud → Manage Account Storage → MileGuard → Delete Data. Because we don't hold your drives on our servers, there is nothing for us to delete on our side, but you can contact us with any request.</p>
+<p>Your data stays until you delete it. You can delete any drive in the app. Deleting the app removes the data on your iPhone; files you saved to iCloud Drive or another folder stay there until you delete them. To remove the iCloud copy, go to Settings → [your name] → iCloud → Manage Account Storage → MileGuard → Delete Data. Because we don't hold your drives on our servers, there is nothing for us to delete on our side, but you can contact us with any request.</p>
     </div>
     <div class="legal-section" id="mg-children">
 <h2>Children</h2>
@@ -181,7 +199,7 @@
     </div>
     <div class="legal-section" id="mg-contact">
 <h2>Contact</h2>
-<p>Guardian Apps LLC<br>Houston, Texas, USA<br><a href="mailto:privacy@gap-apps.com">privacy@gap-apps.com</a></p>
+<p>Guardian Apps LLC<br>Houston, Texas, USA<br><a href="mailto:support@gap-apps.com">support@gap-apps.com</a></p>
     </div>
   </main>
 </div>
@@ -201,6 +219,7 @@
         <li><a href="/decisio.html">DECISIO.ai</a></li>
         <li><a href="/products.html">DECISIO.ai features</a></li>
         <li><a href="/twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+        <li><a href="/mileguard.html">MileGuard<span class="soon">Soon</span></a></li>
       </ul></div>
       <div class="gf-col"><div class="gf-h">Company</div><ul>
         <li><a href="/index.html">Home</a></li>

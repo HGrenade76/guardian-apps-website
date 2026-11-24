@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MileGuard — Mileage log for work, with CarPlay · Coming soon · Guardian.Apps</title>
+<meta name="description" content="MileGuard records every work drive on its own, works with CarPlay, keeps tolls, parking, meals and receipts with each drive, and gives you a year-end tax summary. Coming soon to iPhone.">
+<meta name="theme-color" content="#0A111E">
+<link rel="canonical" href="https://gap-apps.com/mileguard.html">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="Guardian.Apps">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MileGuard — Drive for work. We keep the log. Coming soon to iPhone.">
+<meta property="og:description" content="Every work drive recorded on its own, with CarPlay, receipts and a year-end tax summary.">
+<meta property="og:image" content="https://gap-apps.com/assets/mileguard/mg-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MileGuard — Drive for work. We keep the log. Tax time, done. Coming soon to iPhone and CarPlay.">
+<meta property="og:locale" content="en_US">
+<meta property="og:url" content="https://gap-apps.com/mileguard.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MileGuard — Drive for work. We keep the log. Coming soon to iPhone.">
+<meta name="twitter:description" content="Every work drive recorded on its own, with CarPlay, receipts and a year-end tax summary.">
+<meta name="twitter:image" content="https://gap-apps.com/assets/mileguard/mg-og.png">
+<meta name="twitter:image:alt" content="MileGuard — Drive for work. We keep the log. Tax time, done. Coming soon to iPhone and CarPlay.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<style>
+/* Tokens copied from index.html so the page sits in the same family. */
+:root{--bg:#0A111E;--bg-top:#0E1A2C;--surface:#0F1B2D;--surface-2:#15243A;--line:rgba(255,255,255,.09);--text:#EAF0F8;--muted:#8B98AD;--gold:#3DDC97;--gold-2:#5FE3B4;--green:#34D399;
+--paper:#F5F6F8;--paper-2:#FFFFFF;--ink-strong:#0F1F3A;--ink-muted:#41506B;--line-on-paper:#E2E5EC;--gold-text:#0E8A63;
+/* MileGuard accents (the app's brand greens) */
+--tp-strength:#0E8A63;
+--radius:16px;--maxw:1180px;
+--sans:-apple-system,"SF Pro Display","SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;--serif:"Cormorant Garamond",Georgia,serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.55}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 2rem}
+.eyebrow{display:flex;align-items:center;gap:.8rem;font-size:.72rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.eyebrow::before{content:"";width:2.2rem;height:1px;background:var(--gold)}
+.g{color:var(--gold)}
+.serif{font-family:var(--serif);font-style:italic;font-weight:600;letter-spacing:0}
+h1,h2,h3{letter-spacing:-.03em;line-height:1.05}
+
+/* NAV (same structure as index.html) */
+nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2rem;background:rgba(10,17,30,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-logo{font-weight:800;font-size:1.05rem;letter-spacing:-.02em}.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:2.2rem;list-style:none}
+.nav-links a{color:var(--muted);font-size:.82rem;font-weight:500}
+.nav-links a.on{color:var(--text)}
+.soon{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,74,.5);border-radius:6px;padding:.1rem .35rem;margin-left:.35rem;vertical-align:1px}
+.nav-cta{background:var(--gold);color:#0A111E;font-weight:700;font-size:.82rem;padding:.6rem 1.05rem;border-radius:10px}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;padding:5.5rem 0 5rem;background:radial-gradient(900px 500px at 78% 30%,rgba(61,220,151,.13),transparent 60%),linear-gradient(180deg,var(--bg-top),var(--bg))}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center}
+.badge{display:inline-flex;align-items:center;gap:.7rem;margin-bottom:1.6rem}
+.badge img{width:56px;height:56px;border-radius:14px;box-shadow:0 10px 30px -8px rgba(0,0,0,.8)}
+.badge b{font-size:1.25rem;letter-spacing:-.02em}.badge small{display:block;color:var(--muted);font-size:.78rem;font-weight:500}
+.hero h1{font-size:clamp(2.6rem,5.4vw,4.4rem);font-weight:800}
+.hero h1 .serif{font-size:1.12em;color:var(--gold-2)}
+.hero p.lede{margin-top:1.4rem;max-width:34rem;color:#B7C2D4;font-size:1.08rem}
+.wait{margin-top:2rem;display:flex;gap:.6rem;max-width:30rem}
+.wait input{flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);color:var(--text);border-radius:12px;padding:.95rem 1rem;font:inherit;font-size:.95rem}
+.wait button{background:var(--gold);color:#0A111E;font:inherit;font-weight:700;font-size:.92rem;border:0;border-radius:12px;padding:0 1.25rem;white-space:nowrap;cursor:pointer}
+.fine{margin-top:.8rem;color:var(--muted);font-size:.8rem}
+.chips{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.8rem}
+.chips span{font-size:.78rem;font-weight:600;color:#C9D3E2;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:999px;padding:.42rem .8rem}
+
+.stage{position:relative;height:600px}
+.plates{position:absolute;inset:0;margin:auto;width:560px;height:560px;opacity:.9}
+.phone{position:absolute;width:250px;border-radius:40px;padding:9px;background:linear-gradient(160deg,#3a3d44,#0b0c0f);box-shadow:0 40px 80px -30px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.12)}
+.phone img{border-radius:32px}
+.phone.a{left:6%;top:40px;transform:rotate(-6deg)}
+.phone.b{right:4%;top:0;transform:rotate(5deg)}
+.tag{position:absolute;font-size:.72rem;font-weight:700;letter-spacing:.06em;color:#0A111E;background:var(--gold-2);border-radius:999px;padding:.35rem .7rem;box-shadow:0 10px 20px -8px rgba(0,0,0,.6)}
+.preview-note{position:absolute;bottom:-6px;right:0;font-size:.7rem;color:var(--muted)}
+
+/* PAPER SECTIONS */
+.paper{background:var(--paper);color:var(--ink-strong)}
+.paper .eyebrow{color:var(--gold-text)}.paper .eyebrow::before{background:var(--gold-text)}
+.paper .g{color:var(--gold-text)}
+section.pad{padding:6rem 0}
+.why{display:grid;grid-template-columns:.9fr 1.1fr;gap:4rem;align-items:start}
+.why h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.why p{color:var(--ink-muted);font-size:1.05rem;margin-bottom:1rem}
+.why .sig{color:var(--ink-strong);font-weight:600}
+.quote{font-family:var(--serif);font-style:italic;font-size:1.65rem;line-height:1.3;color:var(--ink-strong);border-left:3px solid var(--gold);padding-left:1.2rem;margin:1.6rem 0}
+
+/* HOW IT WORKS */
+.how h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:40rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6rem;margin-top:3rem}
+.step{background:var(--paper-2);border:1px solid var(--line-on-paper);border-radius:22px;padding:1.6rem 1.6rem 0;overflow:hidden;display:flex;flex-direction:column}
+.step .n{font-size:.75rem;font-weight:800;color:var(--gold-text);letter-spacing:.1em}
+.step h3{font-size:1.35rem;margin:.5rem 0 .6rem}
+.step p{color:var(--ink-muted);font-size:.95rem}
+.step ul{list-style:none;margin:1rem 0 1.4rem;font-size:.88rem;color:var(--ink-strong)}
+.step li{padding:.35rem 0;border-top:1px solid var(--line-on-paper)}
+.step li b{color:var(--tp-strength)}
+.shot{margin-top:auto;align-self:center;width:78%;border-radius:28px 28px 0 0;padding:8px 8px 0;background:linear-gradient(160deg,#3a3d44,#0b0c0f)}
+.shot img{width:100%;border-radius:22px 22px 0 0;height:330px;object-fit:cover;object-position:top}
+
+/* TEEN SAFETY */
+.safe{background:radial-gradient(700px 400px at 15% 20%,rgba(52,211,153,.10),transparent 60%),var(--surface)}
+.safe-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:4rem;align-items:center}
+.safe h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.safe p.lede{color:#B7C2D4;margin-top:1rem}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.rule{border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:18px;padding:1.2rem}
+.rule svg{width:30px;height:30px;color:var(--green)}
+.rule b{display:block;margin:.6rem 0 .3rem}
+.rule span{color:var(--muted);font-size:.9rem}
+
+/* PRIVATE */
+.priv{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem;margin-top:2.6rem}
+.pv svg{width:34px;height:34px;color:var(--gold-text)}
+.pv b{display:block;margin:.8rem 0 .3rem;font-size:1.02rem}
+.pv span{color:var(--ink-muted);font-size:.92rem}
+
+/* FAQ */
+.faq{max-width:52rem;margin-top:2.4rem}
+.faq details{border-top:1px solid var(--line-on-paper);padding:1.1rem 0}
+.faq details:last-child{border-bottom:1px solid var(--line-on-paper)}
+.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between}
+.faq summary::after{content:"+";color:var(--gold-text);font-size:1.3rem;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq p{color:var(--ink-muted);margin-top:.6rem}
+
+/* CLOSING */
+.closing{text-align:center;padding:6rem 0;background:radial-gradient(700px 360px at 50% 0,rgba(61,220,151,.14),transparent 70%),var(--bg)}
+.closing img{width:96px;height:96px;border-radius:24px;margin:0 auto 1.6rem;box-shadow:0 20px 40px -14px rgba(0,0,0,.8)}
+.closing h2{font-size:clamp(2.2rem,4.4vw,3.4rem);font-weight:800}
+.closing .wait{margin:2rem auto 0}
+
+footer{border-top:1px solid var(--line);padding:2.2rem 0}
+.foot{display:flex;flex-wrap:wrap;gap:1.4rem 2.4rem;align-items:center;justify-content:space-between;font-size:.82rem;color:var(--muted)}
+.foot-brand{font-weight:800;color:var(--text)}.foot-brand span{color:var(--green)}
+.foot-links{display:flex;gap:1.6rem;list-style:none;flex-wrap:wrap}
+.foot-links a:hover{color:var(--gold-2)}
+.foot-social{display:flex;gap:1.1rem}
+.foot-social a{font-size:.76rem;color:#74829A}.foot-social a:hover{color:var(--green)}
+.foot-copy{font-size:.74rem;color:#74829A}
+.wait-ok{display:none;margin-top:2rem;max-width:30rem;border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);color:var(--green);border-radius:12px;padding:.95rem 1rem;font-weight:600;font-size:.95rem}
+.closing .wait-ok{margin:2rem auto 0}
+.nav-links a:hover{color:var(--text)}
+
+
+/* SEE EVERY MOVE */
+.move{display:grid;grid-template-columns:1fr 1.1fr;gap:4rem;align-items:center}
+.move h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.move h2 .serif{color:var(--gold-text);font-size:1.1em}
+.move p{color:var(--ink-muted);font-size:1.05rem;margin-top:1rem}
+.move ul{list-style:none;margin-top:1.4rem}.move li{padding:.5rem 0;border-top:1px solid var(--line-on-paper);font-size:.95rem}.move li b{color:var(--tp-strength);margin-right:.4rem}
+.duo{position:relative;height:560px}
+.duo .phone{width:250px}
+.duo .phone.a{left:2%;top:10px;transform:rotate(-4deg)}
+.duo .phone.b{right:2%;top:60px;transform:rotate(4deg)}
+.duo .lit{position:absolute;left:38%;bottom:6px;font-size:.72rem;font-weight:700;color:#b3261e;background:#fff3f2;border:1px solid rgba(214,69,69,.35);border-radius:999px;padding:.35rem .75rem}
+@media (max-width:900px){.move{grid-template-columns:1fr;gap:2rem}.duo{height:420px}.duo .phone{width:180px}}
+
+@media (max-width:900px){
+  .nav-links{display:none}
+  .wrap{padding:0 1rem}
+  nav{padding:.9rem 1rem}
+  .hero{padding:3rem 0 3rem}
+  .hero-grid,.why,.safe-grid{grid-template-columns:1fr;gap:2.4rem}
+  .stage{height:430px}
+  .plates{width:400px;height:400px}
+  .phone{width:180px;border-radius:30px;padding:7px}.phone img{border-radius:24px}
+  .phone.a{left:2%;top:30px}.phone.b{right:2%}
+  .tag.buddy{display:none}
+  .steps,.priv{grid-template-columns:1fr}
+  .rules{grid-template-columns:1fr}
+  section.pad{padding:4rem 0}
+  .wait{flex-direction:column}.wait button{padding:.95rem}
+  .foot{flex-direction:column;align-items:flex-start}
+}
+.wait-btn{display:inline-block;margin-top:2rem;background:var(--gold);color:#06231A;font-weight:700;font-size:.95rem;border-radius:12px;padding:1rem 1.6rem;transition:transform .2s,box-shadow .2s}
+.wait-btn:hover{transform:translateY(-1px);box-shadow:0 12px 28px -12px rgba(61,220,151,.5)}
+.cta-row{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:2rem;align-items:center}
+.cta-row .wait-btn{margin-top:0}
+.closing .cta-row{justify-content:center}
+.test-btn{display:inline-block;border:1px solid rgba(255,255,255,.22);color:var(--text);font-weight:700;font-size:.95rem;border-radius:12px;padding:1rem 1.5rem;transition:border-color .2s,color .2s}
+.test-btn:hover{border-color:var(--gold);color:var(--gold-2)}
+/* room for the fixed site nav */
+.hero{padding-top:9.5rem}
+@media (max-width:900px){.hero{padding-top:6.5rem}}
+
+/* CARPLAY */
+.car{display:grid;grid-template-columns:.9fr 1.1fr;gap:4rem;align-items:center}
+.car h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.car ul{list-style:none;margin-top:1.6rem}
+.car li{display:flex;gap:.8rem;padding:.8rem 0;border-top:1px solid var(--line)}
+.car li::before{content:"✓";color:var(--gold);font-weight:800}
+.car li b{display:block}.car li span{color:var(--muted);font-size:.95rem}
+.car-shot img{width:100%;border-radius:28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.85)}
+.car-shot small{display:block;margin-top:.6rem;color:var(--muted);font-size:.72rem}
+.score-list li b{color:var(--gold-text)}
+@media (max-width:900px){.car{grid-template-columns:1fr;gap:2rem}}
+.gn .gn-cta{background:#3DDC97;color:#06231A!important}
+</style>
+<link rel="stylesheet" href="assets/site-chrome.css">
+<script src="assets/site-chrome.js" defer></script>
+</head>
+<body>
+
+<nav class="gn" aria-label="Main">
+  <a href="index.html" class="gn-logo">Guardian<span>.</span>Apps</a>
+  <button class="gn-burger" type="button" aria-expanded="false" aria-controls="gn-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="gn-menu" id="gn-menu">
+    <ul class="gn-links">
+      <li class="gn-dd is-current">
+        <button class="gn-dd-btn" type="button" aria-expanded="false" aria-controls="gn-apps">Apps<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5l3.5 3.5 3.5-3.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <div class="gn-panel" id="gn-apps">
+          <a href="decisio.html" class="gn-app"><img src="assets/brand/decisio-mark-128.webp" alt="" width="40" height="40"><span><b>DECISIO.ai</b><small>Meeting decisions and follow-through</small></span></a>
+          <a href="twoplates.html" class="gn-app"><img src="assets/twoplates/tp-icon-128.webp" alt="" width="40" height="40"><span><b>TwoPlates<span class="soon">Soon</span></b><small>Strength training for two</small></span></a>
+          <a href="mileguard.html" class="gn-app" aria-current="page"><img src="assets/mileguard/mg-icon-128.webp" alt="" width="40" height="40"><span><b>MileGuard<span class="soon">Soon</span></b><small>Mileage log for work</small></span></a>
+          <a href="index.html#apps" class="gn-all">All apps →</a>
+        </div>
+      </li>
+      <li><a href="index.html#philosophy">Philosophy</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <a href="#waitlist" class="gn-cta">Join the waitlist</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="badge"><img src="assets/mileguard/mg-icon-512.webp" alt="MileGuard app icon"><div><b>MileGuard</b><small>Coming soon · iPhone &amp; CarPlay</small></div></div>
+      <h1>Drive for work.<br>We keep the log.<br><span class="serif">Tax time, done.</span></h1>
+      <p class="lede">MileGuard records every drive by itself, from the moment your car connects to the moment you park. Swipe it business or personal. At the end of the year you get a tax summary that answers Schedule C and compares the standard mileage rate with your actual costs.</p>
+      <div class="cta-row"><a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20MileGuard%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20MileGuard%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20MileGuard&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20MileGuard.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20drive%20for%20work%20as%20%28employee%20/%20self-employed%20/%20gig%20driver%29%3A%20%0AMy%20car%20has%20CarPlay%20%28yes%20/%20no%29%3A%20%0A%0AThanks%21">Help us test</a></div>
+      <p class="fine">Both open your email app with a short note to us. Free for 40 drives a month; try Pro free for 2 weeks. <a href="mileguard/privacy/" style="text-decoration:underline">Privacy</a></p>
+      <div class="chips"><span>Records on its own</span><span>Works with CarPlay</span><span>Toll roads spotted</span><span>Driving score</span><span>Private by default</span></div>
+    </div>
+    <div class="stage">
+      <div class="phone a"><img src="assets/mileguard/mg-screen-home.webp" alt="MileGuard home: this month's miles, business share and business value"></div>
+      <div class="phone b"><img src="assets/mileguard/mg-screen-driving.webp" alt="My Driving: a driving score of 88 with hard braking, acceleration, speeding and top speed"></div>
+      <span class="preview-note">Sample data. The final app may differ.</span>
+    </div>
+  </div>
+</header>
+
+<section class="paper pad">
+  <div class="wrap why">
+    <div>
+      <div class="eyebrow">Why this exists</div>
+      <h2>Nobody remembers their miles <span class="g">in April.</span></h2>
+    </div>
+    <div>
+      <p>If you drive for work, every business mile is worth money at tax time or on your expense claim. But only if it's written down: when, where, how far and why.</p>
+      <p>Most people rebuild the year from calendars and bank statements, or skip it. Tolls, parking and the client lunch get lost along the way.</p>
+      <p>MileGuard keeps that record as you go. It runs in the background, starts with your car, and asks one question when you park: business or personal?</p>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad how" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2>Drive. Swipe. <span class="g">Hand it to your accountant.</span></h2>
+    <div class="steps">
+      <div class="step"><span class="n">01</span><h3>It records on its own</h3><p>Drives start and stop by themselves. Turn on Only record in my car and rides as a passenger stay out of your log.</p>
+        <ul><li><b>✓</b> Starts with CarPlay or your car's Bluetooth</li><li><b>✓</b> Split drives joined, return trips filled in</li><li><b>✓</b> Your usual purposes one tap away</li></ul>
+        <div class="shot"><img src="assets/mileguard/mg-screen-home.webp" alt="Home screen with this month's miles"></div></div>
+      <div class="step"><span class="n">02</span><h3>Every cost on the drive</h3><p>Toll roads are spotted on your route. Import your EZ TAG, TxTag or E-ZPass statement and each toll lands on the right drive.</p>
+        <ul><li><b>✓</b> Tolls, parking and business meals</li><li><b>✓</b> Receipt photos kept with the drive</li><li><b>✓</b> Fuel and car costs for the actual method</li></ul>
+        <div class="shot"><img src="assets/mileguard/mg-screen-drive.webp" alt="A business drive with tolls, parking and a client lunch"></div></div>
+      <div class="step"><span class="n">03</span><h3>A summary that holds up</h3><p>Drive logs, reimbursement claims, and a year-end tax summary your tax preparer can work from.</p>
+        <ul><li><b>✓</b> Answers Schedule C Part IV</li><li><b>✓</b> Standard rate vs actual expenses</li><li><b>✓</b> Monthly log ready to send to your accountant</li></ul>
+        <div class="shot"><img src="assets/mileguard/mg-screen-reports.webp" alt="Year-end tax summary comparing the two methods"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad">
+  <div class="wrap car">
+    <div>
+      <div class="eyebrow">MileGuard + CarPlay</div>
+      <h2>Plug in and drive. <span class="g">That's the whole setup.</span></h2>
+      <ul>
+        <li><div><b>Starts with your car</b><span>Recording begins when CarPlay or your car's Bluetooth connects, and ends when it disconnects and you park.</span></div></li>
+        <li><div><b>Live on the dashboard</b><span>Miles and time for the drive in progress, right on the car screen.</span></div></li>
+        <li><div><b>This month at a glance</b><span>A CarPlay widget with your miles, business value and drives waiting for review.</span></div></li>
+        <li><div><b>Knows which car</b><span>Each car's CarPlay or Bluetooth picks the right vehicle for the log.</span></div></li>
+      </ul>
+    </div>
+    <div class="car-shot"><img src="assets/mileguard/mg-carplay.webp" alt="Illustration of a car screen showing a MileGuard drive in progress and this month's totals"><small>Illustration with sample data. Layout varies by car.</small></div>
+  </div>
+</section>
+
+<section class="paper pad" id="driving">
+  <div class="wrap move">
+    <div>
+      <div class="eyebrow">My Driving</div>
+      <h2>See how you drive.<br><span class="serif">Get a little better each month.</span></h2>
+      <p>Every drive gets a score from hard braking, hard acceleration and time over the posted limit, weighted by distance. Compare the month with the last one and see which habit is costing you points.</p>
+      <ul class="score-list"><li><b>✓</b>Score for every drive and every month</li><li><b>✓</b>Hard braking and acceleration measured on every drive</li><li><b>✓</b>Speeding checked against posted limits</li><li><b>✓</b>Top speed and week-by-week trend</li></ul>
+    </div>
+    <div class="duo">
+      <div class="phone a"><img src="assets/mileguard/mg-screen-driving.webp" alt="My Driving dashboard"></div>
+      <div class="phone b"><img src="assets/mileguard/mg-screen-home.webp" alt="Home screen"></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" id="private" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Private by default</div>
+    <h2 style="font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem;max-width:44rem">Your drives are yours. <span class="g">Same promise as everything we build.</span></h2>
+    <div class="priv">
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><b>Stored in your iCloud</b><span>Drives, routes and receipts sync through your private iCloud. We can't see them.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h6l2 2h8v10H4z"/></svg><b>Files you keep</b><span>Monthly logs and every receipt, saved to iCloud Drive or a folder you pick, like OneDrive. Delete the app and they stay.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 4l16 16M9.5 5.5A9 9 0 0121 12a9 9 0 01-2 3M6 7a9 9 0 00-3 5 9 9 0 0012 8"/></svg><b>No ads. No accounts.</b><span>No sign-up, no tracking, and we never sell your location.</span></div>
+      <div class="pv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><b>Route checks, not kept</b><span>Toll-road and speed-limit checks send the route to our server, which answers and keeps nothing.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="paper pad" style="padding-top:0">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <div class="faq">
+      <details open><summary>When does MileGuard launch?</summary><p>It's in beta with drivers now. Join the waitlist and you'll be the first to know, with an early invite to the beta if there's room.</p></details>
+      <details><summary>Can I help test it?</summary><p>Yes, please. Tap "Help us test" and send the short email with the email on your Apple account, and we'll send you a TestFlight invite.</p></details>
+      <details><summary>Do I need CarPlay?</summary><p>No. MileGuard records drives on any iPhone. CarPlay or your car's Bluetooth just makes it sharper: drives start with the car, and rides as a passenger stay out.</p></details>
+      <details><summary>Does it find my tolls?</summary><p>It spots when a business drive used a toll road and flags it. Import your toll statement as a CSV (EZ TAG, TxTag, NTTA, E-ZPass and others) and each toll is matched to its drive. You can also type the amount in.</p></details>
+      <details><summary>How much will it cost?</summary><p>MileGuard is free for 40 drives a month. Pro adds unlimited drives, PDF reports and the year-end summary, with a 2-week free trial. We'll confirm prices before launch.</p></details>
+      <details><summary>Is this tax advice?</summary><p>No. MileGuard keeps the records the IRS asks for and does the arithmetic. Your tax preparer decides what you claim.</p></details>
+      <details><summary>Android?</summary><p>MileGuard launches on iPhone with CarPlay. We'll announce other platforms when they're ready, not before.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="closing">
+  <div class="wrap">
+    <img src="assets/mileguard/mg-icon-512.webp" alt="">
+    <h2>Stop guessing your miles.<br><span class="serif g" style="font-size:1.1em">Get on the list.</span></h2>
+    <div class="cta-row"><a class="wait-btn" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20MileGuard%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20MileGuard%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20MileGuard&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20MileGuard.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20drive%20for%20work%20as%20%28employee%20/%20self-employed%20/%20gig%20driver%29%3A%20%0AMy%20car%20has%20CarPlay%20%28yes%20/%20no%29%3A%20%0A%0AThanks%21">Help us test</a></div>
+    <p class="fine">Coming soon to iPhone and CarPlay · Private by default · No ads, ever</p>
+  </div>
+</section>
+<footer class="gf">
+  <div class="gf-in">
+    <div class="gf-top">
+      <div class="gf-brand">
+        <a href="index.html" class="gf-logo">Guardian<span>.</span>Apps</a>
+        <p>Apps built for real people. Private by default.</p>
+        <div class="gf-social">
+          <a href="https://bsky.app/profile/guardianapps.bsky.social" target="_blank" rel="me noopener">Bluesky ↗</a>
+          <a href="https://mastodon.social/@guardianAppsLLC" target="_blank" rel="me noopener">Mastodon ↗</a>
+        </div>
+      </div>
+      <div class="gf-col"><div class="gf-h">Apps</div><ul>
+        <li><a href="decisio.html">DECISIO.ai</a></li>
+        <li><a href="products.html">DECISIO.ai features</a></li>
+        <li><a href="twoplates.html">TwoPlates<span class="soon">Soon</span></a></li>
+        <li><a href="mileguard.html">MileGuard<span class="soon">Soon</span></a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Company</div><ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#philosophy">Philosophy</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul></div>
+      <div class="gf-col"><div class="gf-h">Legal</div><ul>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="terms.html">Terms</a></li>
+      </ul></div>
+    </div>
+    <div class="gf-bottom">© 2025–2026 Guardian Apps LLC</div>
+  </div>
+</footer>
+
+</body>
+</html>
