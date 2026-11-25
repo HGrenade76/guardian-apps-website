@@ -1309,7 +1309,7 @@
       try { return { items: JSON.parse(r.fields.items.value || "[]"), tag: r.recordChangeTag }; } catch (e) { return { items: [], tag: r.recordChangeTag }; }
     },
     async saveList(items, tag) {
-      const rec = { recordName: SHARE_LIST, recordType: "MGShareList", fields: { items: { value: JSON.stringify(items), type: "STRING" } } };
+      const rec = { recordName: SHARE_LIST, recordType: "MgShareList", fields: { items: { value: JSON.stringify(items), type: "STRING" } } };
       if (tag) rec.recordChangeTag = tag;
       const res = await Cloud.db.saveRecords([rec]);
       if (res.hasErrors) throw res.errors[0];
