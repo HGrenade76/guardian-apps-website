@@ -4,7 +4,7 @@ html{scroll-padding-top:84px}
 nav.gn{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:.9rem 5%;margin:0;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(10,17,30,.78);-webkit-backdrop-filter:blur(18px) saturate(140%);backdrop-filter:blur(18px) saturate(140%);font-family:-apple-system,"SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.4;color:#EAF0F8}
 nav.gn *{box-sizing:border-box}
 nav.gn a{text-decoration:none;color:inherit}
-.gn-logo{font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:#EAF0F8!important;white-space:nowrap}.gn-logo span{color:#34D399}
+.gn-logo{display:inline-flex;align-items:center;gap:.55rem;font-weight:600;font-size:1.15rem;letter-spacing:-.02em;color:#EAF0F8!important;white-space:nowrap}.gn-logo img{width:26px;height:26px;flex-shrink:0}.gn-logo span{color:#34D399}
 .gn-menu{display:flex;align-items:center;gap:2.2rem;flex:1;justify-content:flex-end}
 .gn-links{display:flex;align-items:center;gap:2rem;list-style:none;margin:0 auto;padding:0}
 .gn-links>li>a,.gn-dd-btn{color:#8B98AD;font-family:inherit;font-size:.84rem;font-weight:500;line-height:1.4;background:none;border:0;padding:.4rem 0;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;transition:color .2s}
@@ -49,7 +49,7 @@ footer.gf{display:block;margin:0;padding:3.4rem 0 2rem;border-top:1px solid rgba
 footer.gf a{text-decoration:none;color:inherit}
 .gf-in{max-width:1180px;margin:0 auto;padding:0 5%}
 .gf-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:2.4rem}
-.gf-logo{font-weight:700;font-size:1.1rem;color:#EAF0F8!important}.gf-logo span{color:#34D399}
+.gf-logo{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;font-size:1.1rem;letter-spacing:-.02em;color:#EAF0F8!important}.gf-logo img{width:24px;height:24px;flex-shrink:0}.gf-logo span{color:#34D399}
 .gf-brand p{margin:.7rem 0 1.1rem;font-size:.86rem;max-width:18rem}
 .gf-social{display:flex;gap:1.1rem;font-size:.78rem}
 .gf-social a:hover{color:#5FE3B4}
