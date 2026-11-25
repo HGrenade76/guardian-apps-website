@@ -1144,7 +1144,8 @@
     if (R.vehicle) trips = trips.filter((t) => t.vehicleId === R.vehicle);
     if (R.business) {
       const def = defaultBusiness();
-      trips = trips.filter((t) => (t.businessId || (def && def.id)) === R.business);
+      // Only business drives belong to a company, whatever company a reclassified drive had before.
+      trips = trips.filter((t) => t.category === "business" && (t.businessId || (def && def.id)) === R.business);
     }
     trips = trips.slice().sort((a, b) => a.start - b.start);
     const listed = R.kind === "claim" ? trips.filter((t) => t.category === "business") : trips;
