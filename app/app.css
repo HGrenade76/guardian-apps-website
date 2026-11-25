@@ -192,6 +192,10 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .link:hover{color:var(--br-2)}
 tr.click{cursor:pointer}tr.click:hover td{background:#fafbfa}
 .btn.danger{color:#C2372F;border-color:rgba(194,55,47,.35)}
+.btn.danger.solid{background:#C2372F;color:#fff;border-color:#C2372F}
+.btn:disabled{opacity:.6;cursor:default}
+.actions.confirming{flex-wrap:wrap;padding:12px;border-radius:12px;background:rgba(194,55,47,.07)}
+.confirm-q{flex-basis:100%;margin:0 0 4px;font-size:14px;line-height:1.45}
 .scrim{position:fixed;inset:0;background:rgba(10,20,16,.35);z-index:40}
 .sheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;z-index:41;box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}
 .sheet .hd{display:flex;justify-content:space-between;align-items:center}

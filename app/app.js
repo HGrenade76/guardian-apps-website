@@ -1057,11 +1057,42 @@
     }
   }
 
+  // Delete asks once in plain words, then deletes on the next click. A second click while it's working is ignored.
   async function deleteCost(el) {
     const m = S.modal;
-    if (!m.confirmDelete) { m.confirmDelete = true; el.textContent = "Tap again to delete"; return; }
-    try { apply(await S.source.deleteCost(m.id)); closeModal(); render(); toast("Deleted."); }
-    catch (e) { console.error(e); toast("Couldn't delete. Try again."); }
+    if (!m || !m.id || m.deleting) return;
+    const label = m.kind === "fuel" ? "Fill-up" : "Car cost";
+    const bar = el.closest(".actions");
+    if (!m.confirmDelete) {
+      m.confirmDelete = true;
+      m.actionsHTML = bar.innerHTML;
+      bar.classList.add("confirming");
+      bar.innerHTML = `<p class="confirm-q" id="del-q" role="alert"><b>Delete this ${label.toLowerCase()}?</b> It will be removed from your reports and from your iPhone. This can't be undone.</p>
+        <button type="button" class="btn" data-act="cost-delete-cancel">Keep it</button>
+        <button type="button" class="btn danger solid" data-act="cost-delete" aria-describedby="del-q">Delete</button>`;
+      bar.querySelector('[data-act="cost-delete-cancel"]').focus();
+      return;
+    }
+    m.deleting = true;
+    el.disabled = true; el.textContent = "Deleting…";
+    try {
+      apply(await S.source.deleteCost(m.id));
+      closeModal(); render();
+      toast(`${label} deleted. It'll be gone from your iPhone shortly.`);
+    } catch (e) {
+      console.error(e);
+      m.deleting = false; el.disabled = false; el.textContent = "Delete";
+      toast("Couldn't delete. Check your connection and try again.");
+    }
+  }
+
+  function cancelDelete(el) {
+    const m = S.modal, bar = el.closest(".actions");
+    if (!m || !bar || m.deleting) return;
+    m.confirmDelete = false;
+    bar.classList.remove("confirming");
+    bar.innerHTML = m.actionsHTML;
+    const d = bar.querySelector('[data-act="cost-delete"]'); if (d) d.focus();
   }
 
   function renderCosts() {
@@ -1479,6 +1510,7 @@
     const a = el.dataset.act;
     if (a === "modal-close") closeModal();
     else if (a === "cost-delete") deleteCost(el);
+    else if (a === "cost-delete-cancel") cancelDelete(el);
     else if (a === "share-copy") copy($("#share-url").value);
     else if (a === "share-copy-one") copy(shareURL(el.dataset.t));
     else if (a === "share-revoke") { Share().revoke(el.dataset.t).then(() => { toast("Link turned off."); openShare(); }).catch(() => toast("Couldn't turn it off. Try again.")); }
@@ -1508,7 +1540,7 @@
     else if (el.dataset.act === "ropt") { S.report[el.name] = el.value; render(); }
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && S.modal) { closeModal(); return; }
+    if (e.key === "Escape" && S.modal) { if (S.modal.deleting) return; const k = $('#modal [data-act="cost-delete-cancel"]'); if (k) cancelDelete(k); else closeModal(); return; }
     if (e.key === "Enter" && e.target.matches("tr.click")) { e.target.click(); return; }
     if (e.key === "Escape" && S.selected && S.view === "drives" && !e.target.closest("input")) { S.selected = null; S.draft = null; render(); }
   });
