@@ -15,11 +15,36 @@
     rateName: "IRS standard rate", deduction: "Mileage deduction", value: "Mileage value", meals: "Schedule C line 24b",
     province: "", territory: false, claim: "employer" };
   // CRA per-km allowance: first 5,000 business km of the year, then the lower rate; +4¢ in the territories.
+  // UK: HMRC approved mileage, cars and vans, per tax year from 6 April (55p from 6 April 2026).
   const CRA = { 2024: [0.70, 0.64], 2025: [0.72, 0.66], 2026: [0.73, 0.67] };
-  const craYear = (y) => CRA[y] || CRA[Math.max(...Object.keys(CRA).map(Number).filter((k) => k <= y).concat([2024]))];
+  const HMRC = { 2024: [0.45, 0.25], 2025: [0.45, 0.25], 2026: [0.55, 0.25] };
+  const pickRate = (t, y) => t[y] || t[Math.max(...Object.keys(t).map(Number).filter((k) => k <= y).concat([2024]))];
+  const craYear = (y) => pickRate(CRA, y);
+  // A tax year is named for the year it starts in.
+  const taxYearOf = (d) => RG.uk && d < new Date(d.getFullYear(), 3, 6) ? d.getFullYear() - 1 : d.getFullYear();
+  const taxYearLabel = (y) => RG.uk ? `${y}–${String((y + 1) % 100).padStart(2, "0")}` : String(y);
+  const taxYearRange = (y) => RG.uk ? [new Date(y, 3, 6), new Date(y + 1, 3, 6)] : [new Date(y, 0, 1), new Date(y + 1, 0, 1)];
+  // [first rate, rate after] for a tax year, or null in the US.
+  function tierRates(y) {
+    if (RG.ca) { const [a, b] = craYear(y), k = RG.territory ? 0.04 : 0; return [a + k, b + k]; }
+    if (RG.uk) return pickRate(HMRC, y);
+    return null;
+  }
   function setRegion(info) {
+    if (info && info.region === "GB") {
+      Object.assign(RG, { uk: true, tier: 10000, vol: "L", cur: "GBP", loc: "en-GB",
+        rateName: "HMRC approved mileage rate", deduction: "Approved mileage", value: "Mileage allowance", meals: "meals on business drives",
+        claim: info.claim || "employer" });
+      ASSIGNABLE = ["business", "personal", "commute"];
+      KINDS.log.text = "HMRC-style log of your business journeys";
+      KINDS.claim.text = "Business miles at HMRC rates or your employer's, plus tolls, parking and meals";
+      KINDS.tax.text = "Tax year totals, approved mileage and business share of car costs";
+      KINDS.tax.title = "Tax year summary";
+      return;
+    }
     if (!info || info.region !== "CA") return;
     MI = 1000;
+    RG.tier = 5000;
     Object.assign(RG, { ca: true, unit: "km", word: "km", Word: "Km", vol: "L", cur: "CAD", loc: "en-CA",
       rateName: "CRA per-km rate", deduction: "CRA allowance", value: "CRA allowance", meals: "50% deductible",
       province: info.province || "ON", territory: ["YT", "NT", "NU"].includes(info.province), claim: info.claim || "employer" });
@@ -66,7 +91,7 @@
   const money = (n) => (n || 0).toLocaleString(RG.loc, { style: "currency", currency: RG.cur });
   const miles = (m) => (m / MI).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const num = (n, d = 1) => (n || 0).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
-  const cents = (r) => RG.ca ? `${Math.round(r * 100)}¢/km` : `$${r}/mi`;
+  const cents = (r) => RG.ca ? `${Math.round(r * 100)}¢/km` : RG.uk ? `${Math.round(r * 100)}p/mile` : `$${r}/mi`;
   const ymKey = (d) => d.getFullYear() * 100 + d.getMonth();
   const monthName = (y, m) => new Date(y, m, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const dayLabel = (d) => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -79,6 +104,7 @@
     dl: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
     search: '<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',
     doc: '<path d="M6 3h8l4 4v14H6zM9 13h6M9 17h6"/>',
+    link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
   };
 
   function toast(msg) {
@@ -90,7 +116,7 @@
   }
 
   function rateFor(cat, date) {
-    if (RG.ca) return cat === "business" ? craYear(date.getFullYear())[0] + (RG.territory ? 0.04 : 0) : 0;
+    if (RG.tier) return cat === "business" ? tierRates(taxYearOf(date))[0] : 0;
     let r = null;
     for (const x of RATES) if (x.at <= date) r = x;
     if (!r) return 0;
@@ -135,6 +161,7 @@
       classifiedAt: date(r, "classifiedAt"), autoRule: str(r, "autoRule"),
       lockedFree: bool(r, "lockedFree"), isManual: bool(r, "isManual"), viaCarPlay: bool(r, "viaCarPlay"),
       hasReceipt: !!(F(r, "receiptData_ckAsset") || F(r, "mealReceiptData_ckAsset")),
+      receipt: !!F(r, "receiptData_ckAsset"), mealReceipt: !!F(r, "mealReceiptData_ckAsset"),
     };
   }
 
@@ -150,6 +177,7 @@
   const HISTORY = {
     categoryRaw: "category", purpose: "purpose", client: "client", business: "business",
     tollAmount: "tolls", parkingAmount: "parking", mealAmount: "meal", mealWith: "meal with", mealOvernight: "meal overnight",
+    startAddress: "from", endAddress: "to",
   };
 
   const Cloud = {
@@ -208,15 +236,81 @@
             break;
           case "CD_VehicleExpense":
             out.expenses.push({ id: r.recordName, date: date(r, "date") || new Date(0), kind: str(r, "kindRaw") || "other",
-              amount: dbl(r, "amount"), note: str(r, "note"), vehicleId: str(r, "vehicle") });
+              amount: dbl(r, "amount"), note: str(r, "note"), vehicleId: str(r, "vehicle"), receipt: !!F(r, "receiptData_ckAsset") });
             break;
           case "CD_FuelEntry":
             out.fuel.push({ id: r.recordName, date: date(r, "date") || new Date(0), cost: dbl(r, "totalCost"),
-              gallons: dbl(r, "gallons"), station: str(r, "station"), vehicleId: str(r, "vehicle") });
+              gallons: dbl(r, "gallons"), station: str(r, "station"), vehicleId: str(r, "vehicle"), receipt: !!F(r, "receiptData_ckAsset") });
             break;
         }
       }
       return out;
+    },
+
+    // Car costs and fill-ups made here become ordinary records the app imports, like ones made on the iPhone.
+    async saveCost(kind, c, isNew) {
+      const fuel = kind === "fuel";
+      const ts = (d) => ({ value: d.getTime(), type: "TIMESTAMP" });
+      const fields = fuel
+        ? { CD_date: ts(c.date), CD_totalCost: { value: c.cost, type: "DOUBLE" }, CD_gallons: { value: c.gallons, type: "DOUBLE" },
+            CD_station: { value: c.station, type: "STRING" } }
+        : { CD_date: ts(c.date), CD_kindRaw: { value: c.kind, type: "STRING" }, CD_amount: { value: c.amount, type: "DOUBLE" },
+            CD_note: { value: c.note, type: "STRING" } };
+      if (c.vehicleId) fields.CD_vehicle = { value: c.vehicleId, type: "STRING" };
+      if (isNew) {
+        Object.assign(fields, { CD_entityName: { value: fuel ? "FuelEntry" : "VehicleExpense", type: "STRING" },
+          CD_id: { value: uuid(), type: "STRING" }, CD_createdAt: ts(new Date()) });
+        if (fuel) Object.assign(fields, { CD_odometer: { value: 0, type: "DOUBLE" }, CD_note: { value: "", type: "STRING" }, CD_sourceRaw: { value: "manual", type: "STRING" } });
+      }
+      const rec = { recordName: isNew ? uuid() : c.id, recordType: fuel ? "CD_FuelEntry" : "CD_VehicleExpense", fields };
+      if (!isNew) rec.recordChangeTag = (this._recs[c.id] || {}).recordChangeTag;
+      const res = await this.db.saveRecords([rec], { zoneID: ZONE });
+      if (res.hasErrors) throw res.errors[0];
+      this.merge(res.records);
+      return { data: this.build(), id: rec.recordName };
+    },
+
+    async deleteCost(id) {
+      const res = await this.db.deleteRecords([{ recordName: id }], { zoneID: ZONE });
+      if (res.hasErrors) throw res.errors[0];
+      delete this._recs[id];
+      return this.build();
+    },
+
+    merge(records) {
+      for (const r of records || []) {
+        const old = this._recs[r.recordName] || {};
+        this._recs[r.recordName] = { ...old, ...r, fields: { ...(old.fields || {}), ...(r.fields || {}) } };
+      }
+    },
+
+    // Receipt photos live in the same field the app uses, as an iCloud asset.
+    async uploadReceipt(id, field, file, history) {
+      const r = this._recs[id];
+      const recs = [{ recordName: id, recordType: r.recordType, recordChangeTag: r.recordChangeTag,
+        fields: { ["CD_" + field + "_ckAsset"]: { value: file } } }];
+      if (history && r.recordType === "CD_Trip") {
+        recs.push({ recordName: uuid(), recordType: "CD_TripEdit", fields: {
+          CD_entityName: { value: "TripEdit" }, CD_date: { value: Date.now(), type: "TIMESTAMP" }, CD_field: { value: history + " (web)" },
+          CD_oldValue: { value: "" }, CD_newValue: { value: "photo added" }, CD_trip: { value: id } } });
+      }
+      const res = await this.db.saveRecords(recs, { zoneID: ZONE, atomic: true });
+      if (res.hasErrors) throw res.errors[0];
+      this.merge(res.records);
+      return this.build();
+    },
+
+    async receiptURL(id, field) {
+      const res = await this.db.fetchRecords([{ recordName: id }], { zoneID: ZONE, desiredKeys: ["CD_" + field, "CD_" + field + "_ckAsset"] });
+      const r = res.records && res.records[0];
+      if (!r || !r.fields) return null;
+      const inline = r.fields["CD_" + field] && r.fields["CD_" + field].value;
+      const asset = r.fields["CD_" + field + "_ckAsset"] && r.fields["CD_" + field + "_ckAsset"].value;
+      if (inline) {
+        const bin = atob(inline);
+        return URL.createObjectURL(new Blob([Uint8Array.from(bin, (c) => c.charCodeAt(0))], { type: "image/jpeg" }));
+      }
+      return asset && asset.downloadURL ? asset.downloadURL.replace("${f}", "receipt.jpg") : null;
     },
 
     async route(t) {
@@ -280,7 +374,7 @@
   // ---------- Demo source (?demo) ----------
   const Demo = {
     async start() {},
-    async access() { return { ok: true, region: new URLSearchParams(location.search).has("ca") ? "CA" : "US", province: "ON" }; },
+    async access() { return { ok: true, region: (() => { const q = new URLSearchParams(location.search); return q.has("ca") ? "CA" : q.has("uk") ? "GB" : "US"; })(), province: "ON" }; },
     async load() { const d = window.MG_DEMO(); this.d = d; return d; },
     async route(t) { return t._route || []; },
     async save(t, changes) {
@@ -289,29 +383,56 @@
       for (const [k, v] of Object.entries(changes.fields)) {
         if (k === "classifiedAt") { tt.classifiedAt = new Date(); continue; }
         if (k === "tollSourceRaw") { tt.tollSource = v; continue; }
+        if (k === "startAddress") { tt.from = v; continue; }
+        if (k === "endAddress") { tt.to = v; continue; }
         tt[map[k] || k] = v;
       }
       this.d.editCounts[t.id] = (this.d.editCounts[t.id] || 0) + changes.history.length;
       await new Promise((r) => setTimeout(r, 250));
       return this.d;
     },
+    async saveCost(kind, c, isNew) {
+      const list = kind === "fuel" ? this.d.fuel : this.d.expenses;
+      const id = isNew ? "N" + Date.now() : c.id;
+      const i = list.findIndex((x) => x.id === id);
+      const row = { ...(i >= 0 ? list[i] : {}), ...c, id };
+      if (i >= 0) list[i] = row; else list.push(row);
+      await new Promise((r) => setTimeout(r, 200));
+      return { data: this.d, id };
+    },
+    async deleteCost(id) {
+      this.d.fuel = this.d.fuel.filter((x) => x.id !== id);
+      this.d.expenses = this.d.expenses.filter((x) => x.id !== id);
+      return this.d;
+    },
+    async uploadReceipt(id, field) {
+      for (const list of [this.d.trips, this.d.expenses, this.d.fuel]) {
+        const x = list.find((y) => y.id === id);
+        if (x) { if (field === "mealReceiptData") x.mealReceipt = true; else x.receipt = true; x.hasReceipt = true; }
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      return this.d;
+    },
+    async receiptURL() { return null; },
   };
 
   // Official amount per drive. Canada's step at 5,000 km counts every business drive earlier in the year,
   // and a drive that crosses it is split between the two rates.
   function computeAmounts() {
     S.amt = {};
-    if (!RG.ca) {
+    if (!RG.tier) {
       for (const t of S.trips) S.amt[t.id] = Math.round((t.meters / MI) * rateFor(t.category, t.start) * 100) / 100;
       return;
     }
-    const prior = {}, bonus = RG.territory ? 0.04 : 0;
+    S.tiers = {};   // per drive: [distance at the first rate, rate, distance after, rate]
+    const prior = {};
     for (const t of S.trips.slice().sort((a, b) => a.start - b.start)) {
       if (t.category !== "business") { S.amt[t.id] = 0; continue; }
-      const y = t.start.getFullYear(), [hi, lo] = craYear(y), km = t.meters / 1000, before = prior[y] || 0;
-      const first = Math.max(0, Math.min(km, 5000 - before));
-      S.amt[t.id] = Math.round((first * (hi + bonus) + (km - first) * (lo + bonus)) * 100) / 100;
-      prior[y] = before + km;
+      const y = taxYearOf(t.start), [hi, lo] = tierRates(y), d = t.meters / MI, before = prior[y] || 0;
+      const first = Math.max(0, Math.min(d, RG.tier - before));
+      S.amt[t.id] = Math.round((first * hi + (d - first) * lo) * 100) / 100;
+      S.tiers[t.id] = [first, hi, d - first, lo];
+      prior[y] = before + d;
     }
   }
   const amt = (t) => S.amt[t.id] || 0;
@@ -367,6 +488,7 @@
       S.pro = true;
       apply(data);
       showApp();
+      ShareCloud.sweep().catch(() => {});
     } catch (e) {
       console.error(e);
       gate("Couldn't reach iCloud", "Check your connection and try again. If it keeps happening, sign out and back in.",
@@ -544,7 +666,7 @@
       ${kpi("Business", `${num(s.business)} ${RG.unit}`, s.total ? `${Math.round(s.pct)}% business use` : "")}
       ${kpi(RG.value, money(s.deduction), `at ${cents(rate)}`)}
       ${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "business drives")}
-      ${kpi("Meals (50%)", money(s.mealsDeductible), s.mealCount ? `${s.mealCount} business meal${s.mealCount > 1 ? "s" : ""}` : "")}
+      ${RG.uk ? kpi("Meals", money(s.meals), "on business drives") : kpi("Meals (50%)", money(s.mealsDeductible), s.mealCount ? `${s.mealCount} business meal${s.mealCount > 1 ? "s" : ""}` : "")}
     </div>
     <div class="bar"><div class="pills" role="tablist">${pill("all", "All")}${pill("review", `Needs review${s.unreviewed ? " " + s.unreviewed : ""}`)}${s.missing || S.filter === "purpose" ? pill("purpose", `Missing purpose ${s.missing}`) : ""}${pill("business", "Business")}${pill("personal", "Personal")}</div>
       <span class="note">Changes save to your iCloud and show up on your iPhone.</span></div>
@@ -598,14 +720,16 @@
       <div class="hd"><h2>${miles(t.meters)} ${RG.unit}</h2><span>${esc(range)}</span><button class="btn close" data-act="unpick" aria-label="Close">✕</button></div>
       <div class="map" id="map">${mapSVG(t)}</div>
       <div style="margin-top:10px">
-        <div class="field"><span>From</span><span>${esc(t.from || "—")}</span></div>
-        <div class="field"><span>To</span><span>${esc(t.to || "—")}</span></div>
+        ${locked ? `<div class="field"><span>From</span><span>${esc(t.from || "—")}</span></div>
+        <div class="field"><span>To</span><span>${esc(t.to || "—")}</span></div>` : ""}
         <div class="field"><span>Vehicle</span><span>${esc(vehicleLabel(t.vehicleId) || "—")}</span></div>
         ${t.autoRule ? `<div class="field"><span>Classified by</span><span>${esc(t.autoRule)}</span></div>` : ""}
         ${edits ? `<div class="field"><span>Change history</span><span>${edits} change${edits > 1 ? "s" : ""} · see the app</span></div>` : ""}
       </div>
       ${locked ? `<p class="hint" style="margin-top:14px">This drive was recorded over the free monthly limit. Open MileGuard on your iPhone with Pro to unlock it.</p>` : `
       <form class="form" data-act="save" autocomplete="off">
+        <label class="in">From<input name="from" value="${esc(d.from)}" maxlength="300"></label>
+        <label class="in">To<input name="to" value="${esc(d.to)}" maxlength="300"></label>
         <div class="seg" role="group" aria-label="Drive type">${seg}</div>
         ${biz ? `
         <label class="in">Business purpose<input name="purpose" value="${esc(d.purpose)}" placeholder="What was the drive for?" maxlength="200"></label>
@@ -613,14 +737,16 @@
         <label class="in">Client or company<input name="client" value="${esc(d.client)}" placeholder="Optional" maxlength="200"></label>
         ${bizList.length > 1 ? `<label class="in">Business<select name="business">${bizList.map((b) => `<option value="${esc(b.id)}" ${(d.businessId || bizList[0].id) === b.id ? "selected" : ""}>${esc(b.name)}</option>`).join("")}</select></label>` : ""}
         <div class="three">
-          <label class="in">Tolls<input name="tolls" inputmode="decimal" value="${fmtAmt(d.tolls)}" placeholder="$0.00"></label>
-          <label class="in">Parking<input name="parking" inputmode="decimal" value="${fmtAmt(d.parking)}" placeholder="$0.00"></label>
-          <label class="in">Meal<input name="meal" inputmode="decimal" value="${fmtAmt(d.meal)}" placeholder="$0.00"></label>
+          <label class="in">Tolls<input name="tolls" inputmode="decimal" value="${fmtAmt(d.tolls)}" placeholder="${money(0)}"></label>
+          <label class="in">Parking<input name="parking" inputmode="decimal" value="${fmtAmt(d.parking)}" placeholder="${money(0)}"></label>
+          <label class="in">Meal<input name="meal" inputmode="decimal" value="${fmtAmt(d.meal)}" placeholder="${money(0)}"></label>
         </div>
         ${t.tollsLikely && !d.tolls ? `<div class="hint">Toll road spotted on this route. Add the amount from your toll statement.</div>` : ""}
+        ${receiptRow(t.id, "receiptData", t.receipt, "Tolls or parking receipt")}
         ${d.meal ? `<label class="in">Who was there<input name="mealWith" value="${esc(d.mealWith)}" placeholder="Client or contact" maxlength="200"></label>
         <label class="check"><input type="checkbox" name="mealOvernight" ${d.mealOvernight ? "checked" : ""}> Away overnight</label>
-        <div class="hint">A meal counts as business with a client or contact there, or on an overnight trip. 50% is deductible.</div>` : ""}` : ""}
+        <div class="hint">${RG.uk ? "Meals while travelling for work can be allowable; entertaining clients isn't." : "A meal counts as business with a client or contact there, or on an overnight trip. 50% is deductible."}</div>
+        ${receiptRow(t.id, "mealReceiptData", t.mealReceipt, "Meal receipt")}` : ""}` : ""}
         <div class="actions"><button type="button" class="btn" data-act="cancel">Cancel</button><button type="submit" class="btn primary" id="save-btn">Save</button></div>
       </form>`}
     </div>`;
@@ -699,7 +825,7 @@
     const t = S.trips.find((x) => x.id === id);
     if (!t) return;
     S.selected = id;
-    S.draft = { category: t.category === "unclassified" ? "" : t.category, purpose: t.purpose, client: t.client, businessId: t.businessId,
+    S.draft = { from: t.from, to: t.to, category: t.category === "unclassified" ? "" : t.category, purpose: t.purpose, client: t.client, businessId: t.businessId,
       tolls: t.tolls, parking: t.parking, meal: t.meal, mealWith: t.mealWith, mealOvernight: t.mealOvernight };
     S.draftDirty = false;
     render();
@@ -710,6 +836,8 @@
     if (!f) return;
     const d = S.draft;
     const amt = (n) => { const v = parseFloat(String(n || "").replace(/[$,\s]/g, "")); return isFinite(v) && v >= 0 ? Math.round(v * 100) / 100 : 0; };
+    if (f.from) d.from = f.from.value.trim();
+    if (f.to) d.to = f.to.value.trim();
     if (f.purpose) d.purpose = f.purpose.value.trim();
     if (f.client) d.client = f.client.value.trim();
     if (f.business) d.businessId = f.business.value;
@@ -733,6 +861,8 @@
       fields[key] = newV;
       history.push({ field: HISTORY[key], old: show ? show(oldV) : String(oldV), new: show ? show(newV) : String(newV) });
     };
+    put("startAddress", t.from, d.from);
+    put("endAddress", t.to, d.to);
     put("categoryRaw", t.category, d.category);
     if (d.category === "business") {
       put("purpose", t.purpose, d.purpose);
@@ -804,7 +934,7 @@
       ${kpi("Business", `${num(s.business, 0)} ${RG.unit}`, s.total ? `${Math.round(s.pct)}% business use` : "")}
       ${kpi(RG.deduction, money(s.deduction), RG.rateName)}
       ${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}
-      ${kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}
+      ${RG.uk ? kpi("Meals", money(s.meals), "on business drives") : kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}
     </div>
     <div class="two">
       <div class="card"><b>Miles by month</b> <span class="muted" style="font-size:12px">· green is business</span><div class="bars">${barHTML}</div></div>
@@ -816,6 +946,124 @@
   }
 
   // ---------- Costs ----------
+  // ---------- receipts ----------
+  function receiptRow(id, field, has, label) {
+    return `<div class="receipt"><span>${label}</span>
+      ${has ? `<button type="button" class="link" data-act="receipt-view" data-id="${esc(id)}" data-f="${field}">View</button>` : ""}
+      <label class="link">${has ? "Replace" : "Add photo"}<input type="file" accept="image/*" data-act="receipt-up" data-id="${esc(id)}" data-f="${field}" hidden></label></div>`;
+  }
+
+  // Phones take big photos; a receipt reads fine at 1600 px.
+  async function shrink(file) {
+    try {
+      const img = await createImageBitmap(file);
+      const k = Math.min(1, 1600 / Math.max(img.width, img.height));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      const blob = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.82));
+      return new File([blob], "receipt.jpg", { type: "image/jpeg" });
+    } catch (e) { return file; }
+  }
+
+  async function uploadReceipt(el) {
+    const file = el.files && el.files[0];
+    if (!file) return;
+    if (!/^image\//.test(file.type)) return toast("Pick a photo of the receipt.");
+    toast("Uploading receipt…");
+    try {
+      const small = await shrink(file);
+      const label = el.dataset.f === "mealReceiptData" ? "meal receipt" : "receipt";
+      apply(await S.source.uploadReceipt(el.dataset.id, el.dataset.f, small, label));
+      toast("Receipt saved. It'll be on your iPhone shortly.");
+      render();
+      if (S.modal) openCost(S.modal.kind, el.dataset.id);
+    } catch (e) { console.error(e); toast("Couldn't upload the receipt. Try again."); }
+  }
+
+  async function viewReceipt(id, field) {
+    const w = window.open("", "_blank");
+    try {
+      const url = await S.source.receiptURL(id, field);
+      if (!url) { if (w) w.close(); return toast(S.source === Demo ? "Sample receipts aren't included in the demo." : "No receipt found."); }
+      if (w) w.location = url; else location.href = url;
+    } catch (e) { if (w) w.close(); toast("Couldn't open the receipt."); }
+  }
+
+  // ---------- cost editor ----------
+  function modalHost() {
+    let m = $("#modal");
+    if (!m) { m = document.createElement("div"); m.id = "modal"; document.body.appendChild(m); }
+    return m;
+  }
+  function closeModal() { S.modal = null; modalHost().innerHTML = ""; }
+
+  function openCost(kind, id) {
+    const fuel = kind === "fuel";
+    const list = fuel ? S.fuel : S.expenses;
+    const c = id ? list.find((x) => x.id === id) : null;
+    const vs = Object.values(S.vehicles).sort((a, b) => a.createdAt - b.createdAt);
+    const def = (vs.find((v) => v.isDefault) || vs[0] || {}).id || "";
+    const today = new Date();
+    const d = c ? c.date : (S.month.y === today.getFullYear() && S.month.m === today.getMonth() ? today : new Date(S.month.y, S.month.m, 1, 12));
+    S.modal = { kind, id: c ? c.id : null, confirmDelete: false };
+    const val = (v) => (v ? String(Math.round(v * 1000) / 1000) : "");
+    modalHost().innerHTML = `<div class="scrim" data-act="modal-close"></div>
+    <form class="card sheet" data-act="cost-save" autocomplete="off" role="dialog" aria-label="${fuel ? "Fill-up" : "Car cost"}">
+      <div class="hd"><h2>${c ? "Edit" : "Add"} ${fuel ? "fill-up" : "car cost"}</h2><button type="button" class="btn close" style="display:inline-flex" data-act="modal-close" aria-label="Close">✕</button></div>
+      <div class="form">
+        <div class="three" style="grid-template-columns:1fr 1fr">
+          <label class="in">Date<input type="date" name="date" value="${iso(d)}" required></label>
+          <label class="in">${fuel ? "Total cost" : "Amount"}<input name="amount" inputmode="decimal" value="${val(c && (fuel ? c.cost : c.amount))}" placeholder="0.00" required></label>
+        </div>
+        ${fuel ? `<div class="three" style="grid-template-columns:1fr 1fr">
+          <label class="in">${RG.vol === "L" ? "Litres" : "Gallons"}<input name="gallons" inputmode="decimal" value="${val(c && c.gallons)}" placeholder="Optional"></label>
+          <label class="in">Station<input name="station" value="${esc(c ? c.station : "")}" maxlength="120" placeholder="Optional"></label></div>`
+        : `<label class="in">Kind<select name="kind">${Object.entries(EXPENSE).map(([k, l]) => `<option value="${k}" ${(c ? c.kind : "maintenance") === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></label>
+          <label class="in">Note<input name="note" value="${esc(c ? c.note : "")}" maxlength="200" placeholder="Optional"></label>`}
+        ${vs.length ? `<label class="in">Vehicle<select name="vehicle">${vs.map((v) => `<option value="${esc(v.id)}" ${(c ? c.vehicleId || def : def) === v.id ? "selected" : ""}>${esc(vehicleLabel(v.id))}</option>`).join("")}</select></label>` : ""}
+        ${c ? receiptRow(c.id, "receiptData", c.receipt, "Receipt") : `<p class="hint">Save first, then add a receipt photo.</p>`}
+        <div class="actions">${c ? `<button type="button" class="btn danger" data-act="cost-delete" style="margin-right:auto">Delete</button>` : ""}
+          <button type="button" class="btn" data-act="modal-close">Cancel</button><button type="submit" class="btn primary" id="cost-save">Save</button></div>
+      </div>
+    </form>`;
+    const first = modalHost().querySelector("input[name=amount]");
+    if (first && !c) first.focus();
+  }
+
+  async function saveCost(f) {
+    const m = S.modal;
+    const num = (v) => { const x = parseFloat(String(v || "").replace(/[^0-9.,-]/g, "").replace(",", ".")); return isFinite(x) && x >= 0 ? Math.round(x * 1000) / 1000 : 0; };
+    const [y, mo, da] = f.date.value.split("-").map(Number);
+    if (!y) return toast("Pick a date.");
+    const amount = Math.round(num(f.amount.value) * 100) / 100;
+    if (!amount) return toast("Enter the amount.");
+    const c = m.kind === "fuel"
+      ? { date: new Date(y, mo - 1, da, 12), cost: amount, gallons: num(f.gallons.value), station: f.station.value.trim(), vehicleId: f.vehicle ? f.vehicle.value : "" }
+      : { date: new Date(y, mo - 1, da, 12), amount, kind: f.kind.value, note: f.note.value.trim(), vehicleId: f.vehicle ? f.vehicle.value : "" };
+    if (m.id) c.id = m.id;
+    const btn = $("#cost-save"); if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+    try {
+      const res = await S.source.saveCost(m.kind, c, !m.id);
+      apply(res.data);
+      S.month = { y: c.date.getFullYear(), m: c.date.getMonth() };
+      render();
+      if (!m.id) { openCost(m.kind, res.id); toast("Saved. Add a receipt photo if you have one."); }
+      else { closeModal(); toast("Saved. It'll be on your iPhone shortly."); }
+    } catch (e) {
+      console.error(e);
+      toast("Couldn't save. Check your connection and try again.");
+      if (btn) { btn.disabled = false; btn.textContent = "Save"; }
+    }
+  }
+
+  async function deleteCost(el) {
+    const m = S.modal;
+    if (!m.confirmDelete) { m.confirmDelete = true; el.textContent = "Tap again to delete"; return; }
+    try { apply(await S.source.deleteCost(m.id)); closeModal(); render(); toast("Deleted."); }
+    catch (e) { console.error(e); toast("Couldn't delete. Try again."); }
+  }
+
   function renderCosts() {
     const inMonth = (d) => d.getFullYear() === S.month.y && d.getMonth() === S.month.m;
     const ex = S.expenses.filter((x) => inMonth(x.date));
@@ -824,10 +1072,10 @@
     const yFu = S.fuel.filter((x) => x.date.getFullYear() === S.month.y).reduce((a, x) => a + x.cost, 0);
     const gallons = fu.reduce((a, x) => a + x.gallons, 0);
     const rows = [
-      ...fu.map((x) => ({ date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} ${RG.vol} · ${money(x.cost / x.gallons)}/gal` : "", v: x.vehicleId, amt: x.cost })),
-      ...ex.map((x) => ({ date: x.date, what: EXPENSE[x.kind] || "Other", detail: x.note, v: x.vehicleId, amt: x.amount })),
+      ...fu.map((x) => ({ id: x.id, k: "fuel", r: x.receipt, date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} ${RG.vol} · ${money(x.cost / x.gallons)}/${RG.vol}` : "", v: x.vehicleId, amt: x.cost })),
+      ...ex.map((x) => ({ id: x.id, k: "expense", r: x.receipt, date: x.date, what: EXPENSE[x.kind] || "Other", detail: x.note, v: x.vehicleId, amt: x.amount })),
     ].sort((a, b) => b.date - a.date);
-    return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<span class="right muted" style="font-size:12px">Add fill-ups and car costs in the app.</span></div>
+    return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<div class="right"><button class="btn" data-act="cost-new" data-k="fuel">+ Fill-up</button><button class="btn primary" data-act="cost-new" data-k="expense">+ Car cost</button></div></div>
     <div class="kpis four">
       ${kpi("Fuel this month", money(fu.reduce((a, x) => a + x.cost, 0)), gallons ? `${num(gallons)} ${RG.vol}` : `${fu.length} fill-up${fu.length === 1 ? "" : "s"}`)}
       ${kpi("Car costs this month", money(ex.reduce((a, x) => a + x.amount, 0)), `${ex.length} item${ex.length === 1 ? "" : "s"}`)}
@@ -835,7 +1083,7 @@
       ${kpi(`Car costs in ${S.month.y}`, money(yEx), "for the actual-expense method")}
     </div>
     <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table><thead><tr><th>Date</th><th>What</th><th>Details</th><th>Vehicle</th><th class="n">Amount</th></tr></thead><tbody>
-      ${rows.map((r) => `<tr><td>${esc(r.date.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(r.what)}</td><td class="muted">${esc(r.detail)}</td><td>${esc(vehicleName(r.v))}</td><td class="n">${money(r.amt)}</td></tr>`).join("") || '<tr><td colspan="5"><div class="empty"><b>No costs this month</b>Fill-ups and car costs you add in the app show up here.</div></td></tr>'}
+      ${rows.map((r) => `<tr class="click" data-act="cost-edit" data-k="${r.k}" data-id="${esc(r.id)}" tabindex="0"><td>${esc(r.date.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(r.what)}${r.r ? ' <span class="muted" title="Receipt attached">📎</span>' : ""}</td><td class="muted">${esc(r.detail)}</td><td>${esc(vehicleName(r.v))}</td><td class="n">${money(r.amt)}</td></tr>`).join("") || '<tr><td colspan="5"><div class="empty"><b>No costs this month</b>Add a fill-up or car cost here or in the app.</div></td></tr>'}
     </tbody></table></div></div>`;
   }
 
@@ -848,9 +1096,9 @@
 
   function periods() {
     const ms = availableMonths();
-    const years = [...new Set(ms.map((x) => x.y))];
+    const years = [...new Set(ms.map((x) => taxYearOf(new Date(x.y, x.m, 28))))].sort((a, b) => b - a);
     return [
-      ...years.map((y) => ({ key: `y${y}`, label: `${y} (full year)`, start: new Date(y, 0, 1), end: new Date(y + 1, 0, 1), year: y })),
+      ...years.map((y) => { const [st, en] = taxYearRange(y); return { key: `y${y}`, label: `${taxYearLabel(y)} (${RG.uk ? "tax year" : "full year"})`, start: st, end: en, year: y }; }),
       ...ms.map((x) => ({ key: `m${x.y}-${x.m}`, label: monthName(x.y, x.m), start: new Date(x.y, x.m, 1), end: new Date(x.y, x.m + 1, 1), year: x.y })),
     ];
   }
@@ -897,31 +1145,31 @@
     let kp, table;
     if (R.kind === "tax") {
       const businessShare = s.total ? s.business / s.total : 0;
-      if (RG.ca) {
-        const tiers = {}, bonus = RG.territory ? 0.04 : 0, prior = {};
-        for (const t of S.trips.slice().sort((a, b) => a.start - b.start)) {
-          if (t.category !== "business") continue;
-          const y = t.start.getFullYear(), km = t.meters / 1000, before = prior[y] || 0;
-          prior[y] = before + km;
-          if (!D.trips.includes(t)) continue;
-          const [hi, lo] = craYear(y), first = Math.max(0, Math.min(km, 5000 - before));
-          if (first) tiers[hi + bonus] = (tiers[hi + bonus] || 0) + first;
-          if (km - first) tiers[lo + bonus] = (tiers[lo + bonus] || 0) + km - first;
+      if (RG.tier) {
+        const tiers = {};
+        for (const t of D.trips) {
+          const x = S.tiers[t.id];
+          if (!x) continue;
+          if (x[0]) tiers[x[1]] = (tiers[x[1]] || 0) + x[0];
+          if (x[2]) tiers[x[3]] = (tiers[x[3]] || 0) + x[2];
         }
         const tierRows = Object.keys(tiers).map(Number).sort((a, b) => b - a)
-          .map((r) => `<tr><td>${num(tiers[r], 0)} km at ${Math.round(r * 100)}¢</td><td>${money(tiers[r] * r)}</td></tr>`).join("");
-        kp = `${kpi("Business km", num(s.business, 0), `${Math.round(s.pct)}% of ${num(s.total, 0)}`)}${kpi("CRA allowance", money(s.deduction), "if your employer pays per km")}${kpi("Car costs × business use", money(D.actualCosts * businessShare), "if you're self-employed")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "business drives")}`;
+          .map((r) => `<tr><td>${num(tiers[r], 0)} ${RG.unit} at ${cents(r).split("/")[0]}</td><td>${money(tiers[r] * r)}</td></tr>`).join("");
+        const uk = RG.uk;
+        kp = `${kpi(`Business ${RG.word}`, num(s.business, 0), `${Math.round(s.pct)}% of ${num(s.total, 0)}`)}${kpi(RG.deduction, money(s.deduction), uk ? "employees and simplified expenses" : "if your employer pays per km")}${kpi("Car costs × business use", money(D.actualCosts * businessShare), uk ? "if you use actual costs" : "if you're self-employed")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "business drives")}`;
         table = `<table class="sumtable"><tbody>
-        <tr><td>Kilometres driven to earn income (T2125 Part 5 · T777)</td><td>${num(s.business, 0)}</td></tr>
-        <tr><td>Total kilometres driven</td><td>${num(s.total, 0)}</td></tr>
+        <tr><td>${uk ? "Business miles" : "Kilometres driven to earn income (T2125 Part 5 · T777)"}</td><td>${num(s.business, 0)}</td></tr>
+        <tr><td>Total ${RG.word} driven</td><td>${num(s.total, 0)}</td></tr>
         <tr><td>Business use</td><td>${num(s.pct)}%</td></tr>
         ${tierRows}
-        <tr><td>CRA per-km allowance</td><td>${money(s.deduction)}</td></tr>
+        <tr><td>${RG.deduction}</td><td>${money(s.deduction)}</td></tr>
         <tr><td>Fuel and car costs logged</td><td>${money(D.actualCosts)}</td></tr>
         <tr><td>Business share of car costs</td><td>${money(D.actualCosts * businessShare)}</td></tr>
         <tr><td>Business tolls and parking</td><td>${money(s.tolls + s.parking)}</td></tr>
-        <tr><td>Business meals (${s.mealCount}) · 50% deductible</td><td>${money(s.mealsDeductible)}</td></tr>
-      </tbody></table><p class="hint" style="margin:12px 0 0">Capital cost allowance (CCA) and car loan interest aren't included; your accountant adds those.</p>`;
+        <tr><td>${uk ? "Meals on business drives" : `Business meals (${s.mealCount}) · 50% deductible`}</td><td>${money(uk ? s.meals : s.mealsDeductible)}</td></tr>
+      </tbody></table><p class="hint" style="margin:12px 0 0">${uk
+        ? "Use either simplified mileage or actual costs for a vehicle, not both. If your employer paid less than these rates, claim Mileage Allowance Relief on the difference."
+        : "Capital cost allowance (CCA) and car loan interest aren't included; your accountant adds those."}</p>`;
       } else {
       kp = `${kpi("Business miles", num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi("Standard deduction", money(s.deduction), "IRS standard rate")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), "Schedule C line 24b")}`;
         table = `<table class="sumtable"><tbody>
@@ -941,7 +1189,7 @@
     } else {
       kp = R.kind === "claim"
         ? `${kpi(`Business ${RG.word}`, num(s.business), D.custom ? `at ${cents(D.custom)}` : RG.rateName)}${kpi("Mileage", money(D.claimMileage), "")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "")}${kpi("Total due", money(D.claim), s.meals ? `incl. meals ${money(s.meals)}` : "")}`
-        : `${kpi(`Business ${RG.word}`, num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi(RG.deduction, money(s.deduction), RG.rateName)}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}`;
+        : `${kpi(`Business ${RG.word}`, num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi(RG.deduction, money(s.deduction), RG.rateName)}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${RG.uk ? kpi("Meals", money(s.meals), "on business drives") : kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}`;
       const shown = D.listed.slice(0, 200);
       table = `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Route</th><th>Type</th><th>Purpose</th><th class="n">${RG.Word}</th><th class="n">Value</th></tr></thead><tbody>
         ${shown.map((t) => `<tr><td>${esc(t.start.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(t.from)} → ${esc(t.to)}</td><td>${esc((CATS[t.category] || CATS.unclassified).label)}</td><td>${esc([t.purpose, t.client].filter(Boolean).join(" · "))}${missingPurpose(t) ? '<span class="warn">Missing</span>' : ""}</td><td class="n">${miles(t.meters)}</td><td class="n">${money(amountFor(t, D))}</td></tr>`).join("") || '<tr><td colspan="6" class="muted">No drives in this period.</td></tr>'}
@@ -952,10 +1200,10 @@
     <div class="opts">${sel("period", "Period", periodOpts, R.period)}
       ${sel("vehicle", "Vehicle", [["", "All vehicles"], ...vs.map((v) => [v.id, vehicleLabel(v.id)])], R.vehicle)}
       ${bs.length > 1 ? sel("business", "Business", [["", "All businesses"], ...bs.map((b) => [b.id, b.name])], R.business) : ""}
-      ${R.kind === "claim" ? `<label class="in">Rate per ${RG.ca ? "km" : "mile"}<input data-act="rrate" inputmode="decimal" value="${esc(R.rate)}" placeholder="${D.claimRate}"></label>` : ""}</div>
+      ${R.kind === "claim" ? `<label class="in">Rate per ${RG.ca ? "km" : "mile"} (${RG.cur})<input data-act="rrate" inputmode="decimal" value="${esc(R.rate)}" placeholder="${D.claimRate}"></label>` : ""}</div>
     <div class="card">
-      <div class="topbar"><div><b style="font-size:16px">${KINDS[R.kind].title} · ${esc(p.label.replace(" (full year)", ""))}</b><div class="muted" style="font-size:12px">${esc([S.user, scope].filter(Boolean).join(" · "))}</div></div>
-      <div class="right"><button class="btn" data-act="csv">${icon(I.dl)}CSV</button><button class="btn primary" data-act="pdf">${icon(I.dl)}PDF</button></div></div>
+      <div class="topbar"><div><b style="font-size:16px">${KINDS[R.kind].title} · ${esc(p.label.replace(/ \((full|tax) year\)/, ""))}</b><div class="muted" style="font-size:12px">${esc([S.user, scope].filter(Boolean).join(" · "))}</div></div>
+      <div class="right"><button class="btn" data-act="share">${icon(I.link)}Share link</button><button class="btn" data-act="csv">${icon(I.dl)}CSV</button><button class="btn primary" data-act="pdf">${icon(I.dl)}PDF</button></div></div>
       <div class="kpis four" style="margin-top:16px">${kp}</div>
       ${warn.length ? `<div class="banner" style="margin-top:14px">${warn.join(" and ")}. <a href="#/drives/${s.unreviewed ? "review" : "purpose"}" data-act="jump-month" data-y="${p.start.getFullYear()}" data-m="${p.start.getMonth()}">Fix in Drives</a></div>` : ""}
       <div style="margin-top:14px">${table}</div>
@@ -990,7 +1238,7 @@
     const W = RG.word;
     lines.push("", `Summary,${csvCell(D.p.label)}`, `Total ${W},${s.total.toFixed(1)}`, `Business ${W},${s.business.toFixed(1)}`,
       `Commuting ${W},${s.commute.toFixed(1)}`, `Other personal ${W},${s.personal.toFixed(1)}`,
-      ...(RG.ca ? [] : [`Medical ${W},${s.medical.toFixed(1)}`, `Charity ${W},${s.charity.toFixed(1)}`]),
+      ...(RG.tier ? [] : [`Medical ${W},${s.medical.toFixed(1)}`, `Charity ${W},${s.charity.toFixed(1)}`]),
       `Business use %,${s.pct.toFixed(1)}`, `${RG.deduction} (${RG.rateName}),${s.deduction.toFixed(2)}`,
       `Business tolls,${s.tolls.toFixed(2)}`, `Business parking,${s.parking.toFixed(2)}`);
     if (D.R.kind === "claim") {
@@ -1000,7 +1248,7 @@
       lines.push(`Business meals,${s.meals.toFixed(2)}`, `Business meals deductible (50%),${s.mealsDeductible.toFixed(2)}`);
     }
     if (D.fu.length) {
-      lines.push("", "Fuel", RG.ca ? "Date,Time,Station,Litres,Price per litre,Cost,Vehicle" : "Date,Time,Station,Gallons,Price per gallon,Cost,Vehicle");
+      lines.push("", "Fuel", RG.vol === "L" ? "Date,Time,Station,Litres,Price per litre,Cost,Vehicle" : "Date,Time,Station,Gallons,Price per gallon,Cost,Vehicle");
       for (const f of D.fu.slice().sort((a, b) => a.date - b.date)) lines.push([iso(f.date), hm(f.date), f.station, f.gallons ? f.gallons.toFixed(3) : "", f.gallons ? (f.cost / f.gallons).toFixed(3) : "", f.cost.toFixed(2), vehicleName(f.vehicleId)].map(csvCell).join(","));
     }
     if (D.ex.length) {
@@ -1008,6 +1256,142 @@
       for (const x of D.ex.slice().sort((a, b) => a.date - b.date)) lines.push([iso(x.date), EXPENSE[x.kind] || "Other", x.amount.toFixed(2), x.note, vehicleName(x.vehicleId)].map(csvCell).join(","));
     }
     download(stem(D) + ".csv", new Blob(["﻿" + lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" }));
+  }
+
+  // Summary lines shared by the PDF and share links: [label, formatted value].
+  function pairs(D) {
+    const { s } = D;
+    if (D.R.kind === "claim") {
+      return [[`Business ${RG.word}`, num(s.business)], ["Rate", D.custom ? cents(D.custom) : RG.rateName], ["Mileage", money(D.claimMileage)],
+        ["Tolls", money(s.tolls)], ["Parking", money(s.parking)], ...(s.meals ? [["Meals", money(s.meals)]] : []), ["Total due", money(D.claim)]];
+    }
+    const out = [[`Total ${RG.word}`, num(s.total)], [`Business ${RG.word}`, num(s.business)], [`Commuting ${RG.word}`, num(s.commute)],
+      [`Other personal ${RG.word}`, num(s.personal + s.medical + s.charity)], ["Business use", num(s.pct) + "%"]];
+    if (RG.tier && S.tiers) {
+      const tiers = {};
+      for (const t of D.trips) { const x = S.tiers[t.id]; if (!x) continue; if (x[0]) tiers[x[1]] = (tiers[x[1]] || 0) + x[0]; if (x[2]) tiers[x[3]] = (tiers[x[3]] || 0) + x[2]; }
+      for (const r of Object.keys(tiers).map(Number).sort((a, b) => b - a)) out.push([`${num(tiers[r], 0)} ${RG.unit} at ${cents(r).split("/")[0]}`, money(tiers[r] * r)]);
+    }
+    out.push([`${RG.deduction} (${RG.rateName})`, money(s.deduction)], ["Business tolls and parking", money(s.tolls + s.parking)]);
+    if (s.meals) out.push(RG.uk ? ["Meals on business drives", money(s.meals)] : ["Business meals (50% deductible)", money(s.mealsDeductible)]);
+    if (D.R.kind === "tax") out.push(["Fuel and car costs logged", money(D.actualCosts)], ["Business share of car costs", money(D.actualCosts * (s.total ? s.business / s.total : 0))]);
+    return out;
+  }
+
+  // ---------- share links ----------
+  // A snapshot of one report, put in MileGuard's public iCloud database under a random 128-bit name.
+  // Only someone with the link can open it. It stops opening when it expires, and expired ones are deleted
+  // next time the owner signs in. The owner's list of links lives in their private database.
+  const SHARE_LIST = "mileguard-shares";
+  const shareURL = (token) => `${location.origin}/app/share.html#${token}`;
+  const token = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), (b) => b.toString(16).padStart(2, "0")).join("");
+
+  function snapshot(D) {
+    const listed = D.listed;
+    return {
+      v: 1, kind: D.R.kind, title: `${KINDS[D.R.kind].title} · ${D.p.label.replace(/ \((full|tax) year\)/, "")}`,
+      by: S.user !== "Signed in" ? S.user : "",
+      scope: [D.R.vehicle ? vehicleLabel(D.R.vehicle) : "All vehicles", D.R.business ? S.businesses[D.R.business].name : ""].filter(Boolean).join(" · "),
+      made: Date.now(), cur: RG.cur, loc: RG.loc, unit: RG.unit, Word: RG.Word,
+      sum: pairs(D),
+      head: ["Date", "Start", "End", "From", "To", RG.Word, "Type", "Purpose", "Client", "Tolls", "Parking", "Meal", "Value"],
+      rows: D.R.kind === "tax" ? [] : listed.map((t) => [iso(t.start), hm(t.start), hm(t.end), t.from, t.to, +(t.meters / MI).toFixed(1),
+        (CATS[t.category] || CATS.unclassified).label, t.purpose, t.client, t.tolls, t.parking, t.meal, +amountFor(t, D).toFixed(2)]),
+    };
+  }
+
+  const ShareCloud = {
+    pub: () => CloudKit.getDefaultContainer().publicCloudDatabase,
+    async list() {
+      const res = await Cloud.db.fetchRecords([{ recordName: SHARE_LIST }]);
+      const r = res.records && res.records[0];
+      if (!r || r.serverErrorCode || !r.fields) return { items: [], tag: null };
+      try { return { items: JSON.parse(r.fields.items.value || "[]"), tag: r.recordChangeTag }; } catch (e) { return { items: [], tag: r.recordChangeTag }; }
+    },
+    async saveList(items, tag) {
+      const rec = { recordName: SHARE_LIST, recordType: "MGShareList", fields: { items: { value: JSON.stringify(items), type: "STRING" } } };
+      if (tag) rec.recordChangeTag = tag;
+      const res = await Cloud.db.saveRecords([rec]);
+      if (res.hasErrors) throw res.errors[0];
+    },
+    async create(snap, days) {
+      const t = token(), payload = JSON.stringify(snap);
+      if (payload.length > 900000) { const e = new Error("too big"); e.tooBig = true; throw e; }
+      const expires = Date.now() + days * 86400000;
+      const res = await this.pub().saveRecords([{ recordName: t, recordType: "MGShare", fields: {
+        title: { value: snap.title, type: "STRING" }, payload: { value: payload, type: "STRING" }, expires: { value: expires, type: "TIMESTAMP" } } }]);
+      if (res.hasErrors) throw res.errors[0];
+      const l = await this.list();
+      await this.saveList([{ t, title: snap.title, exp: expires, made: Date.now() }, ...l.items], l.tag);
+      return t;
+    },
+    async revoke(t) {
+      await this.pub().deleteRecords([{ recordName: t }]).catch(() => {});
+      const l = await this.list();
+      await this.saveList(l.items.filter((x) => x.t !== t), l.tag);
+    },
+    async sweep() {
+      const l = await this.list();
+      const dead = l.items.filter((x) => x.exp < Date.now());
+      if (!dead.length) return;
+      await this.pub().deleteRecords(dead.map((x) => ({ recordName: x.t }))).catch(() => {});
+      await this.saveList(l.items.filter((x) => x.exp >= Date.now()), l.tag);
+    },
+  };
+
+  const ShareDemo = {
+    items: [],
+    async list() { return { items: this.items }; },
+    async create(snap, days) {
+      const t = token();
+      try { localStorage.setItem("mg-demo-share-" + t, JSON.stringify({ snap, exp: Date.now() + days * 86400000 })); } catch (e) {}
+      this.items.unshift({ t, title: snap.title, exp: Date.now() + days * 86400000, made: Date.now() });
+      return t;
+    },
+    async revoke(t) { this.items = this.items.filter((x) => x.t !== t); try { localStorage.removeItem("mg-demo-share-" + t); } catch (e) {} },
+    async sweep() {},
+  };
+  const Share = () => (S.source === Demo ? ShareDemo : ShareCloud);
+
+  async function openShare(created) {
+    S.modal = { kind: "share" };
+    const D = reportData();
+    const title = `${KINDS[D.R.kind].title} · ${D.p.label.replace(/ \((full|tax) year\)/, "")}`;
+    let items = [];
+    try { items = (await Share().list()).items.filter((x) => x.exp >= Date.now()); } catch (e) { /* still let them make one */ }
+    const date = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    modalHost().innerHTML = `<div class="scrim" data-act="modal-close"></div>
+    <form class="card sheet" data-act="share-create" role="dialog" aria-label="Share a link">
+      <div class="hd"><h2>Share a link</h2><button type="button" class="btn close" style="display:inline-flex" data-act="modal-close" aria-label="Close">✕</button></div>
+      <div class="form">
+        ${created ? `<div class="sharebox"><b>Link ready</b><input readonly value="${esc(shareURL(created))}" id="share-url" aria-label="Link">
+          <button type="button" class="btn primary" data-act="share-copy">Copy link</button></div>
+          <p class="hint">Anyone with this link can see this report until it expires. Send it to your accountant or employer; they don't need MileGuard.</p>`
+        : `<p class="hint" style="font-size:14px;color:var(--tx)"><b>${esc(title)}</b></p>
+          <p class="hint">Makes a read-only copy of this report that opens in any browser, with a CSV and PDF download. It doesn't change as you edit drives; make a new link for an updated copy.</p>
+          <label class="in">Link works for<select name="days"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select></label>
+          <div class="actions"><button type="button" class="btn" data-act="modal-close">Cancel</button><button type="submit" class="btn primary" id="share-go">Create link</button></div>`}
+        ${items.length ? `<div><b style="font-size:13px">Your links</b><table style="margin-top:6px"><tbody>${items.map((x) => `<tr><td>${esc(x.title)}<div class="muted" style="font-size:12px">Until ${date(x.exp)}</div></td>
+          <td class="n"><button type="button" class="link" data-act="share-copy-one" data-t="${esc(x.t)}">Copy</button> · <button type="button" class="link" data-act="share-revoke" data-t="${esc(x.t)}" style="color:#C2372F">Turn off</button></td></tr>`).join("")}</tbody></table></div>` : ""}
+      </div>
+    </form>`;
+  }
+
+  async function createShare(f) {
+    const btn = $("#share-go"); if (btn) { btn.disabled = true; btn.textContent = "Creating…"; }
+    try {
+      const t = await Share().create(snapshot(reportData()), Number(f.days.value) || 30);
+      await openShare(t);
+    } catch (e) {
+      console.error(e);
+      toast(e.tooBig ? "Too many drives for one link. Pick a shorter period." : "Couldn't create the link. Try again.");
+      if (btn) { btn.disabled = false; btn.textContent = "Create link"; }
+    }
+  }
+
+  async function copy(text) {
+    try { await navigator.clipboard.writeText(text); toast("Link copied."); }
+    catch (e) { const i = $("#share-url"); if (i) { i.select(); } toast("Select the link and copy it."); }
   }
 
   function loadScript(src) {
@@ -1027,16 +1411,11 @@
       const W = doc.internal.pageSize.getWidth();
       const green = [14, 138, 99];
       doc.setFont("helvetica", "bold"); doc.setFontSize(18); doc.setTextColor(18, 22, 20);
-      doc.text(`${KINDS[D.R.kind].title} · ${D.p.label.replace(" (full year)", "")}`, 40, 50);
+      doc.text(`${KINDS[D.R.kind].title} · ${D.p.label.replace(/ \((full|tax) year\)/, "")}`, 40, 50);
       doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(91, 103, 99);
       const scope = [S.user !== "Signed in" ? S.user : "", D.R.vehicle ? vehicleLabel(D.R.vehicle) : "All vehicles", D.R.business ? S.businesses[D.R.business].name : ""].filter(Boolean).join(" · ");
       doc.text(`${scope}  ·  Made with MileGuard on ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`, 40, 66);
-      const sum = D.R.kind === "claim"
-        ? [[`Business ${RG.word}`, num(s.business)], ["Rate", D.custom ? cents(D.custom) : RG.rateName], ["Mileage", money(D.claimMileage)], ["Tolls", money(s.tolls)], ["Parking", money(s.parking)], ...(s.meals ? [["Meals", money(s.meals)]] : []), ["Total due", money(D.claim)]]
-        : [[`Total ${RG.word}`, num(s.total)], [`Business ${RG.word}`, num(s.business)], [`Commuting ${RG.word}`, num(s.commute)], [`Other personal ${RG.word}`, num(s.personal + s.medical + s.charity)],
-          ["Business use", num(s.pct) + "%"], [`${RG.deduction} (${RG.rateName})`, money(s.deduction)], ["Business tolls and parking", money(s.tolls + s.parking)],
-          ...(s.meals ? [["Business meals (50% deductible)", money(s.mealsDeductible)]] : []),
-          ...(D.R.kind === "tax" ? [["Fuel and car costs logged", money(D.actualCosts)], ["Business share of logged costs", money(D.actualCosts * (s.total ? s.business / s.total : 0))]] : [])];
+      const sum = pairs(D);
       doc.autoTable({ startY: 84, body: sum, theme: "plain", tableWidth: 360, styles: { fontSize: 10, cellPadding: 3 },
         columnStyles: { 1: { halign: "right", fontStyle: "bold" } } });
       if (D.R.kind !== "tax") {
@@ -1080,11 +1459,31 @@
     else if (a === "quick-log") { S.report.kind = "log"; S.report.period = `m${S.month.y}-${S.month.m}`; csv(); }
     else if (a === "rkind") { S.report.kind = el.dataset.k; render(); }
     else if (a === "csv") csv();
+    else if (a === "share") openShare();
+    else if (a === "receipt-view") { e.preventDefault(); viewReceipt(el.dataset.id, el.dataset.f); }
+    else if (a === "cost-new") openCost(el.dataset.k, null);
+    else if (a === "cost-edit") openCost(el.dataset.k, el.dataset.id);
     else if (a === "pdf") pdf();
     else if (a === "jump") { S.month = (() => { const t = S.trips.find(el.dataset.f === "review" ? (x) => x.category === "unclassified" && !x.lockedFree : el.dataset.f === "purpose" ? missingPurpose : (x) => x.category === "business" && x.tollsLikely && !x.tolls); return t ? { y: t.start.getFullYear(), m: t.start.getMonth() } : S.month; })(); }
     else if (a === "jump-month") { S.month = { y: Number(el.dataset.y), m: Number(el.dataset.m) }; }
   });
-  document.addEventListener("submit", (e) => { if (e.target.matches("form.form")) { e.preventDefault(); save(); } });
+  document.addEventListener("submit", (e) => {
+    if (e.target.matches("form.form")) { e.preventDefault(); save(); }
+    else if (e.target.matches("form[data-act=share-create]")) { e.preventDefault(); createShare(e.target); }
+    else if (e.target.matches("form.sheet")) { e.preventDefault(); saveCost(e.target); }
+  });
+  // The cost editor sits outside #main.
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-act]");
+    if (!el || !el.closest("#modal")) return;
+    const a = el.dataset.act;
+    if (a === "modal-close") closeModal();
+    else if (a === "cost-delete") deleteCost(el);
+    else if (a === "share-copy") copy($("#share-url").value);
+    else if (a === "share-copy-one") copy(shareURL(el.dataset.t));
+    else if (a === "share-revoke") { Share().revoke(el.dataset.t).then(() => { toast("Link turned off."); openShare(); }).catch(() => toast("Couldn't turn it off. Try again.")); }
+    else if (a === "receipt-view") { e.preventDefault(); viewReceipt(el.dataset.id, el.dataset.f); }
+  });
   document.addEventListener("input", (e) => {
     const el = e.target;
     if (el.dataset.act === "search") {
@@ -1104,10 +1503,13 @@
   });
   document.addEventListener("change", (e) => {
     const el = e.target;
+    if (el.dataset.act === "receipt-up") { uploadReceipt(el); return; }
     if (el.dataset.act === "month-pick") { const [y, m] = el.value.split("-").map(Number); S.month = { y, m }; render(); }
     else if (el.dataset.act === "ropt") { S.report[el.name] = el.value; render(); }
   });
   document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && S.modal) { closeModal(); return; }
+    if (e.key === "Enter" && e.target.matches("tr.click")) { e.target.click(); return; }
     if (e.key === "Escape" && S.selected && S.view === "drives" && !e.target.closest("input")) { S.selected = null; S.draft = null; render(); }
   });
   window.addEventListener("beforeunload", (e) => { if (S.draftDirty) { e.preventDefault(); e.returnValue = ""; } });

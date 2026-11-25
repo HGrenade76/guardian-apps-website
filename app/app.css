@@ -184,3 +184,23 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .help b:first-child{display:block;margin-bottom:2px}
 .home-link{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
 .home-link a{color:var(--sub)!important;font-weight:500!important}
+
+/* Receipts and the cost editor */
+.receipt{display:flex;align-items:center;gap:12px;font-size:13px;padding:8px 12px;border-radius:10px;background:var(--chip)}
+.receipt span{margin-right:auto;color:var(--sub);font-weight:600}
+.link{background:none;border:none;padding:0;color:var(--br);font-weight:700;cursor:pointer;font-size:13px}
+.link:hover{color:var(--br-2)}
+tr.click{cursor:pointer}tr.click:hover td{background:#fafbfa}
+.btn.danger{color:#C2372F;border-color:rgba(194,55,47,.35)}
+.scrim{position:fixed;inset:0;background:rgba(10,20,16,.35);z-index:40}
+.sheet{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(460px,calc(100vw - 24px));max-height:calc(100vh - 24px);overflow:auto;z-index:41;box-shadow:0 30px 80px -20px rgba(0,0,0,.4)}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center}
+.sharebox{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:rgba(14,138,99,.08)}
+.sharebox input{height:38px;border-radius:10px;border:1px solid rgba(0,0,0,.14);padding:0 10px;font-size:13px;background:#fff}
+/* Share viewer */
+.viewer{max-width:1100px;margin:0 auto;padding:28px 20px 60px;display:flex;flex-direction:column;gap:18px}
+.viewer header{display:flex;align-items:center;gap:12px}
+.viewer header img{border-radius:9px}
+.viewer header small{display:block;color:var(--sub);font-size:12px}
+.viewer .meta{color:var(--sub);font-size:13px;margin-top:4px}
+.viewer td:nth-child(-n+3){white-space:nowrap}
