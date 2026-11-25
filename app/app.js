@@ -8,7 +8,27 @@
   const CFG = window.MG_CONFIG || {};
   const ZONE = { zoneName: "com.apple.coredata.cloudkit.zone" };
   const ACCESS_RECORD = "mileguard-web";
-  const MI = 1609.344;
+  let MI = 1609.344;   // metres per display unit; 1000 in Canada
+
+  // Country, as the app last saved it with the Pro record. Distances are stored in metres, money as typed.
+  const RG = { ca: false, unit: "mi", word: "miles", Word: "Miles", vol: "gal", cur: "USD", loc: "en-US",
+    rateName: "IRS standard rate", deduction: "Mileage deduction", value: "Mileage value", meals: "Schedule C line 24b",
+    province: "", territory: false, claim: "employer" };
+  // CRA per-km allowance: first 5,000 business km of the year, then the lower rate; +4¢ in the territories.
+  const CRA = { 2024: [0.70, 0.64], 2025: [0.72, 0.66], 2026: [0.73, 0.67] };
+  const craYear = (y) => CRA[y] || CRA[Math.max(...Object.keys(CRA).map(Number).filter((k) => k <= y).concat([2024]))];
+  function setRegion(info) {
+    if (!info || info.region !== "CA") return;
+    MI = 1000;
+    Object.assign(RG, { ca: true, unit: "km", word: "km", Word: "Km", vol: "L", cur: "CAD", loc: "en-CA",
+      rateName: "CRA per-km rate", deduction: "CRA allowance", value: "CRA allowance", meals: "50% deductible",
+      province: info.province || "ON", territory: ["YT", "NT", "NU"].includes(info.province), claim: info.claim || "employer" });
+    ASSIGNABLE = ["business", "personal", "commute"];
+    KINDS.log.text = "CRA logbook of your drives";
+    KINDS.claim.text = "Business km at the CRA rate or your employer's, plus tolls, parking and meals";
+    KINDS.tax.text = "Logbook totals, CRA allowance and business share of car costs";
+    KINDS.tax.title = "Year-end summary";
+  }
 
   // IRS standard rates by effective date. Same table as the app (Compliance/IRSRates.swift).
   const RATES = [
@@ -25,7 +45,7 @@
     medical: { label: "Medical", color: "#C04A8E" },
     charity: { label: "Charity", color: "#8A63D2" },
   };
-  const ASSIGNABLE = ["business", "personal", "commute", "medical", "charity"];
+  let ASSIGNABLE = ["business", "personal", "commute", "medical", "charity"];
   const EXPENSE = {
     insurance: "Insurance", repairs: "Repairs", maintenance: "Maintenance & oil", tires: "Tires",
     registration: "Registration & fees", lease: "Lease payment", loanInterest: "Loan interest",
@@ -43,9 +63,10 @@
   // ---------- helpers ----------
   const $ = (s, el = document) => el.querySelector(s);
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const money = (n) => (n || 0).toLocaleString("en-US", { style: "currency", currency: "USD" });
+  const money = (n) => (n || 0).toLocaleString(RG.loc, { style: "currency", currency: RG.cur });
   const miles = (m) => (m / MI).toLocaleString("en-US", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   const num = (n, d = 1) => (n || 0).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const cents = (r) => RG.ca ? `${Math.round(r * 100)}¢/km` : `$${r}/mi`;
   const ymKey = (d) => d.getFullYear() * 100 + d.getMonth();
   const monthName = (y, m) => new Date(y, m, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" });
   const dayLabel = (d) => d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
@@ -69,6 +90,7 @@
   }
 
   function rateFor(cat, date) {
+    if (RG.ca) return cat === "business" ? craYear(date.getFullYear())[0] + (RG.territory ? 0.04 : 0) : 0;
     let r = null;
     for (const x of RATES) if (x.at <= date) r = x;
     if (!r) return 0;
@@ -144,11 +166,11 @@
       try {
         const res = await this.db.fetchRecords([{ recordName: ACCESS_RECORD }]);
         const r = res.records && res.records[0];
-        if (!r || r.serverErrorCode || !r.fields) return false;
-        const pro = r.fields.pro && Number(r.fields.pro.value) === 1;
-        const exp = r.fields.expires && r.fields.expires.value;
-        return pro && (!exp || exp > Date.now());
-      } catch (e) { return false; }
+        if (!r || r.serverErrorCode || !r.fields) return { ok: false };
+        const f = (k) => r.fields[k] && r.fields[k].value;
+        const exp = f("expires");
+        return { ok: Number(f("pro")) === 1 && (!exp || exp > Date.now()), region: f("region"), province: f("province"), claim: f("claim") };
+      } catch (e) { return { ok: false }; }
     },
 
     async load() {
@@ -258,7 +280,7 @@
   // ---------- Demo source (?demo) ----------
   const Demo = {
     async start() {},
-    async access() { return true; },
+    async access() { return { ok: true, region: new URLSearchParams(location.search).has("ca") ? "CA" : "US", province: "ON" }; },
     async load() { const d = window.MG_DEMO(); this.d = d; return d; },
     async route(t) { return t._route || []; },
     async save(t, changes) {
@@ -275,12 +297,32 @@
     },
   };
 
+  // Official amount per drive. Canada's step at 5,000 km counts every business drive earlier in the year,
+  // and a drive that crosses it is split between the two rates.
+  function computeAmounts() {
+    S.amt = {};
+    if (!RG.ca) {
+      for (const t of S.trips) S.amt[t.id] = Math.round((t.meters / MI) * rateFor(t.category, t.start) * 100) / 100;
+      return;
+    }
+    const prior = {}, bonus = RG.territory ? 0.04 : 0;
+    for (const t of S.trips.slice().sort((a, b) => a.start - b.start)) {
+      if (t.category !== "business") { S.amt[t.id] = 0; continue; }
+      const y = t.start.getFullYear(), [hi, lo] = craYear(y), km = t.meters / 1000, before = prior[y] || 0;
+      const first = Math.max(0, Math.min(km, 5000 - before));
+      S.amt[t.id] = Math.round((first * (hi + bonus) + (km - first) * (lo + bonus)) * 100) / 100;
+      prior[y] = before + km;
+    }
+  }
+  const amt = (t) => S.amt[t.id] || 0;
+
   function apply(data) {
     S.trips = data.trips.sort((a, b) => b.start - a.start);
     S.vehicles = data.vehicles; S.businesses = data.businesses;
     S.expenses = data.expenses.sort((a, b) => b.date - a.date);
     S.fuel = data.fuel.sort((a, b) => b.date - a.date);
     S.editCounts = data.editCounts;
+    computeAmounts();
     if (S.selected && !S.trips.find((t) => t.id === S.selected)) { S.selected = null; S.draft = null; }
   }
 
@@ -309,7 +351,9 @@
     $("#apple-sign-in-button").hidden = true;
     try {
       await S.source.start();
-      const [pro, data] = await Promise.all([S.source.access(), S.source.load()]);
+      const [acc, data] = await Promise.all([S.source.access(), S.source.load()]);
+      const pro = acc.ok;
+      setRegion(acc);
       if (data.empty) {
         return gate("No MileGuard drives yet",
           "We couldn't find MileGuard data in this iCloud account. Get MileGuard on your iPhone, sign in to the same Apple ID, and your drives will show up here.",
@@ -368,7 +412,7 @@
       $("#sign-out").hidden = true;
       $("#demo-out").hidden = false;
       $("#demo-out").href = location.pathname;
-      Demo.load().then((d) => { S.pro = true; apply(d); showApp(); });
+      Demo.access().then(setRegion).then(() => Demo.load()).then((d) => { S.pro = true; apply(d); showApp(); });
       return;
     }
     gate("Your drives, on a bigger screen", "Loading…", '<div class="spin"></div>');
@@ -452,7 +496,7 @@
       const m = t.meters / MI;
       s.total += m;
       if (t.category in s) s[t.category] += m;
-      s.deduction += Math.round(m * rateFor(t.category, t.start) * 100) / 100;
+      s.deduction += amt(t);
       if (t.category === "business") { s.tolls += t.tolls; s.parking += t.parking; }
       if (mealIsBusiness(t)) { s.meals += t.meal; s.mealsDeductible += t.meal * 0.5; s.mealCount++; }
       if (t.category === "unclassified") s.unreviewed++;
@@ -489,16 +533,16 @@
       d.trips.push(t);
     }
     const rows = days.map((d) => `<div class="card day">
-      <div class="day-h"><span>${esc(dayLabel(d.date))} · ${d.trips.length} drive${d.trips.length > 1 ? "s" : ""}</span><span>${miles(d.trips.reduce((a, t) => a + t.meters, 0))} mi</span></div>
+      <div class="day-h"><span>${esc(dayLabel(d.date))} · ${d.trips.length} drive${d.trips.length > 1 ? "s" : ""}</span><span>${miles(d.trips.reduce((a, t) => a + t.meters, 0))} ${RG.unit}</span></div>
       ${d.trips.map(rowHTML).join("")}</div>`).join("");
     const emptyText = S.search ? "No drives match your search." : S.filter === "all" ? "No drives this month." : "Nothing here this month.";
     return `<div class="topbar"><h1>Drives</h1>${monthPicker()}
       <div class="right"><label class="search">${icon(I.search)}<input data-act="search" aria-label="Search drives" placeholder="Address, purpose or client" value="${esc(S.search)}"></label>
       <button class="btn primary" data-act="quick-log">${icon(I.dl)}Download log</button></div></div>
     <div class="kpis">
-      ${kpi("Total distance", `${num(s.total)} mi`, `${s.count} drive${s.count === 1 ? "" : "s"}`)}
-      ${kpi("Business", `${num(s.business)} mi`, s.total ? `${Math.round(s.pct)}% business use` : "")}
-      ${kpi("Mileage value", money(s.deduction), `at $${rate}/mi`)}
+      ${kpi("Total distance", `${num(s.total)} ${RG.unit}`, `${s.count} drive${s.count === 1 ? "" : "s"}`)}
+      ${kpi("Business", `${num(s.business)} ${RG.unit}`, s.total ? `${Math.round(s.pct)}% business use` : "")}
+      ${kpi(RG.value, money(s.deduction), `at ${cents(rate)}`)}
       ${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "business drives")}
       ${kpi("Meals (50%)", money(s.mealsDeductible), s.mealCount ? `${s.mealCount} business meal${s.mealCount > 1 ? "s" : ""}` : "")}
     </div>
@@ -551,7 +595,7 @@
     const biz = d.category === "business";
     const edits = S.editCounts[t.id] || 0;
     return `<div class="card detail open" aria-label="Drive details">
-      <div class="hd"><h2>${miles(t.meters)} mi</h2><span>${esc(range)}</span><button class="btn close" data-act="unpick" aria-label="Close">✕</button></div>
+      <div class="hd"><h2>${miles(t.meters)} ${RG.unit}</h2><span>${esc(range)}</span><button class="btn close" data-act="unpick" aria-label="Close">✕</button></div>
       <div class="map" id="map">${mapSVG(t)}</div>
       <div style="margin-top:10px">
         <div class="field"><span>From</span><span>${esc(t.from || "—")}</span></div>
@@ -738,7 +782,7 @@
       bars.push({ m, b, o });
     }
     const max = Math.max(1, ...bars.map((x) => x.b + x.o));
-    const barHTML = bars.map((x) => `<div title="${monthName(y, x.m)}: ${num(x.b)} business mi, ${num(x.o)} other">
+    const barHTML = bars.map((x) => `<div title="${monthName(y, x.m)}: ${num(x.b)} business ${RG.unit}, ${num(x.o)} other">
       <i class="p" style="height:${(x.o / max) * 120}px;border-radius:6px 6px 0 0"></i><i style="height:${(x.b / max) * 120}px;border-radius:0 0 2px 2px;margin-top:-6px"></i>
       <small>${new Date(y, x.m, 1).toLocaleDateString("en-US", { month: "short" })}</small></div>`).join("");
     const byVehicle = {};
@@ -747,7 +791,7 @@
       const v = (byVehicle[k] = byVehicle[k] || { total: 0, business: 0, deduction: 0 });
       v.total += t.meters / MI;
       if (t.category === "business") v.business += t.meters / MI;
-      v.deduction += t.meters / MI * rateFor(t.category, t.start);
+      v.deduction += amt(t);
     }
     const todo = [
       all.unreviewed ? `<a href="#/drives/review" data-act="jump" data-f="review"><span>Drives that need a type</span><b>${all.unreviewed}</b></a>` : "",
@@ -756,17 +800,17 @@
     ].join("");
     return `<div class="topbar"><h1>Overview</h1><span class="muted">${y} so far</span></div>
     <div class="kpis">
-      ${kpi("Total distance", `${num(s.total, 0)} mi`, `${s.count} drives`)}
-      ${kpi("Business", `${num(s.business, 0)} mi`, s.total ? `${Math.round(s.pct)}% business use` : "")}
-      ${kpi("Mileage deduction", money(s.deduction), "IRS standard rate")}
+      ${kpi("Total distance", `${num(s.total, 0)} ${RG.unit}`, `${s.count} drives`)}
+      ${kpi("Business", `${num(s.business, 0)} ${RG.unit}`, s.total ? `${Math.round(s.pct)}% business use` : "")}
+      ${kpi(RG.deduction, money(s.deduction), RG.rateName)}
       ${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}
-      ${kpi("Meals (50%)", money(s.mealsDeductible), "Schedule C line 24b")}
+      ${kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}
     </div>
     <div class="two">
       <div class="card"><b>Miles by month</b> <span class="muted" style="font-size:12px">· green is business</span><div class="bars">${barHTML}</div></div>
       <div class="card"><b>To do</b><div class="todo" style="margin-top:6px">${todo || '<p class="muted" style="margin:10px 0 0">All caught up. Every drive has a type and every business drive has a purpose.</p>'}</div></div>
     </div>
-    <div class="card"><b>By vehicle</b><div class="table-wrap"><table style="margin-top:8px"><thead><tr><th>Vehicle</th><th class="n">Total mi</th><th class="n">Business mi</th><th class="n">Business use</th><th class="n">Mileage value</th></tr></thead><tbody>
+    <div class="card"><b>By vehicle</b><div class="table-wrap"><table style="margin-top:8px"><thead><tr><th>Vehicle</th><th class="n">Total ${RG.unit}</th><th class="n">Business ${RG.unit}</th><th class="n">Business use</th><th class="n">Mileage value</th></tr></thead><tbody>
       ${Object.entries(byVehicle).map(([k, v]) => `<tr><td>${esc(vehicleLabel(k) || "No vehicle")}</td><td class="n">${num(v.total)}</td><td class="n">${num(v.business)}</td><td class="n">${v.total ? Math.round((v.business / v.total) * 100) : 0}%</td><td class="n">${money(v.deduction)}</td></tr>`).join("") || '<tr><td colspan="5" class="muted">No drives yet this year.</td></tr>'}
     </tbody></table></div></div>`;
   }
@@ -780,12 +824,12 @@
     const yFu = S.fuel.filter((x) => x.date.getFullYear() === S.month.y).reduce((a, x) => a + x.cost, 0);
     const gallons = fu.reduce((a, x) => a + x.gallons, 0);
     const rows = [
-      ...fu.map((x) => ({ date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} gal · ${money(x.cost / x.gallons)}/gal` : "", v: x.vehicleId, amt: x.cost })),
+      ...fu.map((x) => ({ date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} ${RG.vol} · ${money(x.cost / x.gallons)}/gal` : "", v: x.vehicleId, amt: x.cost })),
       ...ex.map((x) => ({ date: x.date, what: EXPENSE[x.kind] || "Other", detail: x.note, v: x.vehicleId, amt: x.amount })),
     ].sort((a, b) => b.date - a.date);
     return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<span class="right muted" style="font-size:12px">Add fill-ups and car costs in the app.</span></div>
     <div class="kpis four">
-      ${kpi("Fuel this month", money(fu.reduce((a, x) => a + x.cost, 0)), gallons ? `${num(gallons)} gal` : `${fu.length} fill-up${fu.length === 1 ? "" : "s"}`)}
+      ${kpi("Fuel this month", money(fu.reduce((a, x) => a + x.cost, 0)), gallons ? `${num(gallons)} ${RG.vol}` : `${fu.length} fill-up${fu.length === 1 ? "" : "s"}`)}
       ${kpi("Car costs this month", money(ex.reduce((a, x) => a + x.amount, 0)), `${ex.length} item${ex.length === 1 ? "" : "s"}`)}
       ${kpi(`Fuel in ${S.month.y}`, money(yFu), "")}
       ${kpi(`Car costs in ${S.month.y}`, money(yEx), "for the actual-expense method")}
@@ -826,16 +870,18 @@
     trips = trips.slice().sort((a, b) => a.start - b.start);
     const listed = R.kind === "claim" ? trips.filter((t) => t.category === "business") : trips;
     const s = summarize(trips);
-    const claimRate = parseFloat(R.rate) > 0 ? parseFloat(R.rate) : rateFor("business", p.end > new Date() ? new Date() : new Date(p.end - 1));
+    const custom = parseFloat(R.rate) > 0 ? parseFloat(R.rate) : 0;
+    const claimRate = custom || rateFor("business", p.end > new Date() ? new Date() : new Date(p.end - 1));
     const inP = (d) => d >= p.start && d < p.end;
     const ex = S.expenses.filter((x) => inP(x.date) && (!R.vehicle || x.vehicleId === R.vehicle));
     const fu = S.fuel.filter((x) => inP(x.date) && (!R.vehicle || x.vehicleId === R.vehicle));
     const actualCosts = ex.reduce((a, x) => a + x.amount, 0) + fu.reduce((a, x) => a + x.cost, 0);
-    const claim = s.business * claimRate + s.tolls + s.parking + s.meals;
-    return { p, trips, listed, s, claimRate, claim, ex, fu, actualCosts, R };
+    const claimMileage = custom ? s.business * custom : s.deduction;
+    const claim = claimMileage + s.tolls + s.parking + s.meals;
+    return { p, trips, listed, s, claimRate, claim, ex, fu, actualCosts, R, custom, claimMileage };
   }
 
-  const amountFor = (t, D) => D.R.kind === "claim" ? (t.meters / MI) * D.claimRate : (t.meters / MI) * rateFor(t.category, t.start);
+  const amountFor = (t, D) => D.R.kind === "claim" && D.custom ? (t.meters / MI) * D.custom : amt(t);
 
   function renderReports() {
     const D = reportData();
@@ -851,26 +897,53 @@
     let kp, table;
     if (R.kind === "tax") {
       const businessShare = s.total ? s.business / s.total : 0;
-      kp = `${kpi("Business miles", num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi("Standard deduction", money(s.deduction), "IRS standard rate")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), "Schedule C line 24b")}`;
-      table = `<table class="sumtable"><tbody>
-        <tr><td>Total miles</td><td>${num(s.total)}</td></tr>
-        <tr><td>Business miles (Schedule C line 44a)</td><td>${num(s.business)}</td></tr>
-        <tr><td>Commuting miles (line 44b)</td><td>${num(s.commute)}</td></tr>
-        <tr><td>Other personal miles (line 44c)</td><td>${num(s.personal + s.medical + s.charity)}</td></tr>
+      if (RG.ca) {
+        const tiers = {}, bonus = RG.territory ? 0.04 : 0, prior = {};
+        for (const t of S.trips.slice().sort((a, b) => a.start - b.start)) {
+          if (t.category !== "business") continue;
+          const y = t.start.getFullYear(), km = t.meters / 1000, before = prior[y] || 0;
+          prior[y] = before + km;
+          if (!D.trips.includes(t)) continue;
+          const [hi, lo] = craYear(y), first = Math.max(0, Math.min(km, 5000 - before));
+          if (first) tiers[hi + bonus] = (tiers[hi + bonus] || 0) + first;
+          if (km - first) tiers[lo + bonus] = (tiers[lo + bonus] || 0) + km - first;
+        }
+        const tierRows = Object.keys(tiers).map(Number).sort((a, b) => b - a)
+          .map((r) => `<tr><td>${num(tiers[r], 0)} km at ${Math.round(r * 100)}¢</td><td>${money(tiers[r] * r)}</td></tr>`).join("");
+        kp = `${kpi("Business km", num(s.business, 0), `${Math.round(s.pct)}% of ${num(s.total, 0)}`)}${kpi("CRA allowance", money(s.deduction), "if your employer pays per km")}${kpi("Car costs × business use", money(D.actualCosts * businessShare), "if you're self-employed")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "business drives")}`;
+        table = `<table class="sumtable"><tbody>
+        <tr><td>Kilometres driven to earn income (T2125 Part 5 · T777)</td><td>${num(s.business, 0)}</td></tr>
+        <tr><td>Total kilometres driven</td><td>${num(s.total, 0)}</td></tr>
         <tr><td>Business use</td><td>${num(s.pct)}%</td></tr>
-        <tr><td>Standard mileage deduction</td><td>${money(s.deduction)}</td></tr>
-        <tr><td>Business tolls and parking</td><td>${money(s.tolls + s.parking)}</td></tr>
+        ${tierRows}
+        <tr><td>CRA per-km allowance</td><td>${money(s.deduction)}</td></tr>
         <tr><td>Fuel and car costs logged</td><td>${money(D.actualCosts)}</td></tr>
-        <tr><td>Business share of logged costs (actual method, before depreciation)</td><td>${money(D.actualCosts * businessShare)}</td></tr>
+        <tr><td>Business share of car costs</td><td>${money(D.actualCosts * businessShare)}</td></tr>
+        <tr><td>Business tolls and parking</td><td>${money(s.tolls + s.parking)}</td></tr>
         <tr><td>Business meals (${s.mealCount}) · 50% deductible</td><td>${money(s.mealsDeductible)}</td></tr>
-        <tr><td>Medical miles · charity miles</td><td>${num(s.medical)} · ${num(s.charity)}</td></tr>
-      </tbody></table><p class="hint" style="margin:12px 0 0">The app's PDF also compares the standard rate with actual expenses including depreciation. Check with your tax preparer before you file.</p>`;
+      </tbody></table><p class="hint" style="margin:12px 0 0">Capital cost allowance (CCA) and car loan interest aren't included; your accountant adds those.</p>`;
+      } else {
+      kp = `${kpi("Business miles", num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi("Standard deduction", money(s.deduction), "IRS standard rate")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), "Schedule C line 24b")}`;
+        table = `<table class="sumtable"><tbody>
+          <tr><td>Total miles</td><td>${num(s.total)}</td></tr>
+          <tr><td>Business miles (Schedule C line 44a)</td><td>${num(s.business)}</td></tr>
+          <tr><td>Commuting miles (line 44b)</td><td>${num(s.commute)}</td></tr>
+          <tr><td>Other personal miles (line 44c)</td><td>${num(s.personal + s.medical + s.charity)}</td></tr>
+          <tr><td>Business use</td><td>${num(s.pct)}%</td></tr>
+          <tr><td>Standard mileage deduction</td><td>${money(s.deduction)}</td></tr>
+          <tr><td>Business tolls and parking</td><td>${money(s.tolls + s.parking)}</td></tr>
+          <tr><td>Fuel and car costs logged</td><td>${money(D.actualCosts)}</td></tr>
+          <tr><td>Business share of logged costs (actual method, before depreciation)</td><td>${money(D.actualCosts * businessShare)}</td></tr>
+          <tr><td>Business meals (${s.mealCount}) · 50% deductible</td><td>${money(s.mealsDeductible)}</td></tr>
+          <tr><td>Medical miles · charity miles</td><td>${num(s.medical)} · ${num(s.charity)}</td></tr>
+        </tbody></table><p class="hint" style="margin:12px 0 0">The app's PDF also compares the standard rate with actual expenses including depreciation. Check with your tax preparer before you file.</p>`;
+      }
     } else {
       kp = R.kind === "claim"
-        ? `${kpi("Business miles", num(s.business), `at $${D.claimRate}/mi`)}${kpi("Mileage", money(s.business * D.claimRate), "")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "")}${kpi("Total due", money(D.claim), s.meals ? `incl. meals ${money(s.meals)}` : "")}`
-        : `${kpi("Business miles", num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi("Mileage deduction", money(s.deduction), "IRS standard rate")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), "Schedule C line 24b")}`;
+        ? `${kpi(`Business ${RG.word}`, num(s.business), D.custom ? `at ${cents(D.custom)}` : RG.rateName)}${kpi("Mileage", money(D.claimMileage), "")}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "")}${kpi("Total due", money(D.claim), s.meals ? `incl. meals ${money(s.meals)}` : "")}`
+        : `${kpi(`Business ${RG.word}`, num(s.business), `${Math.round(s.pct)}% of ${num(s.total)}`)}${kpi(RG.deduction, money(s.deduction), RG.rateName)}${kpi("Tolls &amp; parking", money(s.tolls + s.parking), "deductible on top")}${kpi("Meals (50%)", money(s.mealsDeductible), RG.meals)}`;
       const shown = D.listed.slice(0, 200);
-      table = `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Route</th><th>Type</th><th>Purpose</th><th class="n">Miles</th><th class="n">Value</th></tr></thead><tbody>
+      table = `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Route</th><th>Type</th><th>Purpose</th><th class="n">${RG.Word}</th><th class="n">Value</th></tr></thead><tbody>
         ${shown.map((t) => `<tr><td>${esc(t.start.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(t.from)} → ${esc(t.to)}</td><td>${esc((CATS[t.category] || CATS.unclassified).label)}</td><td>${esc([t.purpose, t.client].filter(Boolean).join(" · "))}${missingPurpose(t) ? '<span class="warn">Missing</span>' : ""}</td><td class="n">${miles(t.meters)}</td><td class="n">${money(amountFor(t, D))}</td></tr>`).join("") || '<tr><td colspan="6" class="muted">No drives in this period.</td></tr>'}
       </tbody></table></div>${D.listed.length > shown.length ? `<p class="hint">Showing the first ${shown.length} of ${D.listed.length}. The download has them all.</p>` : ""}`;
     }
@@ -879,7 +952,7 @@
     <div class="opts">${sel("period", "Period", periodOpts, R.period)}
       ${sel("vehicle", "Vehicle", [["", "All vehicles"], ...vs.map((v) => [v.id, vehicleLabel(v.id)])], R.vehicle)}
       ${bs.length > 1 ? sel("business", "Business", [["", "All businesses"], ...bs.map((b) => [b.id, b.name])], R.business) : ""}
-      ${R.kind === "claim" ? `<label class="in">Rate per mile<input data-act="rrate" inputmode="decimal" value="${esc(R.rate)}" placeholder="${D.claimRate}"></label>` : ""}</div>
+      ${R.kind === "claim" ? `<label class="in">Rate per ${RG.ca ? "km" : "mile"}<input data-act="rrate" inputmode="decimal" value="${esc(R.rate)}" placeholder="${D.claimRate}"></label>` : ""}</div>
     <div class="card">
       <div class="topbar"><div><b style="font-size:16px">${KINDS[R.kind].title} · ${esc(p.label.replace(" (full year)", ""))}</b><div class="muted" style="font-size:12px">${esc([S.user, scope].filter(Boolean).join(" · "))}</div></div>
       <div class="right"><button class="btn" data-act="csv">${icon(I.dl)}CSV</button><button class="btn primary" data-act="pdf">${icon(I.dl)}PDF</button></div></div>
@@ -904,19 +977,21 @@
   function csv() {
     const D = reportData();
     const { s } = D;
-    const head = "Date,Start,End,From,To,Miles,Category,Business Purpose,Client,Tolls,Parking,Meal,Meal With,Rate,Amount,Vehicle,Business,Classified At,Rule,Edits,Receipt";
+    const head = `Date,Start,End,From,To,${RG.Word},Category,Business Purpose,Client,Tolls,Parking,Meal,Meal With,Rate,Amount,Vehicle,Business,Classified At,Rule,Edits,Receipt`;
     const lines = [head];
     for (const t of D.listed) {
-      const rate = D.R.kind === "claim" ? D.claimRate : rateFor(t.category, t.start);
+      const rate = D.R.kind === "claim" && D.custom ? D.custom : t.meters ? Math.round(amt(t) / (t.meters / MI) * 1000) / 1000 : 0;
       lines.push([iso(t.start), hm(t.start), hm(t.end), t.from, t.to, (t.meters / MI).toFixed(1), (CATS[t.category] || CATS.unclassified).label,
         t.purpose, t.client, t.tolls.toFixed(2), t.parking.toFixed(2), t.meal ? t.meal.toFixed(2) : "",
         t.meal ? (t.mealOvernight && !t.mealWith ? "Overnight trip" : t.mealWith) : "", rate, amountFor(t, D).toFixed(2),
         vehicleLabel(t.vehicleId), businessName(t), t.classifiedAt ? t.classifiedAt.toISOString() : "", t.autoRule,
         S.editCounts[t.id] || 0, t.hasReceipt ? "yes" : ""].map(csvCell).join(","));
     }
-    lines.push("", `Summary,${csvCell(D.p.label)}`, `Total miles,${s.total.toFixed(1)}`, `Business miles,${s.business.toFixed(1)}`,
-      `Commuting miles,${s.commute.toFixed(1)}`, `Other personal miles,${s.personal.toFixed(1)}`, `Medical miles,${s.medical.toFixed(1)}`,
-      `Charity miles,${s.charity.toFixed(1)}`, `Business use %,${s.pct.toFixed(1)}`, `Business mileage deduction (IRS standard rate),${s.deduction.toFixed(2)}`,
+    const W = RG.word;
+    lines.push("", `Summary,${csvCell(D.p.label)}`, `Total ${W},${s.total.toFixed(1)}`, `Business ${W},${s.business.toFixed(1)}`,
+      `Commuting ${W},${s.commute.toFixed(1)}`, `Other personal ${W},${s.personal.toFixed(1)}`,
+      ...(RG.ca ? [] : [`Medical ${W},${s.medical.toFixed(1)}`, `Charity ${W},${s.charity.toFixed(1)}`]),
+      `Business use %,${s.pct.toFixed(1)}`, `${RG.deduction} (${RG.rateName}),${s.deduction.toFixed(2)}`,
       `Business tolls,${s.tolls.toFixed(2)}`, `Business parking,${s.parking.toFixed(2)}`);
     if (D.R.kind === "claim") {
       if (s.meals) lines.push(`Meals,${s.meals.toFixed(2)}`);
@@ -925,7 +1000,7 @@
       lines.push(`Business meals,${s.meals.toFixed(2)}`, `Business meals deductible (50%),${s.mealsDeductible.toFixed(2)}`);
     }
     if (D.fu.length) {
-      lines.push("", "Fuel", "Date,Time,Station,Gallons,Price per gallon,Cost,Vehicle");
+      lines.push("", "Fuel", RG.ca ? "Date,Time,Station,Litres,Price per litre,Cost,Vehicle" : "Date,Time,Station,Gallons,Price per gallon,Cost,Vehicle");
       for (const f of D.fu.slice().sort((a, b) => a.date - b.date)) lines.push([iso(f.date), hm(f.date), f.station, f.gallons ? f.gallons.toFixed(3) : "", f.gallons ? (f.cost / f.gallons).toFixed(3) : "", f.cost.toFixed(2), vehicleName(f.vehicleId)].map(csvCell).join(","));
     }
     if (D.ex.length) {
@@ -957,9 +1032,9 @@
       const scope = [S.user !== "Signed in" ? S.user : "", D.R.vehicle ? vehicleLabel(D.R.vehicle) : "All vehicles", D.R.business ? S.businesses[D.R.business].name : ""].filter(Boolean).join(" · ");
       doc.text(`${scope}  ·  Made with MileGuard on ${new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}`, 40, 66);
       const sum = D.R.kind === "claim"
-        ? [["Business miles", num(s.business)], ["Rate per mile", money(D.claimRate)], ["Mileage", money(s.business * D.claimRate)], ["Tolls", money(s.tolls)], ["Parking", money(s.parking)], ...(s.meals ? [["Meals", money(s.meals)]] : []), ["Total due", money(D.claim)]]
-        : [["Total miles", num(s.total)], ["Business miles", num(s.business)], ["Commuting miles", num(s.commute)], ["Other personal miles", num(s.personal + s.medical + s.charity)],
-          ["Business use", num(s.pct) + "%"], ["Mileage deduction (IRS standard rate)", money(s.deduction)], ["Business tolls and parking", money(s.tolls + s.parking)],
+        ? [[`Business ${RG.word}`, num(s.business)], ["Rate", D.custom ? cents(D.custom) : RG.rateName], ["Mileage", money(D.claimMileage)], ["Tolls", money(s.tolls)], ["Parking", money(s.parking)], ...(s.meals ? [["Meals", money(s.meals)]] : []), ["Total due", money(D.claim)]]
+        : [[`Total ${RG.word}`, num(s.total)], [`Business ${RG.word}`, num(s.business)], [`Commuting ${RG.word}`, num(s.commute)], [`Other personal ${RG.word}`, num(s.personal + s.medical + s.charity)],
+          ["Business use", num(s.pct) + "%"], [`${RG.deduction} (${RG.rateName})`, money(s.deduction)], ["Business tolls and parking", money(s.tolls + s.parking)],
           ...(s.meals ? [["Business meals (50% deductible)", money(s.mealsDeductible)]] : []),
           ...(D.R.kind === "tax" ? [["Fuel and car costs logged", money(D.actualCosts)], ["Business share of logged costs", money(D.actualCosts * (s.total ? s.business / s.total : 0))]] : [])];
       doc.autoTable({ startY: 84, body: sum, theme: "plain", tableWidth: 360, styles: { fontSize: 10, cellPadding: 3 },
@@ -967,7 +1042,7 @@
       if (D.R.kind !== "tax") {
         doc.autoTable({
           startY: doc.lastAutoTable.finalY + 16,
-          head: [["Date", "Time", "From", "To", "Miles", "Type", "Purpose", "Client", "Tolls", "Parking", "Value"]],
+          head: [["Date", "Time", "From", "To", RG.Word, "Type", "Purpose", "Client", "Tolls", "Parking", "Value"]],
           body: D.listed.map((t) => [iso(t.start), hm(t.start), t.from, t.to, (t.meters / MI).toFixed(1), (CATS[t.category] || CATS.unclassified).label,
             t.purpose, t.client, t.tolls ? t.tolls.toFixed(2) : "", t.parking ? t.parking.toFixed(2) : "", amountFor(t, D).toFixed(2)]),
           styles: { fontSize: 8, cellPadding: 3, overflow: "linebreak" },
