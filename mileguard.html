@@ -204,6 +204,19 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .car li b{display:block}.car li span{color:var(--muted);font-size:.95rem}
 .car-shot img{width:100%;border-radius:28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.85)}
 .car-shot small{display:block;margin-top:.6rem;color:var(--muted);font-size:.72rem}
+.web{display:grid;grid-template-columns:1.25fr .75fr;gap:4rem;align-items:center}
+.web h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
+.web p{color:var(--muted);margin-top:1rem;max-width:30rem}
+.web ul{list-style:none;margin-top:1.4rem}
+.web li{display:flex;gap:.8rem;padding:.7rem 0;border-top:1px solid var(--line)}
+.web li::before{content:"✓";color:var(--gold);font-weight:800}
+.web .go{display:inline-block;margin-top:1.6rem;font-weight:700;color:var(--gold)}
+.browser{border-radius:14px;overflow:hidden;background:#1b2433;box-shadow:0 40px 80px -30px rgba(0,0,0,.85),inset 0 0 0 1px rgba(255,255,255,.1)}
+.browser .bar{display:flex;align-items:center;gap:6px;padding:10px 14px}
+.browser .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.22)}
+.browser .bar span{margin-left:12px;flex:1;max-width:260px;font-size:.72rem;color:var(--muted);background:rgba(255,255,255,.07);border-radius:6px;padding:3px 10px}
+.browser img{width:100%;display:block}
+@media (max-width:900px){.web{grid-template-columns:1fr;gap:2rem}}
 .score-list li b{color:var(--gold-text)}
 @media (max-width:900px){.car{grid-template-columns:1fr;gap:2rem}}
 .gn .gn-cta{background:#3DDC97;color:#06231A!important}
@@ -346,6 +359,23 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
     <div class="duo">
       <div class="phone a"><img src="assets/mileguard/mg-screen-driving-light.webp" alt="My Driving dashboard"></div>
       <div class="phone b"><img src="assets/mileguard/mg-screen-home.webp" alt="Home screen"></div>
+    </div>
+  </div>
+</section>
+
+<section class="pad" id="web">
+  <div class="wrap web">
+    <div class="browser"><div class="bar"><i></i><i></i><i></i><span>gap-apps.com/app</span></div><img src="assets/mileguard/mg-web-drives.webp" alt="MileGuard on the web: a month of drives with totals, and one drive open to add its purpose, parking and a meal" loading="lazy"></div>
+    <div>
+      <div class="eyebrow">MileGuard on the web</div>
+      <h2>Your drives, <span class="g">on a bigger screen.</span></h2>
+      <p>Sign in with your Apple ID on any computer. MileGuard reads your drives straight from your own iCloud, in the browser, so they never pass through our servers.</p>
+      <ul>
+        <li>Review a month of drives and add purposes in minutes</li>
+        <li>Download drive logs, claims and the year-end summary</li>
+        <li>Changes show up on your iPhone</li>
+      </ul>
+      <a class="go" href="/app/">Sign in · Included with Pro →</a>
     </div>
   </div>
 </section>
