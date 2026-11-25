@@ -180,3 +180,5 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
   .topbar .right{width:100%;margin-left:0}
   .table-wrap{overflow-x:auto}
 }
+.help{width:100%;text-align:left;font-size:13px;line-height:1.5;color:var(--warn);background:var(--warn-bg);border-radius:12px;padding:12px 14px}
+.help b:first-child{display:block;margin-bottom:2px}

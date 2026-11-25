@@ -289,6 +289,7 @@
     $("#gate-title").textContent = title;
     $("#gate-text").textContent = text;
     $("#gate-actions").innerHTML = actions || "";
+    $("#gate-help").hidden = true;
   }
 
   function showApp() {
@@ -349,6 +350,7 @@
       gate("Your drives, on a bigger screen",
         "Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.");
       $("#apple-sign-in-button").hidden = false;
+      $("#gate-help").hidden = false;
       c.whenUserSignsIn().then(signedIn);
     };
     c.setUpAuth().then((id) => (id ? signedIn(id) : waitIn())).catch(() => waitIn());
