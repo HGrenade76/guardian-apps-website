@@ -32,7 +32,7 @@ h2{margin:0;font-size:20px;font-weight:800}
 .app{display:flex;min-height:100vh}
 .side{width:232px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:20px 14px;gap:6px;
   position:sticky;top:0;height:100vh}
-.brand{display:flex;align-items:center;gap:10px;padding:0 6px 18px;line-height:1.2}
+.brand{text-decoration:none;color:var(--tx);display:flex;align-items:center;gap:10px;padding:0 6px 18px;line-height:1.2}
 .brand img{border-radius:9px}.brand b{font-size:15px;display:block}.brand small{color:var(--sub);font-size:11px}
 #nav{display:flex;flex-direction:column;gap:4px}
 #nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;text-decoration:none;font-weight:600;color:var(--tx)}
@@ -182,3 +182,5 @@ td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 }
 .help{width:100%;text-align:left;font-size:13px;line-height:1.5;color:var(--warn);background:var(--warn-bg);border-radius:12px;padding:12px 14px}
 .help b:first-child{display:block;margin-bottom:2px}
+.home-link{margin-top:6px;padding-top:6px;border-top:1px solid var(--line)}
+.home-link a{color:var(--sub)!important;font-weight:500!important}
