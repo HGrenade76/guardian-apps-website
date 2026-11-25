@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MileGuard on the web</title>
+<meta name="description" content="Review, classify and download your MileGuard drives on a bigger screen.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0E3A45">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<!-- Sign in -->
+<section id="gate" class="gate" hidden>
+  <div class="gate-card">
+    <img src="/assets/mileguard/mg-icon-128.webp" alt="MileGuard app icon" width="64" height="64">
+    <h1 id="gate-title">Your drives, on a bigger screen</h1>
+    <p id="gate-text">Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.</p>
+    <div id="apple-sign-in-button" class="ck-btn"></div>
+    <div id="gate-actions" class="gate-actions"></div>
+    <p class="fine">Your drives are read from your own iCloud, in this browser. Guardian Apps never sees them. Web access is part of MileGuard Pro.</p>
+    <p class="fine"><a href="/mileguard/privacy/">Privacy</a> · <a href="/mileguard.html">About MileGuard</a></p>
+  </div>
+</section>
+
+<!-- App -->
+<div id="app" class="app" hidden>
+  <aside class="side">
+    <div class="brand"><img src="/assets/mileguard/mg-icon-128.webp" alt="" width="34" height="34"><div><b>MileGuard</b><small>on the web</small></div></div>
+    <nav id="nav">
+      <a href="#/overview" data-view="overview"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/></svg><span>Overview</span></a>
+      <a href="#/drives" data-view="drives"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg><span>Drives</span><em id="badge" hidden></em></a>
+      <a href="#/costs" data-view="costs"><svg viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 8h6M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/></svg><span>Costs</span></a>
+      <a href="#/reports" data-view="reports"><svg viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6zM9 13h6M9 17h6"/></svg><span>Reports</span></a>
+    </nav>
+    <div class="who">
+      <b id="who-name">Signed in</b><span id="who-plan"></span><br>
+      <span class="muted">Reading from your iCloud</span><br>
+      <div id="apple-sign-out-button" class="ck-out"></div>
+      <a href="#" id="demo-out" hidden>Leave demo</a>
+    </div>
+  </aside>
+  <main id="main" class="main" tabindex="-1"></main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js"></script>
+<script src="demo.js"></script>
+<script src="app.js"></script>
+<script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
+</body>
+</html>
