@@ -365,7 +365,7 @@
     S.month = { y: now.getFullYear(), m: now.getMonth() };
     if (demo) {
       S.source = Demo; S.user = "Alex Rivera";
-      $("#apple-sign-out-button").hidden = true;
+      $("#sign-out").hidden = true;
       $("#demo-out").hidden = false;
       $("#demo-out").href = location.pathname;
       Demo.load().then((d) => { S.pro = true; apply(d); showApp(); });
@@ -381,6 +381,17 @@
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("#retry")) location.reload();
+    if (e.target.closest("#sign-out")) {
+      e.preventDefault();
+      // Apple's own sign-out control does the work; it sits off-screen so the sidebar keeps its look.
+      const box = $("#apple-sign-out-button");
+      const target = box && (box.querySelector('[role="button"],button,a') || box.firstElementChild);
+      if (target) target.click();
+      setTimeout(() => {
+        try { Object.keys(localStorage).filter((k) => /cloudkit|ck/i.test(k)).forEach((k) => localStorage.removeItem(k)); } catch (_) {}
+        location.reload();
+      }, 1500);
+    }
     if (e.target.closest("#gate-out")) {
       const c = window.CloudKit && CloudKit.getDefaultContainer();
       if (c && c.signOut) c.signOut().then(() => location.reload()); else location.reload();
