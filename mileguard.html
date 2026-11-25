@@ -203,6 +203,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .car li::before{content:"✓";color:var(--gold);font-weight:800}
 .car li b{display:block}.car li span{color:var(--muted);font-size:.95rem}
 .car-shot img{width:100%;border-radius:28px;box-shadow:0 40px 80px -30px rgba(0,0,0,.85)}
+.car-shot img+img{margin-top:1.4rem}
 .car-shot small{display:block;margin-top:.6rem;color:var(--muted);font-size:.72rem}
 .web{display:grid;grid-template-columns:1.25fr .75fr;gap:4rem;align-items:center}
 .web h2{font-size:clamp(2rem,3.6vw,2.9rem);font-weight:800;margin-top:1rem}
@@ -270,7 +271,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
       <p class="lede">MileGuard records every drive by itself, from the moment your car connects to the moment you park. Swipe it business or personal. At the end of the year you get a tax summary that answers Schedule C and compares the standard mileage rate with your actual costs.</p>
       <div class="cta-row"><a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20MileGuard%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20MileGuard%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20MileGuard&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20MileGuard.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20drive%20for%20work%20as%20%28employee%20/%20self-employed%20/%20gig%20driver%29%3A%20%0AMy%20car%20has%20CarPlay%20%28yes%20/%20no%29%3A%20%0A%0AThanks%21">Help us test</a></div>
       <p class="fine">Both open your email app with a short note to us. Free for 40 drives a month; try Pro free for 2 weeks. <a href="mileguard/privacy/" style="text-decoration:underline">Privacy</a></p>
-      <div class="chips"><span>Records on its own</span><span>Works with CarPlay</span><span>Toll roads spotted</span><span>Driving score</span><span>Private by default</span></div>
+      <div class="chips"><span>Records on its own</span><span>Works with CarPlay</span><span>Tap to classify in the car</span><span>Toll roads spotted</span><span>Driving score</span><span>On the web too</span><span>Private by default</span></div>
     </div>
     <div class="stage">
       <div class="phone a"><img src="assets/mileguard/mg-screen-home-light.webp" alt="MileGuard home: this month's miles, business share and business value"></div>
@@ -336,15 +337,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   <div class="wrap car">
     <div>
       <div class="eyebrow">MileGuard + CarPlay</div>
-      <h2>Plug in and drive. <span class="g">That's the whole setup.</span></h2>
+      <h2>Plug in and drive. <span class="g">Park and tap.</span></h2>
       <ul>
         <li><div><b>Starts with your car</b><span>Recording begins when CarPlay or your car's Bluetooth connects, and ends when it disconnects and you park.</span></div></li>
         <li><div><b>Live on the dashboard</b><span>Miles and time for the drive in progress, right on the car screen.</span></div></li>
-        <li><div><b>This month at a glance</b><span>A CarPlay widget with your miles, business value and drives waiting for review.</span></div></li>
+        <li><div><b>Classify from the car screen</b><span>Once you park, the MileGuard widget shows your last drive with Business and Personal buttons. One tap and it moves on to the next. On touchscreen cars.</span></div></li>
+        <li><div><b>This month at a glance</b><span>Nothing to review? The widget shows your miles and business value instead.</span></div></li>
         <li><div><b>Knows which car</b><span>Each car's CarPlay or Bluetooth picks the right vehicle for the log.</span></div></li>
       </ul>
     </div>
-    <div class="car-shot"><img src="assets/mileguard/mg-carplay.webp" alt="Illustration of a car screen showing a MileGuard drive in progress and this month's totals"><small>Illustration with sample data. Layout varies by car.</small></div>
+    <div class="car-shot">
+      <img src="assets/mileguard/mg-carplay.webp" alt="Illustration of a car screen showing a MileGuard drive in progress and this month's totals">
+      <img src="assets/mileguard/mg-carplay-parked.webp" alt="Illustration of the MileGuard widget on a car screen after parking, with Business and Personal buttons for the last drive" loading="lazy">
+      <small>Illustrations with sample data. Driving, then parked. Layout varies by car.</small>
+    </div>
   </div>
 </section>
 
@@ -400,6 +406,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
       <details open><summary>When does MileGuard launch?</summary><p>It's in beta with drivers now. Join the waitlist and you'll be the first to know, with an early invite to the beta if there's room.</p></details>
       <details><summary>Can I help test it?</summary><p>Yes, please. Tap "Help us test" and send the short email with the email on your Apple account, and we'll send you a TestFlight invite.</p></details>
       <details><summary>Can I use it on my computer?</summary><p>Yes, with Pro. Go to <a href="/app/" style="color:var(--gold-text);font-weight:600">gap-apps.com/app</a> and sign in with the Apple ID on your iPhone to review drives, add purposes and download your logs on a bigger screen. It reads straight from your own iCloud. If you use Advanced Data Protection, turn on "Access iCloud Data on the Web" in your iPhone's iCloud settings first.</p></details>
+      <details><summary>Can I classify drives from the car?</summary><p>Yes. Add the MileGuard widget to CarPlay (on your iPhone: Settings, General, CarPlay, your car, Widgets). After you park, it shows your last drive with Business and Personal buttons. The buttons work on touchscreen car displays and stay hidden while you're driving.</p></details>
       <details><summary>Do I need CarPlay?</summary><p>No. MileGuard records drives on any iPhone. CarPlay or your car's Bluetooth just makes it sharper: drives start with the car, and rides as a passenger stay out.</p></details>
       <details><summary>Does it find my tolls?</summary><p>It spots when a business drive used a toll road and flags it. Download the CSV statement from your toll account and import it; each toll is matched to its drive. You can also type the amount in.</p></details>
       <details><summary>How much will it cost?</summary><p>MileGuard is free for 40 drives a month. Pro adds unlimited drives, PDF reports and the year-end summary, with a 2-week free trial. We'll confirm prices before launch.</p></details>
