@@ -93,13 +93,15 @@
   const dbl = (r, k) => Number(F(r, k) || 0);
   const bool = (r, k) => !!F(r, k);
   const date = (r, k) => { const v = F(r, k); return v == null ? null : new Date(v); };
+  // Addresses come from Apple Maps with the country on the end; drop it for US addresses.
+  const place = (s) => s.replace(/,?\s*(United States|USA|US)$/i, "").trim();
   const meta = (r) => ({ recordName: r.recordName, recordType: r.recordType, recordChangeTag: r.recordChangeTag });
 
   function tripFrom(r) {
     return {
       id: r.recordName, rec: meta(r),
       start: date(r, "startDate") || new Date(0), end: date(r, "endDate"),
-      from: str(r, "startAddress"), to: str(r, "endAddress"),
+      from: place(str(r, "startAddress")), to: place(str(r, "endAddress")),
       startLat: dbl(r, "startLat"), startLon: dbl(r, "startLon"), endLat: dbl(r, "endLat"), endLon: dbl(r, "endLon"),
       meters: dbl(r, "distanceMeters"),
       category: str(r, "categoryRaw") || "unclassified",
@@ -592,14 +594,50 @@
 
   async function drawMap() {
     const t = S.trips.find((x) => x.id === S.selected);
-    if (!t || S.routes[t.id]) return;
-    S.routes[t.id] = [];
+    if (!t) return;
+    if (!S.routes[t.id]) {
+      S.routes[t.id] = [];
+      try { S.routes[t.id] = await S.source.route(t); } catch (e) { /* straight line instead */ }
+    }
+    if (S.selected !== t.id) return;
+    let pts = S.routes[t.id];
+    if (!pts || pts.length < 2) pts = t.startLat || t.endLat ? [[t.startLat, t.startLon], [t.endLat, t.endLon]] : null;
+    if (!pts) return;
+    if (CFG.mapkitToken && (await realMap(t, pts))) return;
+    const m = $("#map");
+    if (m) m.innerHTML = mapSVG(t);
+  }
+
+  // Apple Maps on the web (MapKit JS). Only loads when a token is set in config.js.
+  let mapkitReady = null;
+  function loadMapKit() {
+    if (!mapkitReady) {
+      mapkitReady = loadScript("https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js").then(() => {
+        mapkit.init({ authorizationCallback: (done) => done(CFG.mapkitToken) });
+        return window.mapkit;
+      }).catch(() => null);
+    }
+    return mapkitReady;
+  }
+  async function realMap(t, pts) {
+    const M = await loadMapKit();
+    const el = $("#map");
+    if (!M || !el || S.selected !== t.id) return false;
     try {
-      const pts = await S.source.route(t);
-      S.routes[t.id] = pts;
-      const m = $("#map");
-      if (m && S.selected === t.id && pts.length > 1) m.innerHTML = mapSVG(t);
-    } catch (e) { /* keep the straight-line sketch */ }
+      const link = el.querySelector("a") ? el.querySelector("a").outerHTML : "";
+      el.innerHTML = '<div id="mk" style="position:absolute;inset:0"></div>' + link;
+      const map = new M.Map("mk", { showsCompass: M.FeatureVisibility.Hidden, showsMapTypeControl: false, showsScale: M.FeatureVisibility.Hidden,
+        isRotationEnabled: false, colorScheme: M.Map.ColorSchemes.Light, showsPointsOfInterest: false });
+      const coords = pts.map((p) => new M.Coordinate(p[0], p[1]));
+      const line = new M.PolylineOverlay(coords, { style: new M.Style({ lineWidth: 5, strokeColor: "#0E8A63", lineCap: "round", lineJoin: "round" }) });
+      map.addOverlay(line);
+      map.addAnnotations([
+        new M.MarkerAnnotation(coords[0], { color: "#0E8A63", glyphText: "A", title: t.from }),
+        new M.MarkerAnnotation(coords[coords.length - 1], { color: "#E5534B", glyphText: "B", title: t.to }),
+      ]);
+      map.showItems([line], { animate: false, padding: new M.Padding(36, 30, 36, 30) });
+      return true;
+    } catch (e) { console.error(e); return false; }
   }
 
   function pick(id) {

@@ -6,4 +6,7 @@ window.MG_CONFIG = {
   apiToken: "89a9de3ca42f7d0650dda73e500296518f2ae41671a1223831b7eb45d535e981",
   // TestFlight and App Store builds use "production". Builds run from Xcode use "development".
   environment: "production",
+  // Apple developer portal > Certificates, IDs & Profiles > Services > Maps > Configure Tokens.
+  // A MapKit JS token limited to gap-apps.com. Leave empty for the simple route sketch.
+  mapkitToken: "eyJraWQiOiJEWEg3S0dUMjk1IiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJLRks4V1o1NDQ3IiwiaWF0IjoxNzk1NTg2MDM5LCJvcmlnaW4iOiJnYXAtYXBwcy5jb20iLCJzY29wZSI6Im1hcGtpdF9qcyJ9.jk3GavXZ6lPwr5BFQArKzFrYKGPtTCuO8Cochiae4IX78gzB-Li3Nzg7btNzHaZNp9BK4aJvIPFALpHkLIkmjQ",
 };
