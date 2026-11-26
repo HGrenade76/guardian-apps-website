@@ -126,6 +126,15 @@ Core tests: Full body fill covers push, pull, squat, hinge and core from history
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8d · Meals: Eat step and week roll-over
+```
+One item: Meals home, the Eat step and the week roll-over.
+1. Eat is daily: its circle is a progress ring for the week (days eaten as planned / 7) and ticks only when the week is done; the line reads "Today ✓ · 4 of 7 days" or "Today · 2 of 4 meals". Never "Today done" next to an empty circle. Tapping Eat opens today's meals.
+2. Week roll-over: Hein saw "Sun 15 – Sat 21" on a later date. When a new week starts, Meals shows the new week with Plan open ("Plan this week") and last week under "Last week ›". From Saturday, offer "Plan next week" on Meals and a quiet nudge on Home. Shopping, prep and eat ticks belong to their own week. Check why the week didn't roll.
+Unit tests for the ring and the roll-over across Sunday midnight; UI test for Meals on a new week.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
