@@ -628,13 +628,13 @@
       }
       if (want.due && !a.confirmed) changes.confirmed = true;
     }
-    if (!Object.keys(changes).length) return toast("No changes to save");
+    if (!Object.keys(changes).length) return toast("Nothing new to save. Your changes are already synced.");
     S.dirty = true;
     try {
       const updated = await S.source.saveAction(a, changes);
       Object.assign(a, updated);
       S.actions.sort(actionSort);
-      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed." : "Saved. It'll sync to your iPhone.");
+      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed and saved." : "Saved. It'll sync to your iPhone.");
       if (changes.status) await autoResolve(a.session);
     } catch (e) {
       console.error(e);
