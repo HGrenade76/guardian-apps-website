@@ -64,13 +64,20 @@ Core test: the Cardio area at a gym returns at least 35 items; at home with no m
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 2 · Add exercise: all group tabs visible, and cardio mid-workout
+## ☑ 2 · Add exercise: all group tabs visible, and cardio mid-workout — done (minutes only; Full body tab comes with 1a)
 ```
 One item: Add exercise during a workout, the group tabs.
 1. The tab row is scrolled so "Cardio" is cut off on the left ("…ardio"). Tabs start at the left with All first, in this order: All, Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Full body, Cardio. The selected tab always scrolls into view. Same order everywhere the library shows areas.
 2. Adding a cardio item mid-workout (treadmill, bike, rower, stairs, elliptical, jump rope): the row logs minutes, plus distance, level/incline and heart rate where they apply; never reps × weight. A quick start of 5, 10 or 15 min. It counts in the session's time and totals and is written to Health as a segment of the same workout. Teen rules unchanged.
 UI tests: Cardio visible without scrolling the tab row back; add a 10 min treadmill to a strength session, log it, and it appears in the done screen and overview.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
+## ☐ 2a · Cardio details: distance, level/incline, heart rate (SCHEMA CHANGE)
+```
+One item: store distance, level/incline and average heart rate for cardio entries logged in a strength session (approved by Hein). Optional fields with defaults (CloudKit-compatible, no unique constraints), on the logged entry. The cardio row shows Minutes plus Distance (mi/km by units), Level or Incline (whichever the machine uses) and avg heart rate (filled from Watch/strap when connected, else editable). They show on the done screen and overview; distance and heart rate go to Health with the cardio segment. Teen rules unchanged.
+Run the schema check and list the exact new fields; run the schema seed in Development on the simulator (not my iPhone) and STOP before any upload so Hein can deploy to Production.
+Work in this chat, no helper agents. Run only this area's tests, commit, back up. STOP and report.
 ```
 
 ## ☐ 3 · Back button shows "Tr…"
