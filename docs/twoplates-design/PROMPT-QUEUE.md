@@ -168,6 +168,17 @@ Write the old → new day names per program in docs/PROGRAM-DAY-NAMES.md. Unit t
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8h · Goals: two more, focus areas, target date, and goal drives suggestions
+```
+One item: goals.
+1. Goal list (onboarding screen 6, Plan settings, Profile): Build muscle · Get stronger · Lose fat, keep muscle · Get fitter (new: stamina and conditioning) · Train for a sport (new: power, speed, agility; uses the existing in-season switch) · Move better, stay healthy. Teens: Get stronger, Build muscle, Get fitter, Train for a sport, Move better (never Lose fat). Stored as goalRaw strings; confirm no schema change.
+2. Engine: Get fitter = full-body strength 2–3×/week at 8–15 reps plus 2–3 cardio/conditioning sessions (intervals and steady); Train for a sport = strength 3–6 reps, power moves (jumps, throws, carries) first, conditioning blocks, lower volume in-season. Add both to the periodisation spec §3 table and the website copy. Teen limits unchanged.
+3. Optional follow-ups on the goal screen: "Anything to bring up?" focus areas (arms, glutes, shoulders, back, core, legs; max 2; small extra volume using the existing focusGroups) and "Training for something?" with a target date (race, holiday, event); programs taper the last week before the date.
+4. Goal drives suggestions: "Recommended for you" on Programs, Quick start focus default, Surprise me weighting and builder suggestions (item 8c) all lean to the goal and focus areas.
+Core tests for each goal's week shape; teen goal list test.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
