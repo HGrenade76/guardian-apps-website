@@ -154,10 +154,12 @@
       ownerEmail: str(r, "ownerEmail"), due: date(r, "dueDate"), status: str(r, "statusRaw") || "Open", priority: str(r, "priorityRaw") || "Medium",
       notes: str(r, "notes"), timestamp: str(r, "timestamp"), completed: date(r, "completedDate"), originalDue: date(r, "originalDueDate"),
       reschedules: num(r, "rescheduleCount"), confirmed: bool(r, "isDueDateConfirmed"), archived: bool(r, "isArchived"), session: str(r, "session"),
+      mod: (r.modified && r.modified.timestamp) || 0,
     };
   }
   const decisionFrom = (r) => ({ rec: r.recordName, id: str(r, "id"), text: str(r, "statement"), timestamp: str(r, "timestamp"),
-    status: str(r, "statusRaw") || "Active", tags: list(F(r, "tags")), notes: str(r, "notes"), session: str(r, "session") });
+    status: str(r, "statusRaw") || "Active", tags: list(F(r, "tags")), notes: str(r, "notes"), session: str(r, "session"),
+    mod: (r.modified && r.modified.timestamp) || 0 });
   const riskFrom = (r) => ({ rec: r.recordName, text: str(r, "riskDescription"), type: str(r, "typeRaw") || "Stated", session: str(r, "session") });
 
   const authErr = (e) => /AUTHENTICATION|NOT_AUTHENTICATED|ACCESS_DENIED|AUTH_PERSIST/i.test((e && (e.ckErrorCode || e.serverErrorCode || e.message)) || "");
@@ -216,6 +218,23 @@
         const buf = new Uint8Array(await resp.arrayBuffer());
         return new TextDecoder().decode(buf);
       } catch (e) { return { url }; }
+    },
+
+    async saveDecision(d, changes) {
+      const fields = {};
+      if ("status" in changes) fields.CD_statusRaw = { value: changes.status, type: "STRING" };
+      const rec = this._recs[d.rec];
+      const attempt = async (tag) => this.db.saveRecords([{ recordName: d.rec, recordType: "CD_DecisionModel", recordChangeTag: tag, fields }], { zoneID: ZONE });
+      let res = await attempt(rec && rec.recordChangeTag);
+      if (res.hasErrors && /CONFLICT/.test(res.errors[0].ckErrorCode || res.errors[0].serverErrorCode || "")) {
+        const fresh = await this.db.fetchRecords([{ recordName: d.rec }], { zoneID: ZONE, desiredKeys: DESIRED });
+        const r = fresh.records && fresh.records[0];
+        if (r) { this._recs[r.recordName] = r; res = await attempt(r.recordChangeTag); }
+      }
+      if (res.hasErrors) throw res.errors[0];
+      const r = res.records[0];
+      this._recs[r.recordName] = Object.assign({}, this._recs[r.recordName] || {}, r, { fields: Object.assign({}, (this._recs[r.recordName] || {}).fields, r.fields) });
+      return decisionFrom(this._recs[r.recordName]);
     },
 
     async saveAction(a, changes) {
@@ -287,6 +306,7 @@
           : "(Full transcript, including small talk, appears here.)";
       },
       async saveAction(a, changes) { const t = S.actions.find((x) => x.rec === a.rec); return Object.assign({}, t, changes); },
+      async saveDecision(d, changes) { return Object.assign({}, d, changes); },
     };
   })();
 
@@ -298,12 +318,26 @@
   const dueThisWeek = (a) => isOpen(a) && a.due && a.due >= today0() && a.due < new Date(today0().getTime() + 7 * DAY);
   const sess = (rec) => S.bySession[rec];
 
+  // Same visibility rules as the app's AppState.allActions / allDecisions: only items attached to a
+  // live (not archived) meeting, archived actions hidden, one per id. CloudKit can hold stray copies of
+  // the same action or decision (left over from sync repairs), and orphans with no meeting; the app
+  // never shows those, so neither do we. Where copies share an id, the most recently changed one wins.
+  function newestById(items) {
+    const by = new Map();
+    for (const x of items) {
+      const k = x.id || x.rec, cur = by.get(k);
+      if (!cur || (x.mod || 0) > (cur.mod || 0)) by.set(k, x);
+    }
+    return [...by.values()];
+  }
   function apply(data) {
-    S.sessions = data.sessions.filter((s) => !s.archived).sort((a, b) => b.date - a.date);
     S.bySession = {}; data.sessions.forEach((s) => (S.bySession[s.rec] = s));
-    S.actions = data.actions.filter((a) => !a.archived && a.text).sort(actionSort);
-    S.decisions = data.decisions.filter((d) => d.text).sort((a, b) => ((sess(b.session) || {}).date || 0) - ((sess(a.session) || {}).date || 0));
-    S.risks = data.risks;
+    const live = (rec) => { const s = S.bySession[rec]; return !!s && !s.archived; };
+    S.sessions = data.sessions.filter((s) => !s.archived).sort((a, b) => b.date - a.date);
+    S.actions = newestById(data.actions.filter((a) => a.text && live(a.session))).filter((a) => !a.archived).sort(actionSort);
+    S.decisions = newestById(data.decisions.filter((d) => d.text && live(d.session)))
+      .sort((a, b) => ((sess(b.session) || {}).date || 0) - ((sess(a.session) || {}).date || 0));
+    S.risks = data.risks.filter((r) => live(r.session));
   }
   function actionSort(a, b) {
     const oa = isOpen(a) ? 0 : 1, ob = isOpen(b) ? 0 : 1;
@@ -545,29 +579,39 @@
         <label for="f-status">Status</label><select id="f-status">${st.map((x) => `<option ${x === a.status ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-prio">Priority</label><select id="f-prio">${pr.map((x) => `<option ${x === a.priority ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-due">Due date</label><input id="f-due" type="date" value="${isoDay(a.due)}">
+        <label for="f-done" class="${a.status === "Done" ? "" : "dim"}">Completed on</label><div><input id="f-done" type="date" max="${isoDay(new Date())}" value="${isoDay(a.completed || (a.status === "Done" ? new Date() : null))}" ${a.status === "Done" ? "" : "disabled"}>
+          <div class="hint">Used for your follow-through score. Set the day it was actually done, not the day you logged it.</div></div>
         <span></span><div><button class="btn primary" type="submit" id="save">Save changes</button></div>
       </form>
       <div class="kv">
         ${a.owner ? `<label>Owner</label><div>${esc(a.owner)}${a.ownerEmail ? ` · <a href="mailto:${esc(a.ownerEmail)}">${esc(a.ownerEmail)}</a>` : ""}</div>` : ""}
         ${s ? `<label>From</label><div><a href="#/sessions/${encodeURIComponent(s.rec)}">${esc(s.title)}</a> · ${esc(fmtDate(s.date))}${a.timestamp ? ` · at ${esc(a.timestamp)}` : ""}</div>` : ""}
+        <label>Date status</label><div>${a.due ? (a.confirmed ? "Confirmed" : "Suggested by AI, not yet confirmed") : "None"}</div>
         ${a.reschedules ? `<label>Rescheduled</label><div>${a.reschedules} time${a.reschedules > 1 ? "s" : ""}${a.originalDue ? ` · first due ${esc(fmtDate(a.originalDue))}` : ""}</div>` : ""}
-        ${a.completed && a.status === "Done" ? `<label>Completed</label><div>${esc(fmtDate(a.completed))}</div>` : ""}
+        ${a.completed && a.status === "Done" ? `<label>Completed</label><div>${esc(fmtDate(a.completed))}${(a.originalDue || a.due) ? (startOfDay(a.completed) > startOfDay(a.originalDue || a.due) ? ' <span class="chip red">Late</span>' : ' <span class="chip green">On time</span>') : ""}</div>` : ""}
       </div>
       ${a.notes ? `<div><h3>Notes</h3><div class="note">${esc(a.notes)}</div></div>` : ""}
     </div>`;
   }
 
   async function updateAction(a, want) {
+    // Same rules as AppState.updateAction in the app, so the follow-through score reads web edits correctly.
     const changes = {};
-    if (want.status !== undefined && want.status !== a.status) {
-      changes.status = want.status;
-      changes.completed = want.status === "Done" ? new Date() : null;
-    }
+    const status = want.status !== undefined ? want.status : a.status;
+    if (status !== a.status) changes.status = status;
+    if (status === "Done") {
+      const done = want.completed || a.completed || new Date();
+      if (isoDay(done) !== isoDay(a.completed)) changes.completed = done;
+    } else if (a.completed) changes.completed = null;
     if (want.priority !== undefined && want.priority !== a.priority) changes.priority = want.priority;
     if (want.due !== undefined && isoDay(want.due) !== isoDay(a.due)) {
       changes.due = want.due;
-      changes.confirmed = !!want.due;
-      if (a.due && want.due) { changes.originalDue = a.originalDue || a.due; changes.reschedules = (a.reschedules || 0) + 1; }
+      // Only a date the user stood behind becomes the bar; moving an AI-inferred date is a first commitment.
+      if (a.confirmed && a.due && want.due && startOfDay(want.due) > startOfDay(a.due)) {
+        if (!a.originalDue) changes.originalDue = a.due;
+        changes.reschedules = (a.reschedules || 0) + 1;
+      }
+      if (want.due && !a.confirmed) changes.confirmed = true;
     }
     if (!Object.keys(changes).length) return toast("No changes to save");
     S.dirty = true;
@@ -576,10 +620,23 @@
       Object.assign(a, updated);
       S.actions.sort(actionSort);
       toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : "Saved. It'll sync to your iPhone.");
+      if (changes.status) await autoResolve(a.session);
     } catch (e) {
       console.error(e);
       toast(authErr(e) ? "Your sign-in expired. Reload and sign in again." : "Couldn't save. Check your connection and try again.");
     } finally { S.dirty = false; render(); }
+  }
+
+  // App rule: when every live action in a meeting is Done or Cancelled, its Active decisions become Resolved.
+  async function autoResolve(sessionRec) {
+    if (!sessionRec) return;
+    const acts = S.actions.filter((x) => x.session === sessionRec);
+    if (!acts.length || !acts.every((x) => x.status === "Done" || x.status === "Cancelled")) return;
+    const active = S.decisions.filter((d) => d.session === sessionRec && d.status === "Active");
+    for (const d of active) {
+      try { Object.assign(d, await S.source.saveDecision(d, { status: "Resolved" })); } catch (e) { console.error(e); }
+    }
+    if (active.length) toast(`All actions complete. ${active.length === 1 ? "1 decision" : active.length + " decisions"} resolved.`);
   }
 
   function csv() {
@@ -739,7 +796,15 @@
     if (e.target.id === "q") { S.q = e.target.value; clearTimeout(S.qh); S.qh = setTimeout(render, 180); }
     if (e.target.id === "txq") { S.txQ = e.target.value; const s = sess(S.selected); if (s) paintTranscript(S.tx[s.rec + "|" + S.txMode]); }
   });
-  document.addEventListener("change", (e) => { if (e.target.id === "owner") { S.owner = e.target.value; render(); } });
+  document.addEventListener("change", (e) => {
+    if (e.target.id === "owner") { S.owner = e.target.value; render(); }
+    if (e.target.id === "f-status") {
+      const f = $("#f-done"), done = e.target.value === "Done";
+      f.disabled = !done;
+      document.querySelector('label[for="f-done"]').classList.toggle("dim", !done);
+      if (done && !f.value) f.value = isoDay(new Date());
+    }
+  });
   document.addEventListener("submit", (e) => {
     if (e.target.id !== "action-form") return;
     e.preventDefault();
@@ -747,7 +812,8 @@
     if (!a) return;
     const v = $("#f-due").value;
     const due = v ? new Date(v + "T12:00:00") : null;
-    updateAction(a, { status: $("#f-status").value, priority: $("#f-prio").value, due });
+    const dv = $("#f-done").value;
+    updateAction(a, { status: $("#f-status").value, priority: $("#f-prio").value, due, completed: dv ? new Date(dv + "T12:00:00") : null });
   });
   boot();
 })();
