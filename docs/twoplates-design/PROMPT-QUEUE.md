@@ -33,7 +33,7 @@ One item only. Work in this chat, no helper agents. Run only this area's tests, 
 ```
 *After: send the unclear list to the designer for rulings.*
 
-## ☐ 1a · Rulings on the 61 unclear exercises (+ verify the 20261123.1 archive)
+## ☑ 1a · Rulings on the 61 unclear exercises (+ verify the 20261123.1 archive) — done
 ```
 Two small things.
 A. Verify the 20261123.1 archive from the tool outage: check both iCloud containers in the signature and open it in Organizer. Report the build number.
@@ -53,7 +53,7 @@ Update the Add exercise tab order everywhere to: All, Chest, Back, Shoulders, Ar
 Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 1b · Cardio area shows all cardio (about 40, not 5)
+## ☑ 1b · Cardio area shows all cardio (about 40, not 5) — done 68c03a11
 ```
 One item: the Cardio tab in Add exercise shows only 5 exercises (Arc Trainer, Incline Treadmill Walk, Long Run, Tempo Run, VersaClimber), but the library has about 40 cardio/conditioning items (treadmill, elliptical, stair climber, rowing ×3, air bike, indoor cycling and the cycling sessions, ski machine, running sessions, jump rope, jumping jacks, burpees, mountain climbers, box jumps, squat thrusts, shadow boxing, bear crawl, battle ropes, sled push/pull, swimming).
 - Cardio is an area of its own: every exercise with category cardio, or a conditioning/finisher slot that is a whole-body cardio movement, has primary area Cardio (muscle groups stay as secondary for weekly volume).
@@ -76,6 +76,7 @@ One item only. Work in this chat, no helper agents. Run only this area's tests, 
 ## ☐ 2a · Cardio details: distance, level/incline, heart rate (SCHEMA CHANGE)
 ```
 One item: store distance, level/incline and average heart rate for cardio entries logged in a strength session (approved by Hein). Optional fields with defaults (CloudKit-compatible, no unique constraints), on the logged entry. The cardio row shows Minutes plus Distance (mi/km by units), Level or Incline (whichever the machine uses) and avg heart rate (filled from Watch/strap when connected, else editable). They show on the done screen and overview; distance and heart rate go to Health with the cardio segment. Teen rules unchanged.
+Also (data, no schema): Long Run, Tempo Run and the other running sessions are activities, not treadmill-only: tag them so they show outdoors and at home as well as on a treadmill (they log the same minutes/distance either way).
 Run the schema check and list the exact new fields; run the schema seed in Development on the simulator (not my iPhone) and STOP before any upload so Hein can deploy to Production.
 Work in this chat, no helper agents. Run only this area's tests, commit, back up. STOP and report.
 ```
