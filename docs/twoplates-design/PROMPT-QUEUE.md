@@ -12,7 +12,7 @@ Kept by the designer. Send one prompt at a time, only when the agent has stopped
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
 ```
 
-## ☐ 1 · Muscle-group alignment (all 582 exercises)
+## ☑ 1 · Muscle-group alignment (all 582 exercises) — done e59ed9d8
 ```
 One item: muscle-group alignment for the exercise library (all 582).
 Problem: lists show every exercise that touches a muscle. Example on Glutes: Dumbbell Back Extension, Dumbbell Cross Body Romanian Deadlift, Deficit Deadlift appear as glute exercises.
@@ -33,6 +33,26 @@ One item only. Work in this chat, no helper agents. Run only this area's tests, 
 ```
 *After: send the unclear list to the designer for rulings.*
 
+## ☐ 1a · Rulings on the 61 unclear exercises (+ verify the 20261123.1 archive)
+```
+Two small things.
+A. Verify the 20261123.1 archive from the tool outage: check both iCloud containers in the signature and open it in Organizer. Report the build number.
+B. One item: apply the designer's rulings on the 61 unclear exercises (update scripts/exercise-groups.py rules and docs/EXERCISE-GROUPS-AUDIT.md):
+- New area "Full body" (tab between Core and Cardio): all Olympic lifts and their variants (cleans, snatches, jerks, high pulls, clean & press), thrusters, Wall Ball, Man Maker, Turkish get-up. Secondary: legs, glutes, shoulders, back as they apply. Snatch-Grip Deadlift stays Legs/hamstrings.
+- Face pulls → Shoulders (rear delts), secondary upper back. Upright rows → Shoulders (side delts), secondary traps. Prone Y-T Raises → Shoulders (rear delts), secondary upper back.
+- Bench Dips and Machine Dips → Arms (triceps), secondary chest. Parallel Bar Dips → Chest, secondary triceps.
+- Close-grip bench (barbell, Smith), Diamond and Close-Grip Push-Up → Arms (triceps), secondary chest.
+- Sumo Deadlift and Kettlebell Sumo Deadlift → Glutes, secondary hamstrings, quads, adductors. Smith Sumo RDL → Legs (hamstrings), secondary glutes. Dumbbell Sumo Squat → Legs (quads), secondary glutes, adductors.
+- Kettlebell Swing, Band and Cable Pull-Through → Glutes, secondary hamstrings.
+- Barbell Rack Pull → Back (upper back), secondary glutes, hamstrings.
+- Carries (farmer, suitcase, trap-bar) → Core, secondary forearms, traps. Windmills → Core (obliques), secondary shoulders. Renegade Rows → Back, secondary core.
+- Machine Hip Adduction → Legs (adductors; add adductors as a muscle within Legs).
+- Dead Hang and Plate Pinch → Arms (forearms). Tate Press and Single-Arm Overhead Cable Extension → Arms (triceps).
+- Sled Push, Sled Pull, Sled Push/Pull → Cardio (conditioning), secondary legs (consistent with item 1b).
+Update the Add exercise tab order everywhere to: All, Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Full body, Cardio. Core tests for each ruling group; the generator places Full body moves only in power/finisher slots, never as a bodybuilding main lift.
+Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 1b · Cardio area shows all cardio (about 40, not 5)
 ```
 One item: the Cardio tab in Add exercise shows only 5 exercises (Arc Trainer, Incline Treadmill Walk, Long Run, Tempo Run, VersaClimber), but the library has about 40 cardio/conditioning items (treadmill, elliptical, stair climber, rowing ×3, air bike, indoor cycling and the cycling sessions, ski machine, running sessions, jump rope, jumping jacks, burpees, mountain climbers, box jumps, squat thrusts, shadow boxing, bear crawl, battle ropes, sled push/pull, swimming).
@@ -47,7 +67,7 @@ One item only. Work in this chat, no helper agents. Run only this area's tests, 
 ## ☐ 2 · Add exercise: all group tabs visible, and cardio mid-workout
 ```
 One item: Add exercise during a workout, the group tabs.
-1. The tab row is scrolled so "Cardio" is cut off on the left ("…ardio"). Tabs start at the left with All first, in this order: All, Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Cardio. The selected tab always scrolls into view. Same order everywhere the library shows areas.
+1. The tab row is scrolled so "Cardio" is cut off on the left ("…ardio"). Tabs start at the left with All first, in this order: All, Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Full body, Cardio. The selected tab always scrolls into view. Same order everywhere the library shows areas.
 2. Adding a cardio item mid-workout (treadmill, bike, rower, stairs, elliptical, jump rope): the row logs minutes, plus distance, level/incline and heart rate where they apply; never reps × weight. A quick start of 5, 10 or 15 min. It counts in the session's time and totals and is written to Health as a segment of the same workout. Teen rules unchanged.
 UI tests: Cardio visible without scrolling the tab row back; add a 10 min treadmill to a strength session, log it, and it appears in the done screen and overview.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
