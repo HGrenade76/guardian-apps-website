@@ -135,6 +135,17 @@ Unit tests for the ring and the roll-over across Sunday midnight; UI test for Me
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8e · Finished session: overview everywhere, per-exercise stat card
+```
+One item: finished session detail.
+1. Every way into a finished session (Progress list, All sessions, Home, notifications, Health link) opens the session overview from SPEC-UPDATE-34 item 12 / mockup 36-session-overview, never the old set-by-set page. Find any entry point still using the old page.
+2. In the overview, tapping an exercise row expands a stat card: this session's best set, sets and volume, PR badge if set; a mini line chart of best set (or estimated load for adults, reps for teens) over the last 12 weeks with today highlighted; "vs last time: +10 lb / +2 reps" (last time = the previous session with that exercise, never the same day); "All sets ›" opens the editable set table.
+3. Fix "Last time" on the set table to the previous session (it showed Nov 20 sets on the Nov 20 session).
+Teen rules: no estimated 1RM, reps instead of load where required.
+UI test from each entry point; unit test for last time.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
