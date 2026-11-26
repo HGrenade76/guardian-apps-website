@@ -1,6 +1,6 @@
 # TwoPlates — prompt queue (in order)
 
-Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 6–8 added).
+Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 1b, 6–8 added).
 
 **Footer used on every item** (already included below):
 > One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
@@ -32,6 +32,17 @@ Assign by movement pattern:
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report, and send me the unclear list.
 ```
 *After: send the unclear list to the designer for rulings.*
+
+## ☐ 1b · Cardio area shows all cardio (about 40, not 5)
+```
+One item: the Cardio tab in Add exercise shows only 5 exercises (Arc Trainer, Incline Treadmill Walk, Long Run, Tempo Run, VersaClimber), but the library has about 40 cardio/conditioning items (treadmill, elliptical, stair climber, rowing ×3, air bike, indoor cycling and the cycling sessions, ski machine, running sessions, jump rope, jumping jacks, burpees, mountain climbers, box jumps, squat thrusts, shadow boxing, bear crawl, battle ropes, sled push/pull, swimming).
+- Cardio is an area of its own: every exercise with category cardio, or a conditioning/finisher slot that is a whole-body cardio movement, has primary area Cardio (muscle groups stay as secondary for weekly volume).
+- Group the Cardio list: Machines · Running · Cycling · Rowing · No equipment · Conditioning · Swimming. Machines needing a gym show only when the person trains at a gym (or under Show all equipment).
+- Find why "Add to Lower" showed only 5 (day filter, equipment filter or area mapping) and make the Cardio tab show all that fit the person's kit, in every place the library appears.
+- Cardio items log minutes (plus distance, level, heart rate), never reps × weight (same as item 2).
+Core test: the Cardio area at a gym returns at least 35 items; at home with no machines it returns the no-equipment, running and swimming ones.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
 
 ## ☐ 2 · Add exercise: all group tabs visible, and cardio mid-workout
 ```
