@@ -1,6 +1,6 @@
 # TwoPlates — prompt queue (in order)
 
-Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 1b, 6–8 added).
+Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 1b, 6–8b added).
 
 **Footer used on every item** (already included below):
 > One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
@@ -102,6 +102,16 @@ One item: Train › Programs looks flat. git pull in ~/TwoPlatesTools/design-dro
 - Pick a goal and My own: plain rows with a 64 pt equipment picture on the left, small caps category, name, weeks · days; chevron, or a "Start" outline button for an unstarted own program. Pictures never overlap the text.
 - "+ Build my own program" moves into the MY OWN section label as "+ Build".
 Snapshot test Light and Dark.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
+## ☐ 8b · Program builder day rows: pictures, grammar, gentle checks
+```
+One item: program builder day rows (New program / Your program).
+1. The picture strip: always up to 3 pictures of the day's first exercises, plus a "+N" badge when there are more; never skip duplicates or missing pictures silently (use a placeholder). Upper with 7 exercises showed only 2 pictures.
+2. Grammar: "1 exercise" (singular), everywhere counts appear.
+3. Gentle checks on own programs, shown under the day row, never blocking: a day named Cardio with no cardio-area exercise → "No cardio exercises yet · Add"; a day named Core/Upper/Lower/Legs/Push/Pull whose exercises mostly belong elsewhere → "Most exercises here aren't <area> · Review"; a day with 1–2 exercises → "Only 1 exercise · Add more?".
+Snapshot and unit tests.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
