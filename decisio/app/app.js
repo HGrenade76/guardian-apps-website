@@ -348,16 +348,22 @@
       apply(data);
       showApp();
     } catch (e) {
-      console.error(e);
+      console.error("DECISIO load error", e);
+      const code = errText(e);
       if (authErr(e)) {
         return gate("iCloud web access is turned off",
           "Apple is blocking web access to your iCloud data. This is usually because Advanced Data Protection is on. Follow the steps below, then sign in again.",
-          '<button class="btn primary block" id="retry">I turned it on, try again</button>' + signOutLink(), "open");
+          '<button class="btn primary block" id="retry">I turned it on, try again</button>' + signOutLink() + code, "open");
       }
       gate("Couldn't reach iCloud", "Check your connection and try again. If it keeps happening, sign out and back in.",
-        '<button class="btn primary block" id="retry">Try again</button>' + signOutLink(), true);
+        '<button class="btn primary block" id="retry">Try again</button>' + signOutLink() + code, true);
     }
   }
+  // Shown small under the buttons so a screenshot tells us exactly what CloudKit said.
+  const errText = (e) => {
+    const parts = [e && (e.ckErrorCode || e.serverErrorCode), e && (e.reason || e.message)].filter(Boolean);
+    return parts.length ? `<p class="fine">Details: ${esc(parts.join(" · ").slice(0, 200))}</p>` : "";
+  };
   const signOutLink = () => '<button class="btn block" id="gate-out">Sign out</button>';
 
   function initCloud() {
@@ -383,7 +389,12 @@
       $("#apple-sign-in-button").hidden = false;
       c.whenUserSignsIn().then(signedIn);
     };
-    c.setUpAuth().then((id) => (id ? signedIn(id) : waitIn())).catch((e) => { waitIn(); if (authErr(e)) $("#gate-help").open = true; });
+    // setUpAuth only fails when the token or container setup is wrong, before the person has done anything.
+    c.setUpAuth().then((id) => (id ? signedIn(id) : waitIn())).catch((e) => {
+      console.error("DECISIO setUpAuth error", e);
+      gate("Sign-in isn't available right now", "We couldn't start Apple sign-in for DECISIO. Please try again in a few minutes.",
+        '<button class="btn primary block" id="retry">Try again</button>' + errText(e));
+    });
     c.whenUserSignsOut().then(() => location.reload());
   }
 
