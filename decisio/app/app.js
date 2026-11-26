@@ -220,6 +220,24 @@
       } catch (e) { return { url }; }
     },
 
+    // Delete a meeting the way the app does (SessionModel's cascade rule): the session and every action,
+    // decision and risk attached to it, stray copies included. The audio file in iCloud Drive is left
+    // alone, as the app's own delete does.
+    async deleteSession(rec) {
+      const kids = Object.values(this._recs).filter((r) =>
+        ["CD_ActionModel", "CD_DecisionModel", "CD_RiskModel"].includes(r.recordType) && F(r, "session") === rec).map((r) => r.recordName);
+      const names = [...kids, rec];
+      for (let i = 0; i < names.length; i += 200) {
+        const res = await this.db.deleteRecords(names.slice(i, i + 200).map((n) => ({ recordName: n })), { zoneID: ZONE });
+        if (res.hasErrors) {
+          const bad = res.errors.filter((e) => !/NOT_FOUND/.test(e.ckErrorCode || e.serverErrorCode || ""));
+          if (bad.length) throw bad[0];
+        }
+      }
+      names.forEach((n) => delete this._recs[n]);
+      return this.build();
+    },
+
     async saveDecision(d, changes) {
       const fields = {};
       if ("status" in changes) fields.CD_statusRaw = { value: changes.status, type: "STRING" };
@@ -312,6 +330,10 @@
       },
       async saveAction(a, changes) { const t = S.actions.find((x) => x.rec === a.rec); return Object.assign({}, t, changes); },
       async saveDecision(d, changes) { return Object.assign({}, d, changes); },
+      async deleteSession(rec) {
+        const keep = (x) => x.session !== rec;
+        return { sessions: S.sessions.filter((s) => s.rec !== rec), actions: S.actions.filter(keep), decisions: S.decisions.filter(keep), risks: S.risks.filter(keep) };
+      },
     };
   })();
 
@@ -674,6 +696,22 @@
   }
   function hideOwners() { const ul = $("#owner-list"); if (ul) ul.hidden = true; const i = $("#f-owner"); if (i) i.setAttribute("aria-expanded", "false"); }
 
+  async function deleteSession(rec, btn) {
+    const s = sess(rec); if (!s) return;
+    btn.disabled = true; btn.textContent = "Deleting…";
+    S.dirty = true;
+    try {
+      apply(await S.source.deleteSession(rec));
+      S.confirmDelete = null; S.selected = null; S.selectedSession = null;
+      toast(`"${s.title}" deleted.`);
+      location.hash = "#/sessions";
+    } catch (e) {
+      console.error(e);
+      toast(authErr(e) ? "Your sign-in expired. Reload and sign in again." : "Couldn't delete. Check your connection and try again.");
+      btn.disabled = false; btn.textContent = "Delete meeting";
+    } finally { S.dirty = false; render(); }
+  }
+
   function csv() {
     const rows = actionsFiltered();
     const q = (v) => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
@@ -730,6 +768,10 @@
         <div id="tx" class="transcript" style="margin-top:10px"><div class="spin"></div></div>
       </div>
       ${s.hasAudio ? '<div class="banner">Recording playback on the web is coming soon. For now, play this recording in DECISIO on your iPhone or iPad.</div>' : ""}
+      <div class="danger">${S.confirmDelete === s.rec
+        ? `<p><b>Delete this meeting?</b> ${acts.length || decs.length ? `Its ${[acts.length && `${acts.length} action${acts.length > 1 ? "s" : ""}`, decs.length && `${decs.length} decision${decs.length > 1 ? "s" : ""}`].filter(Boolean).join(" and ")} will be deleted too. ` : ""}This removes it from all your devices and can't be undone.</p>
+           <div class="row-btns"><button class="btn danger-btn" data-delete-yes="${esc(s.rec)}">Delete meeting</button><button class="btn" data-delete-no>Cancel</button></div>`
+        : `<button class="btn" data-delete="${esc(s.rec)}">Delete meeting</button>`}</div>
     </div>`;
   }
 
@@ -808,6 +850,11 @@
       }
       S.selectedAction = rec; render(); return;
     }
+    const dl = t.closest("[data-delete]");
+    if (dl) { S.confirmDelete = dl.dataset.delete; render(); const d = document.querySelector(".danger"); if (d) d.scrollIntoView({ block: "center" }); return; }
+    if (t.closest("[data-delete-no]")) { S.confirmDelete = null; render(); return; }
+    const dy = t.closest("[data-delete-yes]");
+    if (dy) { deleteSession(dy.dataset.deleteYes, dy); return; }
     const cf = t.closest("[data-confirm]");
     if (cf) { const a = S.actions.find((x) => x.rec === cf.dataset.confirm); if (a) updateAction(a, { confirm: true }); return; }
     const tx = t.closest("[data-tx]");
