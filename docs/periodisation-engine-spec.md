@@ -234,3 +234,11 @@ Every session length the app shows (program day, Quick start, Surprise me, Make 
 ## Rules added 21 Nov 2026 (mirrors the twoplates-ios copy)
 1. **Logged sets are never deleted by a flow action.** Restart keeps every logged set and the start time; Remove buddy keeps that person's sessions on the phone ("with <name> (removed)"); Move or Skip on a day with logged sets finishes and saves what was logged; only a session with no logged sets may be discarded.
 2. **§4 teen permissions default:** after a move to a new container or any loss of the guardian's approval record, every teen permission is off until the guardian approves again; old values on the phone never switch anything on. The guardian sees "Review <teen>'s permissions" until saved. *Pending review panel sign-off.*
+
+## Rules added 26 Nov 2026 (mirrors the twoplates-ios copy, §7): Full body moves and the area order
+- Olympic lifts and their variants (cleans, snatches, jerks, high pulls, clean & press), thrusters, Wall Ball, Man Maker and the Turkish get-up are **Full body** moves. The generator places them only in a finisher/power slot, never as a main lift, even when one is a favourite. Snatch-Grip Deadlift stays a hinge (Legs/hamstrings).
+- Teens see only the teen-permitted ones (§4 unchanged).
+- Sled push and pull are cardio, timed in minutes. Adductors are a muscle within Legs.
+- Every exercise has exactly one primary area; secondary areas count half toward weekly volume.
+- Area order everywhere: Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Full body, Cardio.
+- Nothing in §4, §8 or §9 changes.
