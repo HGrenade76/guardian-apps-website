@@ -115,6 +115,17 @@ Snapshot and unit tests.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8c · Program builder: suggestions for an empty day
+```
+One item: New program › a day with no exercises shows only "Add exercise". Make it helpful, using the person's own data:
+1. "Fill this day for me" (secondary button): builds the day from the day's name/focus (Full body, Upper, Lower, Push, Pull, Legs, Core, Cardio) using the person's logged exercises first (most used, then progressing), staples to cover every movement pattern the focus needs, their kit and level, the 7-exercise default cap and the time estimate. Never adds an exercise the person excluded or that isn't teen-permitted for a teen.
+2. "Suggested for <focus>": 5–6 rows, each with a picture, name, one reason line ("You do this often · last 135 × 8", "Progressing well · +10 lb this month", "Not trained in 3 weeks", "Covers hamstrings") and a + to add. Updates as exercises are added (no duplicates, fills gaps first).
+3. "Copy a past session": pick a logged session from the last 4 weeks to fill the day with its exercises.
+4. The day's time estimate updates live. Nothing is added without a tap.
+Core tests: Full body fill covers push, pull, squat, hinge and core from history; suggestions never repeat an added exercise; teen rules respected.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
