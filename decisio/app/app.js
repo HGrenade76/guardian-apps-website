@@ -522,6 +522,7 @@
     const typing = document.activeElement && document.activeElement.id === "q";
     $("#main").innerHTML = (S.demo ? '<div class="demo-bar">You\'re looking at sample data. Sign in to see your own meetings.</div>' : "") + views[S.view]();
     if (S.view === "sessions" && S.selected) loadTranscript();
+    if (S.scrollToSel) { S.scrollToSel = false; const r = document.querySelector(".row.sel"); if (r) r.scrollIntoView({ block: "nearest" }); }
     const q = $("#q");
     if (q && typing) { q.focus(); const v = q.value; q.value = ""; q.value = v; }
   }
@@ -770,12 +771,23 @@
     }
     if (!Object.keys(changes).length) return toast("Nothing new to save. Your changes are already synced.");
     S.dirty = true;
+    // Remember where this action sat, so if the save takes it out of the list we can move on to the next one.
+    const before = S.view === "actions" ? actionsFiltered().map((x) => x.rec) : [];
+    const pos = before.indexOf(a.rec);
     try {
       const updated = await S.source.saveAction(a, changes);
       Object.assign(a, updated);
       S.actions.sort(actionSort);
       toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed." : "Saved. It'll sync to your iPhone.");
       if (changes.status) await autoResolve(a.session);
+      if (S.view === "actions" && pos >= 0 && (S.selectedAction === a.rec || changes.status === "Done")) {
+        const after = actionsFiltered();
+        if (!after.some((x) => x.rec === a.rec)) {
+          const next = after[Math.min(pos, after.length - 1)];
+          S.selectedAction = next ? next.rec : null;
+          S.scrollToSel = true;
+        }
+      }
     } catch (e) {
       console.error(e);
       toast(authErr(e) ? "Your sign-in expired. Reload and sign in again." : "Couldn't save. Check your connection and try again.");
