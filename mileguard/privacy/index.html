@@ -107,7 +107,7 @@
   <div class="eyebrow">Legal</div>
   <h1>MileGuard Privacy <strong>Policy</strong></h1>
   <div class="meta">
-    <div class="meta-item">Guardian Apps LLC · Effective <span>November 23, 2026</span></div>
+    <div class="meta-item">Guardian Apps LLC · Effective <span>November 26, 2026</span></div>
   </div>
 </div>
 
@@ -135,12 +135,13 @@
     <div class="legal-section" id="mg-what-mileguard-collects-and-why">
 <h2>What MileGuard collects and why</h2>
 <ul>
-  <li><strong>Location while you drive.</strong> MileGuard uses your iPhone's location to record the route and distance of each drive. It asks for "Always" access so drives are recorded when the app is closed. Location is only recorded during a drive, not while you're parked or walking.</li>
+  <li><strong>Location while you drive.</strong> MileGuard uses your iPhone's location to record the route and distance of each drive. It asks for "Always" access so drives are recorded when the app is closed. Location is only recorded during a drive, not while you're parked or walking. When your car connects, the app briefly watches GPS speed (for up to 10 minutes) so the drive starts when you pull away; those readings stay on your iPhone and are not kept.</li>
+  <li><strong>Your car's name.</strong> MileGuard reads the name of the car connected by CarPlay or Bluetooth (for example "RAM 1500") to start drives only in your own cars and to pick the right vehicle. The names of your cars are saved with your settings in your iCloud. Headphones are ignored.</li>
   <li><strong>Motion activity.</strong> Motion data tells MileGuard when you start and stop driving. It is used on your iPhone only and never leaves it.</li>
   <li><strong>What you enter.</strong> Trip purposes, clients, toll and parking amounts, business meals and who was there, fuel and car costs, receipt photos, saved places, vehicles (including plate number, VIN and usual driver), odometer readings, your name and business name (for your reports), an email address for your monthly report, and your settings.</li>
   <li><strong>Camera and photos.</strong> Used only when you photograph or pick a receipt. The photo is stored with the drive or cost it belongs to.</li>
   <li><strong>Contacts.</strong> Used only when you pick a vehicle's usual driver. MileGuard receives the one contact you choose and keeps just the name.</li>
-  <li><strong>Toll statements you import.</strong> When you import a CSV from your toll provider, it is read on your iPhone to match tolls to drives. The file itself is not uploaded anywhere.</li>
+  <li><strong>Statements you import.</strong> When you import a CSV from your toll provider, or a fuel or card statement, it is read on your iPhone to match tolls and fill-ups to drives. The file itself is not uploaded anywhere.</li>
 </ul>
     </div>
     <div class="legal-section" id="mg-where-your-data-is-kept">
@@ -168,7 +169,7 @@
 <p>MileGuard uses a small Guardian Apps server for the checks below. None of them involves an account, and nothing is linked to your name. Each request is signed with Apple's App Attest, which proves it comes from the genuine MileGuard app without identifying you.</p>
 <ul>
   <li><strong>Toll check.</strong> For drives you mark as Business, the app sends the drive's route points (latitude, longitude and time) to our server to check whether the route used a toll road. Our server passes a sample of those points to the OpenStreetMap Overpass service (<a href="https://wiki.osmfoundation.org/wiki/Privacy_Policy">privacy policy</a>) to look up toll roads. If toll pricing is enabled, the route may also be sent to Google's Routes API to estimate the toll amount (<a href="https://policies.google.com/privacy">privacy policy</a>). Routes are processed in memory to answer the request and are not stored by us. You can turn this off in Settings → Tolls.</li>
-  <li><strong>Speed-limit check (driving score).</strong> If driving insights are on, the app sends points from the faster parts of a drive (latitude, longitude and time) to our server, which looks up posted speed limits from OpenStreetMap Overpass. The points are processed in memory and not stored. Your driving score, hard braking and speeding events are worked out and kept on your iPhone and in your own iCloud; we never see them. You can turn this off in Settings → Driving insights.</li>
+  <li><strong>Speed-limit check (driving score).</strong> If driving insights are on, the app sends points from the faster parts of a drive (latitude, longitude and time) to our server, which looks up posted speed limits from OpenStreetMap Overpass. The points are processed in memory and not stored. Your driving score, hard braking and speeding events are worked out and kept on your iPhone and in your own iCloud; we never see them. You can turn this off in Settings → Driving insights. If the check can't finish right after a drive (no signal, for example), those points are kept with the drive in your own iCloud and the check is retried the next time you open the app, for up to 30 days, then removed.</li>
   <li><strong>Mileage rates.</strong> The app downloads the current official mileage rates. No personal data is sent.</li>
   <li><strong>In-car display.</strong> When a drive starts, the app sends our server a push token and the drive's start time so Apple's push service can show the drive on your lock screen and CarPlay Dashboard. The token is used for that one notification and is not stored.</li>
 </ul>
@@ -198,6 +199,8 @@
     <div class="legal-section" id="mg-your-rights">
 <h2>Your rights</h2>
 <p>Depending on where you live, you may have the right to know what personal information is processed about you, to ask for it to be corrected or deleted, and to opt out of its sale. We don't sell personal information, and almost everything MileGuard handles is under your control on your own devices. Contact us for anything else and we'll respond within 30 days.</p>
+<p><strong>United Kingdom.</strong> Guardian Apps LLC is the controller for the small amount of data our server handles. We process route points for the toll and speed-limit checks because you asked for those features (legitimate interests and providing the service you requested, under the UK GDPR). Our server is in the United States, so those points are processed there, briefly and without being stored. You can ask us for access, correction or deletion, object to processing, or complain to the Information Commissioner's Office (<a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">ico.org.uk</a>).</p>
+<p><strong>Canada.</strong> We handle personal information in line with PIPEDA and only for the purposes described here. Route points for the toll and speed-limit checks are processed in the United States and not stored. You can ask for access or correction, and you can complain to the Office of the Privacy Commissioner of Canada (<a href="https://www.priv.gc.ca/en/report-a-concern/" target="_blank" rel="noopener">priv.gc.ca</a>). In Quebec, you also have the rights under Law 25; our person in charge of personal information is reachable at support@gap-apps.com.</p>
     </div>
     <div class="legal-section" id="mg-changes">
 <h2>Changes</h2>
