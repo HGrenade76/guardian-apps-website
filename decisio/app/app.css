@@ -172,10 +172,11 @@ select.sel{height:38px;border:1px solid #D5DAE3;border-radius:10px;background:#f
 .ft .row{padding:9px 2px}
 .name-form label{display:block;font-weight:600;margin:6px 0 8px}
 .name-form input{height:38px;border:1px solid #D5DAE3;border-radius:9px;padding:0 10px;min-width:260px}
-/* Apple's sign-in button draws at its own fixed size inside our box; give it room and centre it. */
-#apple-sign-in-button{width:100%;display:flex;justify-content:center}
-#apple-sign-in-button > *{width:280px!important;max-width:100%;min-height:48px;margin:0 auto!important;display:flex!important;align-items:center;justify-content:center;border-radius:10px;overflow:hidden}
-#apple-sign-in-button iframe,#apple-sign-in-button svg,#apple-sign-in-button img{max-width:100%}
+/* Apple's own sign-in control sits off-screen; our button forwards the click to it (same trick as sign-out). */
+.ck-hidden{position:absolute!important;left:-9999px!important;top:0;width:300px}
+.apple-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;width:280px;max-width:100%;height:48px;border:0;border-radius:10px;background:#000;color:#fff;font-size:16px;font-weight:600;cursor:pointer;transition:background .15s}
+.apple-btn:hover{background:#1c1c1e}
+.apple-btn svg{width:18px;height:18px;fill:#fff}
 .gate{position:relative}
 .gate-home{position:absolute;top:22px;left:5%;display:inline-flex;align-items:center;gap:.55rem;color:#EAF0F8;text-decoration:none;font-weight:600;font-size:1.05rem;letter-spacing:-.01em;opacity:.9;transition:opacity .2s}
 .gate-home:hover{opacity:1}

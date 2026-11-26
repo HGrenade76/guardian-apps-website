@@ -410,6 +410,7 @@
     S.user = nc && (nc.givenName || nc.familyName) ? [nc.givenName, nc.familyName].filter(Boolean).join(" ") : "Signed in";
     gate("Opening your meetings…", "Reading from your iCloud.", '<div class="spin"></div>');
     $("#apple-sign-in-button").hidden = true;
+    $("#apple-go").hidden = true;
     try {
       await S.source.start();
       const data = await S.source.load();
@@ -439,6 +440,20 @@
   };
   const signOutLink = () => '<button class="btn block" id="gate-out">Sign out</button>';
 
+  // Our own button, forwarding to Apple's control. If Apple's control can't be found, show Apple's instead.
+  function appleTarget() { const box = $("#apple-sign-in-button"); return box && (box.querySelector('[role="button"],button,a') || box.firstElementChild); }
+  function showAppleGo() {
+    let tries = 0;
+    (function wait() {
+      const t = appleTarget();
+      // A click can't be forwarded into a cross-origin frame; in that case just show Apple's own button.
+      if (t && t.tagName !== "IFRAME" && !t.querySelector("iframe")) { $("#apple-go").hidden = false; return; }
+      if (t) { $("#apple-sign-in-button").classList.remove("ck-hidden"); return; }
+      if (++tries < 40) return setTimeout(wait, 100);
+      $("#apple-sign-in-button").classList.remove("ck-hidden");
+    })();
+  }
+
   function initCloud() {
     if (S.source) return;
     if (!CFG.apiToken) {
@@ -460,6 +475,7 @@
       gate("Your meetings, on a bigger screen",
         "See your actions, decisions and meeting records from any computer. Sign in with the Apple ID you use on your iPhone.", "", true);
       $("#apple-sign-in-button").hidden = false;
+      showAppleGo();
       c.whenUserSignsIn().then(signedIn);
     };
     // setUpAuth only fails when the token or container setup is wrong, before the person has done anything.
@@ -962,6 +978,7 @@
   document.addEventListener("click", (e) => {
     const t = e.target;
     if (t.closest("#retry")) return location.reload();
+    if (t.closest("#apple-go")) { const target = appleTarget(); if (target) target.click(); return; }
     const tg = t.closest("[data-toggle]");
     if (tg) {
       e.preventDefault(); e.stopPropagation();

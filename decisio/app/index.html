@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css?v=202611262230">
+<link rel="stylesheet" href="app.css?v=202611262300">
 </head>
 <body>
 
@@ -23,7 +23,8 @@
     <img src="/assets/brand/decisio-mark-128.webp" alt="DECISIO app icon" width="64" height="64">
     <h1 id="gate-title">Your meetings, on a bigger screen</h1>
     <p id="gate-text">See your actions, decisions and meeting records from any computer. Sign in with the Apple ID you use on your iPhone.</p>
-    <div id="apple-sign-in-button" class="ck-btn"></div>
+    <button type="button" id="apple-go" class="apple-btn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3z"/></svg>Sign in with Apple ID</button>
+    <div id="apple-sign-in-button" class="ck-btn ck-hidden" aria-hidden="true"></div>
     <div id="gate-actions" class="gate-actions"></div>
 
     <details id="gate-help" class="help" hidden>
@@ -84,7 +85,7 @@
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="config.js?v=202611261500"></script>
-<script src="app.js?v=202611262130"></script>
+<script src="app.js?v=202611262310"></script>
 <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
 </body>
 </html>
