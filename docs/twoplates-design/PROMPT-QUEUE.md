@@ -73,7 +73,7 @@ UI tests: Cardio visible without scrolling the tab row back; add a 10 min treadm
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 2a · Cardio details: distance, level/incline, heart rate (SCHEMA CHANGE)
+## ☑ 2a · Cardio details: distance, level/incline, heart rate (SCHEMA CHANGE) — done cccaca04, deployed
 ```
 One item: store distance, level/incline and average heart rate for cardio entries logged in a strength session (approved by Hein). Optional fields with defaults (CloudKit-compatible, no unique constraints), on the logged entry. The cardio row shows Minutes plus Distance (mi/km by units), Level or Incline (whichever the machine uses) and avg heart rate (filled from Watch/strap when connected, else editable). They show on the done screen and overview; distance and heart rate go to Health with the cardio segment. Teen rules unchanged.
 Also (data, no schema): Long Run, Tempo Run and the other running sessions are activities, not treadmill-only: tag them so they show outdoors and at home as well as on a treadmill (they log the same minutes/distance either way).
@@ -81,7 +81,7 @@ Run the schema check and list the exact new fields; run the schema seed in Devel
 Work in this chat, no helper agents. Run only this area's tests, commit, back up. STOP and report.
 ```
 
-## ☐ 3 · Back button shows "Tr…"
+## ☑ 3 · Back button shows "Tr…" — done (system back reads "Back" in VoiceOver: accepted, iOS standard)
 ```
 One item: the back button on the set screen shows "Tr…" squeezed inside the round glass button. On every screen, the back button is the chevron only (no title text) in the round glass button, accessibility label "Back to <previous screen>". Check all pushed screens and the set screen. UI test on the set screen: back button has no truncated text and returns to the previous screen (workout keeps running, workout bar shows).
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
