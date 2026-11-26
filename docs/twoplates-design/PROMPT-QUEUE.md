@@ -1,6 +1,6 @@
 # TwoPlates — prompt queue (in order)
 
-Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 6–7 added).
+Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 6–8 added).
 
 **Footer used on every item** (already included below):
 > One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
@@ -82,7 +82,19 @@ One item: when the tab bar minimizes to its pill on scroll, the pill (bottom lef
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8 · Archive (after items 1–7)
+## ☐ 8 · Programs page: sections and separation
+```
+One item: Train › Programs looks flat. git pull in ~/TwoPlatesTools/design-drop and follow mockup 38-programs:
+- Photo header as on Pick a goal (if not already in the build).
+- Sections IN USE, PICK A GOAL (See all ›), MY OWN (+ Build) separated by a hairline with 16 pt space above each label.
+- In use: one white tile (12 pt radius) with week line in gold, name, "next" line, a gold progress bar and the day's illustration on the right, not overlapping text.
+- Pick a goal and My own: plain rows with a 64 pt equipment picture on the left, small caps category, name, weeks · days; chevron, or a "Start" outline button for an unstarted own program. Pictures never overlap the text.
+- "+ Build my own program" moves into the MY OWN section label as "+ Build".
+Snapshot test Light and Dark.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
+## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
 ```
