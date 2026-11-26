@@ -146,6 +146,17 @@ UI test from each entry point; unit test for last time.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8f · Visual-first data, app-wide (SPEC-UPDATE-36)
+```
+One item: apply SPEC-UPDATE-36 "Show, don't list". git pull in ~/TwoPlatesTools/design-drop first.
+1. Build shared chart components once (line with range picker, bars, ring/progress bar, heat map, muscle bars with green/amber/red, bars with target band, sparkline), each with a takeaway line, VoiceOver summary and a teaching empty state, using the fixed data colours.
+2. Go through the audit list in the spec screen by screen. Where a screen leads with a list or table, add its one leading visual and move raw tables one tap away. List every screen changed and every screen left as is with the reason.
+3. Teen rules: no body or calorie charts, no estimated-1RM lines.
+Snapshot tests for each component in Light and Dark; captures of every changed screen in Tools/agent-shots/visual-first/.
+This is a larger item: commit after the components, then after each group of screens, and back up each time.
+Work in this chat, no helper agents. Run only these areas' tests. Don't install on my iPhone. STOP and report with the captures.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
