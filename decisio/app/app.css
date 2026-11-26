@@ -172,3 +172,7 @@ select.sel{height:38px;border:1px solid #D5DAE3;border-radius:10px;background:#f
 .ft .row{padding:9px 2px}
 .name-form label{display:block;font-weight:600;margin:6px 0 8px}
 .name-form input{height:38px;border:1px solid #D5DAE3;border-radius:9px;padding:0 10px;min-width:260px}
+/* Apple's sign-in button draws at its own fixed size inside our box; give it room and centre it. */
+#apple-sign-in-button{width:100%;display:flex;justify-content:center}
+#apple-sign-in-button > *{width:280px!important;max-width:100%;min-height:48px;margin:0 auto!important;display:flex!important;align-items:center;justify-content:center;border-radius:10px;overflow:hidden}
+#apple-sign-in-button iframe,#apple-sign-in-button svg,#apple-sign-in-button img{max-width:100%}
