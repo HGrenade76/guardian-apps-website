@@ -458,6 +458,7 @@
   let lastSync = Date.now();
   window.addEventListener("focus", async () => {
     if (S.source !== Cloud || Date.now() - lastSync < 30000 || S.dirty) return;
+    if (document.activeElement && document.activeElement.closest("#action-form")) return;
     lastSync = Date.now();
     try { apply(await Cloud.load()); render(); } catch (e) { /* keep what's on screen */ }
   });
@@ -582,7 +583,7 @@
         <div class="m">${statusChip(a.status)}${prioChip(a.priority)}${a.due ? `<span class="${isOverdue(a) ? "chip red" : ""}">${esc(isOpen(a) ? relDue(a.due) : "Due " + fmtDate(a.due))}</span>` : ""}</div></div>
       <form id="action-form" class="kv">
         <label for="f-text">Action</label><textarea id="f-text" rows="2" required>${esc(a.text)}</textarea>
-        <label for="f-owner">Owner</label><input id="f-owner" list="owners" value="${esc(a.owner)}" placeholder="Who is responsible?">
+        <label for="f-owner">Owner</label><div class="combo"><input id="f-owner" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="owner-list" value="${esc(a.owner)}" placeholder="Who is responsible?"><ul id="owner-list" class="combo-list" role="listbox" hidden></ul></div>
         <label for="f-email">Owner email</label><input id="f-email" type="email" value="${esc(a.ownerEmail)}" placeholder="Optional">
         <label for="f-status">Status</label><select id="f-status">${st.map((x) => `<option ${x === a.status ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-prio">Priority</label><select id="f-prio">${pr.map((x) => `<option ${x === a.priority ? "selected" : ""}>${x}</option>`).join("")}</select>
@@ -592,7 +593,6 @@
         <label for="f-notes">Notes</label><textarea id="f-notes" rows="3" placeholder="Optional">${esc(a.notes)}</textarea>
         <span></span><div><button class="btn primary" type="submit" id="save">Save changes</button></div>
       </form>
-      <datalist id="owners">${[...new Set(S.actions.map((x) => x.owner).filter(Boolean))].sort().map((o) => `<option value="${esc(o)}">`).join("")}</datalist>
       <div class="kv">
         ${s ? `<label>From</label><div><a href="#/sessions/${encodeURIComponent(s.rec)}">${esc(s.title)}</a> · ${esc(fmtDate(s.date))}${a.timestamp && !/^0?0:00(:00)?$/.test(a.timestamp) ? ` · at ${esc(a.timestamp)}` : ""}</div>` : ""}
         <label>Date status</label><div>${a.due ? (a.confirmed ? '<span class="chip green">Confirmed</span>'
@@ -653,6 +653,26 @@
     }
     if (active.length) toast(`All actions complete. ${active.length === 1 ? "1 decision" : active.length + " decisions"} resolved.`);
   }
+
+  // Owner picker: everyone who owns an action or attended a meeting, like the app's known-people list.
+  function people() {
+    const seen = new Map();
+    for (const n of [...S.actions.map((a) => a.owner), ...S.sessions.flatMap((s) => s.participants)]) {
+      const t = (n || "").trim();
+      if (t && !seen.has(t.toLowerCase())) seen.set(t.toLowerCase(), t);
+    }
+    return [...seen.values()].sort((a, b) => a.localeCompare(b));
+  }
+  function showOwners(input) {
+    const ul = $("#owner-list"); if (!ul) return;
+    const q = input.value.trim().toLowerCase();
+    const hits = people().filter((n) => !q || n.toLowerCase().includes(q)).filter((n) => n.toLowerCase() !== q).slice(0, 8);
+    S.ownerIdx = -1;
+    ul.innerHTML = hits.map((n, i) => `<li role="option" data-owner="${esc(n)}" id="ow-${i}">${esc(n)}</li>`).join("");
+    ul.hidden = !hits.length;
+    input.setAttribute("aria-expanded", hits.length ? "true" : "false");
+  }
+  function hideOwners() { const ul = $("#owner-list"); if (ul) ul.hidden = true; const i = $("#f-owner"); if (i) i.setAttribute("aria-expanded", "false"); }
 
   function csv() {
     const rows = actionsFiltered();
@@ -809,7 +829,32 @@
     }
   });
 
+  document.addEventListener("focusin", (e) => { if (e.target.id === "f-owner") showOwners(e.target); });
+  document.addEventListener("focusout", (e) => { if (e.target.id === "f-owner") setTimeout(hideOwners, 120); });
+  // mousedown, not click, so the pick lands before the input loses focus
+  document.addEventListener("mousedown", (e) => {
+    const li = e.target.closest("[data-owner]");
+    if (!li) return;
+    e.preventDefault();
+    $("#f-owner").value = li.dataset.owner;
+    hideOwners();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target.id !== "f-owner") return;
+    const ul = $("#owner-list"); if (!ul || ul.hidden) return;
+    const items = [...ul.querySelectorAll("li")];
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      S.ownerIdx = (S.ownerIdx + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length;
+      items.forEach((li, i) => li.classList.toggle("on", i === S.ownerIdx));
+    } else if (e.key === "Enter" && S.ownerIdx >= 0) {
+      e.preventDefault();
+      e.target.value = items[S.ownerIdx].dataset.owner; hideOwners();
+    } else if (e.key === "Escape") hideOwners();
+  });
+
   document.addEventListener("input", (e) => {
+    if (e.target.id === "f-owner") showOwners(e.target);
     if (e.target.id === "q") { S.q = e.target.value; clearTimeout(S.qh); S.qh = setTimeout(render, 180); }
     if (e.target.id === "txq") { S.txQ = e.target.value; const s = sess(S.selected); if (s) paintTranscript(S.tx[s.rec + "|" + S.txMode]); }
   });
