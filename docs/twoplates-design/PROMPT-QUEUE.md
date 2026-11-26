@@ -157,6 +157,17 @@ This is a larger item: commit after the components, then after each group of scr
 Work in this chat, no helper agents. Run only these areas' tests. Don't install on my iPhone. STOP and report with the captures.
 ```
 
+## ☐ 8g · Guided program day names and kit
+```
+One item: guided program day names and kit, all 13 programs.
+1. Replace letter/number day names (Easy A/B/C, Day 1, Upper 1/2, Lower 1/2…) with names that say what is trained, from the day's primary muscle groups: e.g. Back to it: Easy A → "Legs & chest", Easy B → "Upper & hamstrings", Easy C → "Legs & back". Two days with the same focus get a second word saying how they differ ("Upper · heavy" / "Upper · volume", "Lower · squat" / "Lower · deadlift"). Max about 22 characters. No invented jargon.
+2. Each day row adds "N exercises · about M min" (from the single estimator).
+3. "What you need" lists the real kit from the program's exercises ("Dumbbells and a bench, or a gym"), never "Whatever you train with".
+4. Same naming rule for generated programs and Quick start titles. A person's own day names are never changed.
+Write the old → new day names per program in docs/PROGRAM-DAY-NAMES.md. Unit test: no guided day name is a bare letter or number.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 9 · Archive (after items 1–8)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
