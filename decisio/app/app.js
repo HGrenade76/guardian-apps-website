@@ -242,6 +242,10 @@
       const ts = (d) => ({ value: d ? d.getTime() : null, type: "TIMESTAMP" });
       if ("status" in changes) fields.CD_statusRaw = { value: changes.status, type: "STRING" };
       if ("priority" in changes) fields.CD_priorityRaw = { value: changes.priority, type: "STRING" };
+      if ("text" in changes) fields.CD_actionDescription = { value: changes.text, type: "STRING" };
+      if ("owner" in changes) fields.CD_owner = { value: changes.owner, type: "STRING" };
+      if ("ownerEmail" in changes) fields.CD_ownerEmail = { value: changes.ownerEmail || null, type: "STRING" };
+      if ("notes" in changes) fields.CD_notes = { value: changes.notes || null, type: "STRING" };
       if ("completed" in changes) fields.CD_completedDate = ts(changes.completed);
       if ("due" in changes) fields.CD_dueDate = ts(changes.due);
       if ("originalDue" in changes) fields.CD_originalDueDate = ts(changes.originalDue);
@@ -297,6 +301,7 @@
       risks: [{ rec: "r1", text: "Contractor onboarding gaps at two sites could lead to a recordable before Q2", type: "Stated", session: S1 }],
     };
     data.actions.forEach((a) => Object.assign(a, { reschedules: 0, confirmed: true, archived: false }));
+    data.actions[1].confirmed = false; // one AI-suggested date, to show the Confirm button
     return {
       async start() {},
       async load() { return JSON.parse(JSON.stringify(data), (k, v) => (typeof v === "string" && /^\d{4}-\d\d-\d\dT/.test(v) ? new Date(v) : v)); },
@@ -576,21 +581,26 @@
       <div class="head"><h2>${esc(a.text)}</h2>
         <div class="m">${statusChip(a.status)}${prioChip(a.priority)}${a.due ? `<span class="${isOverdue(a) ? "chip red" : ""}">${esc(isOpen(a) ? relDue(a.due) : "Due " + fmtDate(a.due))}</span>` : ""}</div></div>
       <form id="action-form" class="kv">
+        <label for="f-text">Action</label><textarea id="f-text" rows="2" required>${esc(a.text)}</textarea>
+        <label for="f-owner">Owner</label><input id="f-owner" list="owners" value="${esc(a.owner)}" placeholder="Who is responsible?">
+        <label for="f-email">Owner email</label><input id="f-email" type="email" value="${esc(a.ownerEmail)}" placeholder="Optional">
         <label for="f-status">Status</label><select id="f-status">${st.map((x) => `<option ${x === a.status ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-prio">Priority</label><select id="f-prio">${pr.map((x) => `<option ${x === a.priority ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-due">Due date</label><input id="f-due" type="date" value="${isoDay(a.due)}">
-        <label for="f-done" class="${a.status === "Done" ? "" : "dim"}">Completed on</label><div><input id="f-done" type="date" max="${isoDay(new Date())}" value="${isoDay(a.completed || (a.status === "Done" ? new Date() : null))}" ${a.status === "Done" ? "" : "disabled"}>
+        <label for="f-done" class="${a.status === "Done" ? "" : "dim"}">Completed on</label><div><input id="f-done" type="date" max="${isoDay(new Date())}" value="${a.status === "Done" ? isoDay(a.completed || new Date()) : ""}" ${a.status === "Done" ? "" : "disabled"}>
           <div class="hint">Used for your follow-through score. Set the day it was actually done, not the day you logged it.</div></div>
+        <label for="f-notes">Notes</label><textarea id="f-notes" rows="3" placeholder="Optional">${esc(a.notes)}</textarea>
         <span></span><div><button class="btn primary" type="submit" id="save">Save changes</button></div>
       </form>
+      <datalist id="owners">${[...new Set(S.actions.map((x) => x.owner).filter(Boolean))].sort().map((o) => `<option value="${esc(o)}">`).join("")}</datalist>
       <div class="kv">
-        ${a.owner ? `<label>Owner</label><div>${esc(a.owner)}${a.ownerEmail ? ` · <a href="mailto:${esc(a.ownerEmail)}">${esc(a.ownerEmail)}</a>` : ""}</div>` : ""}
-        ${s ? `<label>From</label><div><a href="#/sessions/${encodeURIComponent(s.rec)}">${esc(s.title)}</a> · ${esc(fmtDate(s.date))}${a.timestamp ? ` · at ${esc(a.timestamp)}` : ""}</div>` : ""}
-        <label>Date status</label><div>${a.due ? (a.confirmed ? "Confirmed" : "Suggested by AI, not yet confirmed") : "None"}</div>
+        ${s ? `<label>From</label><div><a href="#/sessions/${encodeURIComponent(s.rec)}">${esc(s.title)}</a> · ${esc(fmtDate(s.date))}${a.timestamp && !/^0?0:00(:00)?$/.test(a.timestamp) ? ` · at ${esc(a.timestamp)}` : ""}</div>` : ""}
+        <label>Date status</label><div>${a.due ? (a.confirmed ? '<span class="chip green">Confirmed</span>'
+          : `Suggested by AI, not yet confirmed <button type="button" class="btn sm" data-confirm="${esc(a.rec)}">Confirm date</button>
+             <div class="hint">Confirming makes this the date your follow-through score measures against.</div>`) : "No due date"}</div>
         ${a.reschedules ? `<label>Rescheduled</label><div>${a.reschedules} time${a.reschedules > 1 ? "s" : ""}${a.originalDue ? ` · first due ${esc(fmtDate(a.originalDue))}` : ""}</div>` : ""}
         ${a.completed && a.status === "Done" ? `<label>Completed</label><div>${esc(fmtDate(a.completed))}${(a.originalDue || a.due) ? (startOfDay(a.completed) > startOfDay(a.originalDue || a.due) ? ' <span class="chip red">Late</span>' : ' <span class="chip green">On time</span>') : ""}</div>` : ""}
       </div>
-      ${a.notes ? `<div><h3>Notes</h3><div class="note">${esc(a.notes)}</div></div>` : ""}
     </div>`;
   }
 
@@ -604,6 +614,11 @@
       if (isoDay(done) !== isoDay(a.completed)) changes.completed = done;
     } else if (a.completed) changes.completed = null;
     if (want.priority !== undefined && want.priority !== a.priority) changes.priority = want.priority;
+    for (const k of ["text", "owner", "ownerEmail", "notes"]) {
+      if (want[k] !== undefined && want[k].trim() !== (a[k] || "")) changes[k] = want[k].trim();
+    }
+    if (changes.text === "") return toast("The action can't be empty");
+    if (want.confirm && a.due && !a.confirmed) changes.confirmed = true;
     if (want.due !== undefined && isoDay(want.due) !== isoDay(a.due)) {
       changes.due = want.due;
       // Only a date the user stood behind becomes the bar; moving an AI-inferred date is a first commitment.
@@ -619,7 +634,7 @@
       const updated = await S.source.saveAction(a, changes);
       Object.assign(a, updated);
       S.actions.sort(actionSort);
-      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : "Saved. It'll sync to your iPhone.");
+      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed." : "Saved. It'll sync to your iPhone.");
       if (changes.status) await autoResolve(a.session);
     } catch (e) {
       console.error(e);
@@ -773,6 +788,8 @@
       }
       S.selectedAction = rec; render(); return;
     }
+    const cf = t.closest("[data-confirm]");
+    if (cf) { const a = S.actions.find((x) => x.rec === cf.dataset.confirm); if (a) updateAction(a, { confirm: true }); return; }
     const tx = t.closest("[data-tx]");
     if (tx) { e.preventDefault(); S.txMode = tx.dataset.tx; render(); return; }
     if (t.closest("#csv")) return csv();
@@ -813,7 +830,8 @@
     const v = $("#f-due").value;
     const due = v ? new Date(v + "T12:00:00") : null;
     const dv = $("#f-done").value;
-    updateAction(a, { status: $("#f-status").value, priority: $("#f-prio").value, due, completed: dv ? new Date(dv + "T12:00:00") : null });
+    updateAction(a, { text: $("#f-text").value, owner: $("#f-owner").value, ownerEmail: $("#f-email").value, notes: $("#f-notes").value,
+      status: $("#f-status").value, priority: $("#f-prio").value, due, completed: dv ? new Date(dv + "T12:00:00") : null });
   });
   boot();
 })();

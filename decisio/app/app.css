@@ -143,3 +143,6 @@ select.sel{height:38px;border:1px solid #D5DAE3;border-radius:10px;background:#f
 .kv label.dim{opacity:.45}
 .kv input:disabled{background:var(--bg);color:var(--sub)}
 .hint{font-size:12px;color:var(--sub);margin-top:4px;line-height:1.4}
+.kv textarea{border:1px solid #D5DAE3;border-radius:9px;padding:8px 10px;background:#fff;width:100%;resize:vertical;line-height:1.45;font:inherit}
+.kv textarea#f-text{font-weight:600}
+.kv label{align-self:start;padding-top:9px}
