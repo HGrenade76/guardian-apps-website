@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DECISIO on the web</title>
+<meta name="description" content="Your DECISIO actions, decisions and meeting records on a bigger screen.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A111E">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css?v=202611261200">
+</head>
+<body>
+
+<!-- Sign in -->
+<section id="gate" class="gate" hidden>
+  <div class="gate-card">
+    <img src="/assets/brand/decisio-mark-128.webp" alt="DECISIO app icon" width="64" height="64">
+    <h1 id="gate-title">Your meetings, on a bigger screen</h1>
+    <p id="gate-text">See your actions, decisions and meeting records from any computer. Sign in with the Apple ID you use on your iPhone.</p>
+    <div id="apple-sign-in-button" class="ck-btn"></div>
+    <div id="gate-actions" class="gate-actions"></div>
+
+    <details id="gate-help" class="help" hidden>
+      <summary>Can't sign in, or seeing "Authentication Error"?</summary>
+      <p>If you use <b>Advanced Data Protection</b>, Apple turns off web access to your iCloud data. Turn it back on once and you're set. Everything stays end-to-end encrypted.</p>
+      <div class="help-cols">
+        <div>
+          <b>On your iPhone</b>
+          <ol>
+            <li>Open <b>Settings</b></li>
+            <li>Tap <b>your name</b> at the top</li>
+            <li>Tap <b>iCloud</b></li>
+            <li>Scroll to the bottom and turn on <b>Access iCloud Data on the Web</b></li>
+            <li>Confirm with your passcode if asked</li>
+          </ol>
+        </div>
+        <div>
+          <b>Or on your Mac</b>
+          <ol>
+            <li>Open <b>System Settings</b></li>
+            <li>Click <b>your name</b> at the top of the sidebar</li>
+            <li>Click <b>iCloud</b></li>
+            <li>Turn on <b>Access iCloud Data on the Web</b></li>
+          </ol>
+        </div>
+      </div>
+      <p>Then come back here and sign in again. If your iPhone asks you to allow access, tap <b>Allow</b>.</p>
+      <p class="fine">Still stuck? Make sure you're signing in with the same Apple ID that's on your iPhone, and that iCloud is turned on for DECISIO (Settings → your name → iCloud → Saved to iCloud).</p>
+    </details>
+
+    <p class="fine">Your data is read from your own iCloud, in this browser. Guardian Apps never sees it.</p>
+    <p class="fine"><a href="/privacy.html">Privacy</a> · <a href="/decisio.html">About DECISIO</a> · <a href="?demo">See a demo</a></p>
+  </div>
+</section>
+
+<!-- App -->
+<div id="app" class="app" hidden>
+  <aside class="side">
+    <a class="brand" href="/decisio.html" title="About DECISIO"><img src="/assets/brand/decisio-mark-128.webp" alt="" width="34" height="34"><div><b>DECISIO</b><small>on the web</small></div></a>
+    <nav id="nav">
+      <a href="#/today" data-view="today"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9H3z"/></svg><span>Today</span></a>
+      <a href="#/actions" data-view="actions"><svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg><span>Actions</span><em id="badge" hidden></em></a>
+      <a href="#/sessions" data-view="sessions"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3"/></svg><span>Meetings</span></a>
+      <a href="#/decisions" data-view="decisions"><svg viewBox="0 0 24 24"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg><span>Decisions</span></a>
+    </nav>
+    <div class="who">
+      <b id="who-name">Signed in</b><br>
+      <span class="muted">Reading from your iCloud</span><br>
+      <a href="#" id="sign-out">Sign out</a>
+      <div id="apple-sign-out-button" class="ck-out" aria-hidden="true"></div>
+      <a href="#" id="demo-out" hidden>Leave demo</a>
+      <div class="home-link"><a href="/">← gap-apps.com</a></div>
+    </div>
+  </aside>
+  <main id="main" class="main" tabindex="-1"></main>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script src="config.js?v=202611261200"></script>
+<script src="app.js?v=202611261200"></script>
+<script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
+</body>
+</html>
