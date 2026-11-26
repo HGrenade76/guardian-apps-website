@@ -87,7 +87,7 @@ One item: the back button on the set screen shows "Tr…" squeezed inside the ro
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 4 · No brand names in exercise names
+## ☑ 4 · No brand names in exercise names — done
 ```
 One item: remove brand names from the exercise library (all 582), without inventing names.
 - Find every exercise name containing a brand or trademark (e.g. Hammer Strength, Life Fitness, Nautilus, Cybex, Technogym, Precor, Matrix, Concept2, SkiErg, Assault, StairMaster, TRX, BOSU, VersaClimber, Peloton, Jacobs Ladder, Smith only if paired with a brand).
@@ -97,6 +97,12 @@ One item: remove brand names from the exercise library (all 582), without invent
 - Logged history, PRs and programs keep pointing at the same exercise (rename only, same ID).
 Write docs/EXERCISE-BRAND-NAMES.md: old name → new name, and the undecided list. Core test: no displayed exercise name contains a brand from the list; search by old name finds the renamed exercise.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report, and send me the undecided list.
+```
+
+## ☐ 4a · Brand names in descriptions and history
+```
+4a. Brand names, follow-up: remove the brand from the descriptions, instructions and cues of the seven renamed exercises (e.g. "TRX" in the Suspension Trainer Row text), using the same generic terms. Logged history shows the exercise's current name (same id), so old "TRX Row" sessions read "Suspension Trainer Row". Core test: no brand from the list appears in any displayed exercise text.
+(Send together with item 5.)
 ```
 
 ## ☐ 5 · Plate-loaded machines say "Add plates"
