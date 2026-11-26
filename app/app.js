@@ -472,6 +472,7 @@
     S.user = nc && (nc.givenName || nc.familyName) ? [nc.givenName, nc.familyName].filter(Boolean).join(" ") : "Signed in";
     gate("Opening your drives…", "Reading from your iCloud.", '<div class="spin"></div>');
     $("#apple-sign-in-button").hidden = true;
+    $("#apple-go").hidden = true;
     try {
       await S.source.start();
       const [acc, data] = await Promise.all([S.source.access(), S.source.load()]);
@@ -511,6 +512,20 @@
   };
   const signOutLink = () => '<button class="btn block" id="gate-out">Sign out</button>';
 
+  // Our own button, forwarding to Apple's control. If Apple's control can't be found, show Apple's instead.
+  function appleTarget() { const box = $("#apple-sign-in-button"); return box && (box.querySelector('[role="button"],button,a') || box.firstElementChild); }
+  function showAppleGo() {
+    let tries = 0;
+    (function wait() {
+      const t = appleTarget();
+      // A click can't be forwarded into a cross-origin frame; in that case just show Apple's own button.
+      if (t && t.tagName !== "IFRAME" && !t.querySelector("iframe")) { $("#apple-go").hidden = false; return; }
+      if (t) { $("#apple-sign-in-button").classList.remove("ck-hidden"); return; }
+      if (++tries < 40) return setTimeout(wait, 100);
+      $("#apple-sign-in-button").classList.remove("ck-hidden");
+    })();
+  }
+
   function initCloud() {
     if (S.source) return;
     if (!CFG.apiToken) {
@@ -532,6 +547,7 @@
       gate("Your drives, on a bigger screen",
         "Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.", "", true);
       $("#apple-sign-in-button").hidden = false;
+      showAppleGo();
       c.whenUserSignsIn().then(signedIn);
     };
     c.setUpAuth().then((id) => (id ? signedIn(id) : waitIn())).catch(() => waitIn());
@@ -560,6 +576,7 @@
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("#retry")) location.reload();
+    if (e.target.closest("#apple-go")) { const t = appleTarget(); if (t) t.click(); return; }
     if (e.target.closest("#sign-out")) {
       e.preventDefault();
       // Apple's own sign-out control does the work; it sits off-screen so the sidebar keeps its look.

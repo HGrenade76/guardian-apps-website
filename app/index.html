@@ -12,17 +12,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css?v=202611261600">
+<link rel="stylesheet" href="app.css?v=202611261700">
 </head>
 <body>
 
 <!-- Sign in -->
 <section id="gate" class="gate" hidden>
+  <a class="gate-home" href="/" title="Back to gap-apps.com"><img src="/assets/brand/guardian-mark.svg" alt="" width="26" height="26">Guardian Apps</a>
   <div class="gate-card">
     <img src="/assets/mileguard/mg-icon-128.webp" alt="MileGuard app icon" width="64" height="64">
     <h1 id="gate-title">Your drives, on a bigger screen</h1>
     <p id="gate-text">Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.</p>
-    <div id="apple-sign-in-button" class="ck-btn"></div>
+    <button type="button" id="apple-go" class="apple-btn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3z"/></svg>Sign in with Apple ID</button>
+    <div id="apple-sign-in-button" class="ck-btn ck-hidden" aria-hidden="true"></div>
     <div id="gate-actions" class="gate-actions"></div>
     <details id="gate-help" class="help" hidden>
       <summary>Can't sign in, or seeing "Authentication Error"?</summary>
@@ -82,7 +84,7 @@
 
 <script src="config.js?v=202611261600"></script>
 <script src="demo.js?v=202611261600"></script>
-<script src="app.js?v=202611261600"></script>
+<script src="app.js?v=202611261700"></script>
 <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
 </body>
 </html>
