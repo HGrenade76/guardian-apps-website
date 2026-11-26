@@ -200,6 +200,13 @@
         }
       }
       if (!out.sessions.length && !out.actions.length) out.empty = true;
+      const types = {};
+      Object.values(this._recs).forEach((r) => { types[r.recordType] = (types[r.recordType] || 0) + 1; });
+      const recs = new Set(out.sessions.map((x) => x.rec));
+      const sample = Object.values(this._recs).find((r) => r.recordType === "CD_DecisionModel");
+      out.diag = { types, decisions: out.decisions.length, decWithSession: out.decisions.filter((d) => d.session).length,
+        decLinked: out.decisions.filter((d) => recs.has(d.session)).length, decWithText: out.decisions.filter((d) => d.text).length,
+        decFields: sample ? Object.keys(sample.fields || {}).join(", ") : "none" };
       return out;
     },
 
@@ -339,10 +346,13 @@
 
   // ---------- state ----------
   const S = { source: null, sessions: [], actions: [], decisions: [], risks: [], bySession: {}, view: "today", filter: "open", q: "", owner: "", selected: null, tx: {}, txMode: "focusedTranscript", txQ: "" };
+  // Same definitions as the app's Home screen: "Open" is status Open only; overdue is any unfinished
+  // action whose due date has passed.
   const OPEN = ["Open", "In Progress", "Blocked"];
   const isOpen = (a) => OPEN.includes(a.status);
-  const isOverdue = (a) => isOpen(a) && a.due && a.due < today0();
-  const dueThisWeek = (a) => isOpen(a) && a.due && a.due >= today0() && a.due < new Date(today0().getTime() + 7 * DAY);
+  const isOpenOnly = (a) => a.status === "Open";
+  const isOverdue = (a) => !!a.due && a.due < new Date() && a.status !== "Done" && a.status !== "Cancelled";
+  const dueThisWeek = (a) => isOpen(a) && a.due && a.due >= new Date() && a.due < new Date(Date.now() + 7 * DAY);
   const sess = (rec) => S.bySession[rec];
 
   // Same visibility rules as the app's AppState.allActions / allDecisions: only items attached to a
@@ -365,6 +375,8 @@
     S.decisions = newestById(data.decisions.filter((d) => d.text && live(d.session)))
       .sort((a, b) => ((sess(b.session) || {}).date || 0) - ((sess(a.session) || {}).date || 0));
     S.risks = data.risks.filter((r) => live(r.session));
+    S.scoreActions = newestById(data.actions.filter((a) => a.text && S.bySession[a.session]));
+    S.diag = data.diag;
   }
   function actionSort(a, b) {
     const oa = isOpen(a) ? 0 : 1, ob = isOpen(b) ? 0 : 1;
@@ -460,6 +472,7 @@
   }
 
   function boot() {
+    S.debug = new URLSearchParams(location.search).has("debug");
     if (new URLSearchParams(location.search).has("demo")) {
       S.source = Demo; S.user = "Demo account"; S.demo = true;
       $("#sign-out").hidden = true;
@@ -490,7 +503,7 @@
     const [, view, arg] = (location.hash || "#/today").split("/");
     const prev = S.view;
     S.view =["today", "actions", "sessions", "decisions"].includes(view) ? view : "today";
-    if (S.view === "actions") S.filter = ["open", "overdue", "week", "done", "all"].includes(arg) ? arg : (S.filterA || "open");
+    if (S.view === "actions") S.filter = ["open", "progress", "blocked", "overdue", "week", "done", "confirm", "all"].includes(arg) ? arg : (S.filterA || "open");
     if (S.view === "decisions") S.filter = ["Active", "Resolved", "Reversed", "Superseded", "all"].includes(arg) ? arg : "Active";
     if (S.view === "sessions") S.selected = arg ? decodeURIComponent(arg) : (S.selectedSession || null);
     if (S.view === "actions") S.filterA = S.filter;
@@ -547,7 +560,7 @@
 
   // ---------- Today ----------
   function renderToday() {
-    const open = S.actions.filter(isOpen), over = open.filter(isOverdue), week = open.filter(dueThisWeek);
+    const open = S.actions.filter(isOpen), over = S.actions.filter(isOverdue), week = open.filter(dueThisWeek);
     const recent = S.sessions.filter((s) => s.date > new Date(Date.now() - 7 * DAY));
     const urgent = open.filter((a) => isOverdue(a) || dueThisWeek(a)).slice(0, 8);
     const hello = new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 17 ? "Good afternoon" : "Good evening";
@@ -555,11 +568,13 @@
     return `
       <div class="topbar"><h1>${esc(hello)}${first && first !== "Signed" && !S.demo ? ", " + esc(first) : ""}</h1><span class="muted">${esc(new Date().toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" }))}</span></div>
       <div class="stats">
-        <a class="stat" href="#/actions/open"><b class="num">${open.length}</b><span>Open actions</span></a>
+        <a class="stat" href="#/actions/open"><b class="num">${S.actions.filter(isOpenOnly).length}</b><span>Open actions</span></a>
         <a class="stat ${over.length ? "alert" : ""}" href="#/actions/overdue"><b class="num">${over.length}</b><span>Overdue</span></a>
         <a class="stat" href="#/actions/week"><b class="num">${week.length}</b><span>Due in the next 7 days</span></a>
         <a class="stat" href="#/sessions"><b class="num">${recent.length}</b><span>Meetings this week</span></a>
       </div>
+      ${followThroughCard()}
+      ${S.debug ? diagCard() : ""}
       <div class="grid2">
         <div class="card"><h3>Needs attention</h3><div class="list">${urgent.length ? urgent.map((a) => actionRow(a)).join("") : '<div class="empty">Nothing overdue or due this week.</div>'}</div>
           ${open.length > urgent.length ? '<p><a href="#/actions/open">See all open actions →</a></p>' : ""}</div>
@@ -569,19 +584,122 @@
       ${S.decisions.length ? `<div class="card"><h3>Latest decisions</h3><div class="list">${S.decisions.slice(0, 5).map(decisionRow).join("")}</div></div>` : ""}`;
   }
 
+  // ---------- Follow-through (port of FollowThroughScorer.swift) ----------
+  const MIN_JUDGED = 5, WINDOW = 90;
+  const myName = () => {
+    if (S.demo) return S.demoName || "Hein Ellis";
+    const signed = S.user && S.user !== "Signed in" ? S.user : "";
+    try { return localStorage.getItem("dx-name") || signed; } catch (e) { return signed; }
+  };
+  function isMine(owner, user) {
+    const o = (owner || "").toLowerCase().trim(), u = (user || "").toLowerCase().trim();
+    if (!o || !u) return false;
+    if (o === "me" || o === "myself" || o === "i" || o === u) return true;
+    const of = o.split(" ")[0], uf = u.split(" ")[0];
+    return !!of && of === uf;
+  }
+  const judgeable = (a) => a.confirmed || !!a.originalDue;
+  const effDue = (a) => a.originalDue || a.due;
+  function tally(mine, start, end) {
+    const t = { onTime: 0, late: 0, missed: 0, unconfirmed: 0, delivered: 0, deliveredLate: 0, due: 0 };
+    for (const a of mine) {
+      if (a.status === "Cancelled") continue;
+      const due = effDue(a);
+      if (!due || !(due > start && due <= end)) continue;
+      t.due++;
+      let late = null;
+      if (a.status === "Done") { t.delivered++; late = a.completed ? a.completed > due : false; if (late) t.deliveredLate++; }
+      if (!judgeable(a)) { if (a.status !== "Done") t.unconfirmed++; continue; }
+      if (late === false) t.onTime++; else if (late === true) t.late++; else t.missed++;
+    }
+    t.judged = t.onTime + t.late + t.missed;
+    t.rate = t.judged ? t.onTime / t.judged : null;
+    return t;
+  }
+  function score() {
+    const now = new Date(), user = myName();
+    const curStart = new Date(now - WINDOW * DAY), prevStart = new Date(now - 2 * WINDOW * DAY);
+    const all = S.scoreActions || S.actions;
+    const mine = all.filter((a) => isMine(a.owner, user));
+    const cur = tally(mine, curStart, now), prev = tally(mine, prevStart, curStart);
+    const trend = cur.rate == null || prev.rate == null ? "none" : cur.rate > prev.rate + 1e-9 ? "up" : cur.rate < prev.rate - 1e-9 ? "down" : "flat";
+    const noDue = mine.filter((a) => !a.due && (a.status === "Open" || a.status === "In Progress") && !a.archived).length;
+    const slipping = mine.filter((a) => { const d = effDue(a); return d && !a.archived && d < now && (a.status === "Open" || a.status === "In Progress"); })
+      .sort((a, b) => effDue(a) - effDue(b));
+    const upcoming = mine.filter((a) => !a.archived && a.status !== "Cancelled" && judgeable(a)).map(effDue).filter((d) => d && d > now).sort((a, b) => a - b);
+    const need = Math.max(MIN_JUDGED - cur.judged, 0);
+    const appearOn = need > 0 && upcoming.length >= need && cur.unconfirmed <= cur.judged + need ? upcoming[need - 1] : null;
+    const waiting = {};
+    for (const a of all) {
+      if (a.archived || !(a.status === "Open" || a.status === "In Progress")) continue;
+      const o = (a.owner || "").trim();
+      if (!o || o.toLowerCase() === "unassigned" || isMine(o, user)) continue;
+      (waiting[o] = waiting[o] || []).push(a);
+    }
+    const groups = Object.entries(waiting).map(([owner, items]) => {
+      items.sort((x, y) => (effDue(x) || Infinity) - (effDue(y) || Infinity));
+      return { owner, items, overdue: items.filter((a) => effDue(a) && effDue(a) < now).length };
+    }).sort((x, y) => ((effDue(x.items[0]) || Infinity) - (effDue(y.items[0]) || Infinity)) || x.owner.localeCompare(y.owner));
+    return { user, cur, prev, trend, noDue, slipping, appearOn, groups, representative: cur.judged >= MIN_JUDGED && cur.unconfirmed <= cur.judged };
+  }
+  // Mine, still open, came due in the window, date never confirmed: the ones the card asks you to confirm.
+  function needsConfirm() {
+    const user = myName(), now = new Date(), start = new Date(now - WINDOW * DAY);
+    return S.actions.filter((a) => isMine(a.owner, user) && a.due && !judgeable(a) && a.status !== "Done" && a.status !== "Cancelled"
+      && effDue(a) > start && effDue(a) <= now);
+  }
+
+  function followThroughCard() {
+    const sc = score(), c = sc.cur;
+    if (S.editName || !sc.user) return `<div class="card ft"><h3>Follow-through</h3>
+      <form id="name-form" class="name-form"><label for="name-in">Your name, as it appears as an action owner</label>
+        <div class="row-btns"><input id="name-in" value="${esc(sc.user)}" placeholder="e.g. Hein Ellis" required><button class="btn primary" type="submit">Save</button>${sc.user ? '<button class="btn" type="button" data-name-cancel>Cancel</button>' : ""}</div>
+        <p class="hint">Use the same name as in DECISIO Settings on your iPhone, so the score matches the app. Saved in this browser only.</p></form></div>`;
+    if (false) return `<div class="card ft"><h3>Follow-through</h3><p class="muted">Add your name so we can tell which actions are yours. <button class="btn sm" data-setname>Set your name</button></p></div>`;
+    const arrow = { up: '<span class="chip green">▲ up from ' + Math.round(sc.prev.rate * 100) + "%</span>", down: '<span class="chip red">▼ down from ' + Math.round((sc.prev.rate || 0) * 100) + "%</span>", flat: '<span class="chip">Steady</span>', none: "" }[sc.trend];
+    const head = sc.representative
+      ? `<div class="ft-big"><b class="num">${Math.round(c.rate * 100)}%</b><span>of commitments<br>met on time</span>${arrow}</div>
+         <div class="ft-row"><span><b>${c.onTime}</b> on time</span><span><b>${c.late}</b> late</span><span><b>${c.missed}</b> missed</span></div>`
+      : `<div class="ft-big"><b class="num">${c.delivered} of ${c.due}</b><span>delivered<br>so far</span></div>
+         <p class="muted ft-note">Your on-time score shows once ${MIN_JUDGED} confirmed commitments have come due${c.judged ? ` (${c.judged} so far)` : ""}.${sc.appearOn ? ` It could appear around ${esc(fmtDate(sc.appearOn))}.` : ""}</p>`;
+    const extras = [
+      c.deliveredLate ? `<span>${c.deliveredLate} delivered late</span>` : "",
+      sc.noDue ? `<a href="#/actions/open">${sc.noDue} with no due date</a>` : "",
+      c.unconfirmed ? `<a href="#/actions/confirm" class="ft-confirm">Confirm ${c.unconfirmed} due date${c.unconfirmed > 1 ? "s" : ""}</a>` : "",
+    ].filter(Boolean).join("");
+    const slip = sc.slipping.slice(0, 5).map((a) => `<div class="row" data-action="${esc(a.rec)}"><div class="body"><div class="t">${esc(a.text)}</div>
+        <div class="m">${a.originalDue ? `<span>orig. ${esc(fmtDate(a.originalDue))}</span>` : ""}${a.reschedules ? `<span>pushed ${a.reschedules}×</span>` : ""}<span class="chip red">due ${esc(fmtDate(a.due || a.originalDue))}</span></div></div></div>`).join("");
+    const wait = sc.groups.slice(0, 6).map((g) => `<a class="row" href="#/actions/all" data-owner-filter="${esc(g.owner)}"><div class="body"><div class="t">${esc(g.owner)}</div>
+        <div class="m"><span>${g.items.length} outstanding</span>${g.overdue ? `<span class="chip red">${g.overdue} overdue</span>` : ""}</div></div></a>`).join("");
+    return `<div class="card ft">
+      <div class="topbar"><h3 style="margin:0">Follow-through · last 90 days</h3><span class="right muted ft-who">Counted as yours: owner matches “${esc(sc.user)}” <button class="btn sm" data-setname>Change</button></span></div>
+      <div class="ft-grid">
+        <div>${head}${extras ? `<div class="ft-extras">${extras}</div>` : ""}</div>
+        <div><h3>What's slipping</h3>${slip ? `<div class="list">${slip}</div>${sc.slipping.length > 5 ? `<p class="muted">+${sc.slipping.length - 5} more</p>` : ""}` : '<div class="empty">Nothing of yours is overdue.</div>'}</div>
+        <div><h3>Waiting on</h3>${wait ? `<div class="list">${wait}</div>` : '<div class="empty">No one owes you anything right now.</div>'}</div>
+      </div></div>`;
+  }
+
+  function diagCard() {
+    const d = S.diag; if (!d) return "";
+    return `<div class="card"><h3>Diagnostics</h3><pre class="note" style="font-size:12px">${esc(JSON.stringify(d, null, 2))}</pre></div>`;
+  }
+
   // ---------- Actions ----------
   function actionsFiltered() {
     const q = S.q.toLowerCase();
     const base = {
-      open: S.actions.filter(isOpen), overdue: S.actions.filter(isOverdue), week: S.actions.filter(dueThisWeek),
+      open: S.actions.filter(isOpenOnly), progress: S.actions.filter((a) => a.status === "In Progress"), blocked: S.actions.filter((a) => a.status === "Blocked"),
+      overdue: S.actions.filter(isOverdue), week: S.actions.filter(dueThisWeek), confirm: needsConfirm(),
       done: S.actions.filter((a) => a.status === "Done").sort((a, b) => (b.completed || 0) - (a.completed || 0)), all: S.actions,
     }[S.filter] || [];
     return base.filter((a) => (!S.owner || a.owner === S.owner) && has(q, a.text, a.owner, a.notes, (sess(a.session) || {}).title));
   }
 
   function renderActions() {
-    const counts = { open: S.actions.filter(isOpen).length, overdue: S.actions.filter(isOverdue).length, week: S.actions.filter(dueThisWeek).length, done: S.actions.filter((a) => a.status === "Done").length, all: S.actions.length };
-    const names = { open: "Open", overdue: "Overdue", week: "Next 7 days", done: "Done", all: "All" };
+    const counts = { open: S.actions.filter(isOpenOnly).length, progress: S.actions.filter((a) => a.status === "In Progress").length, blocked: S.actions.filter((a) => a.status === "Blocked").length,
+      overdue: S.actions.filter(isOverdue).length, week: S.actions.filter(dueThisWeek).length, done: S.actions.filter((a) => a.status === "Done").length, confirm: needsConfirm().length, all: S.actions.length };
+    const names = { open: "Open", progress: "In progress", blocked: "Blocked", overdue: "Overdue", week: "Next 7 days", done: "Done", confirm: "Needs date", all: "All" };
     const owners = [...new Set(S.actions.map((a) => a.owner).filter(Boolean))].sort();
     const rows = actionsFiltered();
     const sel = S.actions.find((a) => a.rec === S.selectedAction);
@@ -590,7 +708,7 @@
         <div class="right">${searchBox("Search actions")}
           <select class="sel" id="owner"><option value="">Everyone</option>${owners.map((o) => `<option ${o === S.owner ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>
           <button class="btn" id="csv">${icon(I.dl)}Export CSV</button></div></div>
-      <div class="tabs">${Object.keys(names).map((k) => `<a href="#/actions/${k}" class="${S.filter === k ? "on" : ""}">${names[k]}<i>${counts[k]}</i></a>`).join("")}</div>
+      <div class="tabs">${Object.keys(names).filter((k) => k !== "confirm" || counts.confirm || S.filter === "confirm").map((k) => `<a href="#/actions/${k}" class="${S.filter === k ? "on" : ""}">${names[k]}<i>${counts[k]}</i></a>`).join("")}</div>
       <div class="split">
         <div class="card"><div class="list">${rows.length ? rows.map((a) => actionRow(a)).join("") : '<div class="empty">No actions here.</div>'}</div></div>
         <div class="card">${sel ? actionDetail(sel) : '<div class="empty">Pick an action to see details and update it.</div>'}</div>
@@ -610,7 +728,7 @@
         <label for="f-status">Status</label><select id="f-status">${st.map((x) => `<option ${x === a.status ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-prio">Priority</label><select id="f-prio">${pr.map((x) => `<option ${x === a.priority ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-due">Due date</label><div><input id="f-due" type="date" value="${isoDay(a.due)}">
-          ${a.confirmed ? "" : `<label class="tick"><input type="checkbox" id="f-confirm"> Confirm this due date</label>
+          ${a.confirmed || a.status === "Done" || a.status === "Cancelled" ? "" : `<label class="tick"><input type="checkbox" id="f-confirm"> Confirm this due date</label>
           <div class="hint">The date was suggested by AI. Confirming makes it the date your follow-through score measures against.</div>`}</div>
         <label for="f-done" class="${a.status === "Done" ? "" : "dim"}">Completed on</label><div><input id="f-done" type="date" max="${isoDay(new Date())}" value="${a.status === "Done" ? isoDay(a.completed || new Date()) : ""}" ${a.status === "Done" ? "" : "disabled"}>
           <div class="hint">Used for your follow-through score. Set the day it was actually done, not the day you logged it.</div></div>
@@ -850,6 +968,10 @@
       }
       S.selectedAction = rec; render(); return;
     }
+    if (t.closest("[data-setname]")) { S.editName = true; render(); const i = $("#name-in"); if (i) i.focus(); return; }
+    if (t.closest("[data-name-cancel]")) { S.editName = false; render(); return; }
+    const of = t.closest("[data-owner-filter]");
+    if (of) { S.owner = of.dataset.ownerFilter; S.filterA = "all"; return; }
     const dl = t.closest("[data-delete]");
     if (dl) { S.confirmDelete = dl.dataset.delete; render(); const d = document.querySelector(".danger"); if (d) d.scrollIntoView({ block: "center" }); return; }
     if (t.closest("[data-delete-no]")) { S.confirmDelete = null; render(); return; }
@@ -913,6 +1035,12 @@
     }
   });
   document.addEventListener("submit", (e) => {
+    if (e.target.id === "name-form") {
+      e.preventDefault();
+      const v = $("#name-in").value.trim();
+      if (S.demo) S.demoName = v; else { try { localStorage.setItem("dx-name", v); } catch (_) { S.user = v; } }
+      S.editName = false; render(); return;
+    }
     if (e.target.id !== "action-form") return;
     e.preventDefault();
     const a = S.actions.find((x) => x.rec === S.selectedAction);
