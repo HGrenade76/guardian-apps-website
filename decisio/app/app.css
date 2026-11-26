@@ -176,3 +176,7 @@ select.sel{height:38px;border:1px solid #D5DAE3;border-radius:10px;background:#f
 #apple-sign-in-button{width:100%;display:flex;justify-content:center}
 #apple-sign-in-button > *{width:280px!important;max-width:100%;min-height:48px;margin:0 auto!important;display:flex!important;align-items:center;justify-content:center;border-radius:10px;overflow:hidden}
 #apple-sign-in-button iframe,#apple-sign-in-button svg,#apple-sign-in-button img{max-width:100%}
+.gate{position:relative}
+.gate-home{position:absolute;top:22px;left:5%;display:inline-flex;align-items:center;gap:.55rem;color:#EAF0F8;text-decoration:none;font-weight:600;font-size:1.05rem;letter-spacing:-.01em;opacity:.9;transition:opacity .2s}
+.gate-home:hover{opacity:1}
+.gate-home img{width:26px;height:26px}
