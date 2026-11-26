@@ -93,15 +93,15 @@ One item: when the tab bar minimizes to its pill on scroll, the pill (bottom lef
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8 · Programs page: sections and separation
+## ☐ 8 · Programs page: guided vs my programs, easy switching
 ```
-One item: Train › Programs looks flat. git pull in ~/TwoPlatesTools/design-drop and follow mockup 38-programs:
-- Photo header as on Pick a goal (if not already in the build).
-- Sections IN USE, PICK A GOAL (See all ›), MY OWN (+ Build) separated by a hairline with 16 pt space above each label.
-- In use: one white tile (12 pt radius) with week line in gold, name, "next" line, a gold progress bar and the day's illustration on the right, not overlapping text.
-- Pick a goal and My own: plain rows with a 64 pt equipment picture on the left, small caps category, name, weeks · days; chevron, or a "Start" outline button for an unstarted own program. Pictures never overlap the text.
-- "+ Build my own program" moves into the MY OWN section label as "+ Build".
-Snapshot test Light and Dark.
+One item: Train › Programs. git pull in ~/TwoPlatesTools/design-drop and follow mockup 38-programs (updated 26 Nov).
+1. Layout: photo header (as Pick a goal); sections IN USE, GUIDED PROGRAMS · BY GOAL (See all ›), MY PROGRAMS (+ Build new), each separated by a hairline with 16 pt space above the label.
+2. In use: one white tile (12 pt radius): week line in gold, name, "Guided" or "Built by you" · next day, gold progress bar, the day's illustration on the right never overlapping text.
+3. Guided programs: plain rows, 64 pt equipment picture, small caps category, name, weeks · days a week, chevron to its detail page (which has "Use this program").
+4. My programs: plain rows for every program the person built or imported, with state (Not started / Paused · week N of M), a "Use" or "Resume" outline button.
+5. Switching (guided ↔ own, either way): confirm sheet "Switch to <name>? <current> pauses at week N; you can resume it any time." The paused program keeps its week, logged sessions and progression; Resume continues where it stopped. Only one program is in use at a time. Logged history is never touched by switching.
+Unit tests for pause/resume keeping week and progression; UI test switching guided → own → back to guided resumes at the same week.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
