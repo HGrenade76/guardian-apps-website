@@ -448,13 +448,15 @@
   }
 
   // ---------- boot ----------
-  function gate(title, text, actions) {
+  function gate(title, text, actions, help) {
     $("#app").hidden = true;
     $("#gate").hidden = false;
     $("#gate-title").textContent = title;
     $("#gate-text").textContent = text;
     $("#gate-actions").innerHTML = actions || "";
-    $("#gate-help").hidden = true;
+    const h = $("#gate-help");
+    h.hidden = !help;
+    h.open = help === "open";
   }
 
   function showApp() {
@@ -490,11 +492,23 @@
       showApp();
       ShareCloud.sweep().catch(() => {});
     } catch (e) {
-      console.error(e);
+      console.error("MileGuard load error", e);
+      const code = errText(e);
+      if (authErr(e)) {
+        return gate("iCloud web access is turned off",
+          "Apple is blocking web access to your iCloud data. This is usually because Advanced Data Protection is on. Follow the steps below, then sign in again.",
+          '<button class="btn primary block" id="retry">I turned it on, try again</button>' + signOutLink() + code, "open");
+      }
       gate("Couldn't reach iCloud", "Check your connection and try again. If it keeps happening, sign out and back in.",
-        '<button class="btn primary block" id="retry">Try again</button>' + signOutLink());
+        '<button class="btn primary block" id="retry">Try again</button>' + signOutLink() + code, true);
     }
   }
+  const authErr = (e) => /AUTHENTICATION|NOT_AUTHENTICATED|ACCESS_DENIED|AUTH_PERSIST/i.test((e && (e.ckErrorCode || e.serverErrorCode || e.message)) || "");
+  // Shown small under the buttons so a screenshot tells us exactly what CloudKit said.
+  const errText = (e) => {
+    const parts = [e && (e.ckErrorCode || e.serverErrorCode), e && (e.reason || e.message)].filter(Boolean);
+    return parts.length ? `<p class="fine">Details: ${esc(parts.join(" · ").slice(0, 200))}</p>` : "";
+  };
   const signOutLink = () => '<button class="btn block" id="gate-out">Sign out</button>';
 
   function initCloud() {
@@ -516,9 +530,8 @@
     const c = CloudKit.getDefaultContainer();
     const waitIn = () => {
       gate("Your drives, on a bigger screen",
-        "Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.");
+        "Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.", "", true);
       $("#apple-sign-in-button").hidden = false;
-      $("#gate-help").hidden = false;
       c.whenUserSignsIn().then(signedIn);
     };
     c.setUpAuth().then((id) => (id ? signedIn(id) : waitIn())).catch(() => waitIn());

@@ -6,13 +6,13 @@
 <title>MileGuard on the web</title>
 <meta name="description" content="Review, classify and download your MileGuard drives on a bigger screen.">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#0E3A45">
+<meta name="theme-color" content="#0C1411">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="app.css?v=202611251500">
+<link rel="stylesheet" href="app.css?v=202611261600">
 </head>
 <body>
 
@@ -24,12 +24,35 @@
     <p id="gate-text">Review and classify drives, fix purposes and download your logs. Sign in with the Apple ID you use on your iPhone.</p>
     <div id="apple-sign-in-button" class="ck-btn"></div>
     <div id="gate-actions" class="gate-actions"></div>
-    <div id="gate-help" class="help" hidden>
-      <b>Seeing "Authentication Error"?</b>
-      Apple blocks web sign-in when iCloud web access is off, which happens automatically with Advanced Data Protection. On your iPhone, go to Settings → your name → iCloud and turn on <b>Access iCloud Data on the Web</b>, then try again. Your data stays end-to-end encrypted everywhere else.
-    </div>
+    <details id="gate-help" class="help" hidden>
+      <summary>Can't sign in, or seeing "Authentication Error"?</summary>
+      <p>If you use <b>Advanced Data Protection</b>, Apple turns off web access to your iCloud data. Turn it back on once and you're set. Everything stays end-to-end encrypted.</p>
+      <div class="help-cols">
+        <div>
+          <b>On your iPhone</b>
+          <ol>
+            <li>Open <b>Settings</b></li>
+            <li>Tap <b>your name</b> at the top</li>
+            <li>Tap <b>iCloud</b></li>
+            <li>Scroll to the bottom and turn on <b>Access iCloud Data on the Web</b></li>
+            <li>Confirm with your passcode if asked</li>
+          </ol>
+        </div>
+        <div>
+          <b>Or on your Mac</b>
+          <ol>
+            <li>Open <b>System Settings</b></li>
+            <li>Click <b>your name</b> at the top of the sidebar</li>
+            <li>Click <b>iCloud</b></li>
+            <li>Turn on <b>Access iCloud Data on the Web</b></li>
+          </ol>
+        </div>
+      </div>
+      <p>Then come back here and sign in again. If your iPhone asks you to allow access, tap <b>Allow</b>.</p>
+      <p class="fine">Still stuck? Make sure you're signing in with the same Apple ID that's on your iPhone, and that iCloud is turned on for MileGuard (Settings → your name → iCloud → Saved to iCloud).</p>
+    </details>
     <p class="fine">Your drives are read from your own iCloud, in this browser. Guardian Apps never sees them. Web access is part of MileGuard Pro.</p>
-    <p class="fine"><a href="/mileguard/privacy/">Privacy</a> · <a href="/mileguard.html">About MileGuard</a></p>
+    <p class="fine"><a href="/mileguard/privacy/">Privacy</a> · <a href="/mileguard.html">About MileGuard</a> · <a href="?demo">See a demo</a></p>
   </div>
 </section>
 
@@ -57,9 +80,9 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script src="config.js?v=202611251500"></script>
-<script src="demo.js?v=202611251500"></script>
-<script src="app.js?v=202611251500"></script>
+<script src="config.js?v=202611261600"></script>
+<script src="demo.js?v=202611261600"></script>
+<script src="app.js?v=202611261600"></script>
 <script src="https://cdn.apple-cloudkit.com/ck/2/cloudkit.js" async></script>
 </body>
 </html>
