@@ -58,3 +58,24 @@ footer.gf a{text-decoration:none;color:inherit}
 .gf-col a{font-size:.86rem;transition:color .2s}.gf-col a:hover{color:#E8C56E}
 .gf-bottom{margin-top:2.6rem;padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.06);font-size:.76rem;color:#74829A}
 @media (max-width:900px){.gf-top{grid-template-columns:1fr 1fr;gap:2rem}.gf-brand{grid-column:1/-1}}
+
+/* Sign in */
+.gn-signin{display:inline-flex;align-items:center;gap:.45rem;background:transparent;color:#EAF0F8;border:1px solid rgba(255,255,255,.18);padding:.55rem 1rem;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .2s,background .2s}
+.gn-signin:hover{border-color:rgba(212,168,74,.7);background:rgba(212,168,74,.08)}
+.gn-signin svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.gn-modal{position:fixed;inset:0;z-index:200;background:rgba(5,9,16,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;font-family:-apple-system,"SF Pro Text","Inter",system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.gn-modal[hidden]{display:none}
+.gn-modal-card{position:relative;width:100%;max-width:420px;background:#0F1B2D;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:28px 24px 22px;color:#EAF0F8;box-shadow:0 40px 80px -30px rgba(0,0,0,.9)}
+.gn-modal-card h2{margin:0 0 .4rem;font-size:1.35rem;font-weight:700;letter-spacing:-.01em}
+.gn-modal-card p{margin:0 0 1.1rem;font-size:.88rem;line-height:1.5;color:#8B98AD}
+.gn-modal-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.06);color:#EAF0F8;font-size:1.3rem;line-height:1;cursor:pointer}
+.gn-modal-x:hover{background:rgba(255,255,255,.12)}
+.gn-pick{display:flex;align-items:center;gap:.9rem;padding:.8rem;border-radius:14px;border:1px solid rgba(255,255,255,.08);margin-bottom:.6rem;text-decoration:none;color:#EAF0F8;transition:border-color .15s,background .15s}
+.gn-pick:hover,.gn-pick:focus-visible{border-color:rgba(212,168,74,.6);background:rgba(212,168,74,.06);outline:none}
+.gn-pick img{width:44px;height:44px;border-radius:11px;flex-shrink:0}
+.gn-pick span{flex:1;min-width:0}
+.gn-pick b{display:block;font-size:.98rem;font-weight:600}
+.gn-pick small{display:block;font-size:.78rem;color:#8B98AD;margin-top:.1rem}
+.gn-pick i{font-style:normal;font-size:1.5rem;color:#8B98AD}
+.gn-modal-card .gn-modal-fine{margin:.9rem 0 0;font-size:.75rem;color:#74829A}
+@media (max-width:900px){.gn-signin{justify-content:center;padding:.9rem;font-size:.92rem}}
