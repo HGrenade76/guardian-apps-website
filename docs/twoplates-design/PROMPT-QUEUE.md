@@ -1,6 +1,6 @@
 # TwoPlates — prompt queue (in order)
 
-Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026.
+Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 6–7 added).
 
 **Footer used on every item** (already included below):
 > One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
@@ -66,7 +66,23 @@ One item: the weight hint for machines. Plate-loaded machines (no weight stack) 
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 6 · Archive (after items 1–5)
+## ☐ 6 · Upper/lower days show arms and core
+```
+One item: on an upper/lower program the week reads as only "Upper body" and "Lower body", and Hein asked where arms, core and fitness went. Check and fix:
+1. Every generated upper day includes at least one biceps and one triceps move; every week has core work (a core finisher on two days, or one per lower day); keep within the day's time and the 7-exercise cap.
+2. The day line lists what's in it, e.g. "Upper body · chest, back, shoulders, arms · core", so it's visible on Train and Progress.
+3. If the person's plan style is Lifting only, Progress/Train offers a small "Add a cardio day" link (opens Plan settings › Lifting + cardio). No change to the program unless they choose it.
+Core tests for an upper and a lower day at 45 and 60 min; teen rules unchanged.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
+## ☐ 7 · Shrunken tab bar covers content at the bottom
+```
+One item: when the tab bar minimizes to its pill on scroll, the pill (bottom left) sits on top of content: on Progress it covers the "Find an exercise" field and its hint. Every scrolling screen needs bottom content inset so the last content always scrolls clear of the full tab bar and the minimized pill, including with the workout bar accessory shown. UI test: scroll Progress to the bottom, the exercise search field is fully visible and tappable with the bar minimized.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
+## ☐ 8 · Archive (after items 1–7)
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
 ```
