@@ -155,3 +155,5 @@ select.sel{height:38px;border:1px solid #D5DAE3;border-radius:10px;background:#f
 .row-btns{display:flex;gap:10px}
 .btn.danger-btn{background:var(--red);border-color:var(--red);color:#fff}.btn.danger-btn:hover{background:#B3372F}
 .danger > .btn{color:var(--red)}
+.kv label.tick{display:flex;align-items:center;gap:8px;padding-top:8px;color:var(--tx);font-weight:600;font-size:13px;cursor:pointer}
+.kv label.tick input{width:16px;height:16px;margin:0}

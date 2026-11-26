@@ -609,7 +609,9 @@
         <label for="f-email">Owner email</label><input id="f-email" type="email" value="${esc(a.ownerEmail)}" placeholder="Optional">
         <label for="f-status">Status</label><select id="f-status">${st.map((x) => `<option ${x === a.status ? "selected" : ""}>${x}</option>`).join("")}</select>
         <label for="f-prio">Priority</label><select id="f-prio">${pr.map((x) => `<option ${x === a.priority ? "selected" : ""}>${x}</option>`).join("")}</select>
-        <label for="f-due">Due date</label><input id="f-due" type="date" value="${isoDay(a.due)}">
+        <label for="f-due">Due date</label><div><input id="f-due" type="date" value="${isoDay(a.due)}">
+          ${a.confirmed ? "" : `<label class="tick"><input type="checkbox" id="f-confirm"> Confirm this due date</label>
+          <div class="hint">The date was suggested by AI. Confirming makes it the date your follow-through score measures against.</div>`}</div>
         <label for="f-done" class="${a.status === "Done" ? "" : "dim"}">Completed on</label><div><input id="f-done" type="date" max="${isoDay(new Date())}" value="${a.status === "Done" ? isoDay(a.completed || new Date()) : ""}" ${a.status === "Done" ? "" : "disabled"}>
           <div class="hint">Used for your follow-through score. Set the day it was actually done, not the day you logged it.</div></div>
         <label for="f-notes">Notes</label><textarea id="f-notes" rows="3" placeholder="Optional">${esc(a.notes)}</textarea>
@@ -617,9 +619,7 @@
       </form>
       <div class="kv">
         ${s ? `<label>From</label><div><a href="#/sessions/${encodeURIComponent(s.rec)}">${esc(s.title)}</a> · ${esc(fmtDate(s.date))}${a.timestamp && !/^0?0:00(:00)?$/.test(a.timestamp) ? ` · at ${esc(a.timestamp)}` : ""}</div>` : ""}
-        <label>Date status</label><div>${a.due ? (a.confirmed ? '<span class="chip green">Confirmed</span>'
-          : `Suggested by AI, not yet confirmed <button type="button" class="btn sm" data-confirm="${esc(a.rec)}">Confirm date</button>
-             <div class="hint">Confirming makes this the date your follow-through score measures against.</div>`) : "No due date"}</div>
+        <label>Date status</label><div>${a.due ? (a.confirmed ? '<span class="chip green">Confirmed</span>' : '<span class="chip amber">Suggested by AI</span>') : "No due date"}</div>
         ${a.reschedules ? `<label>Rescheduled</label><div>${a.reschedules} time${a.reschedules > 1 ? "s" : ""}${a.originalDue ? ` · first due ${esc(fmtDate(a.originalDue))}` : ""}</div>` : ""}
         ${a.completed && a.status === "Done" ? `<label>Completed</label><div>${esc(fmtDate(a.completed))}${(a.originalDue || a.due) ? (startOfDay(a.completed) > startOfDay(a.originalDue || a.due) ? ' <span class="chip red">Late</span>' : ' <span class="chip green">On time</span>') : ""}</div>` : ""}
       </div>
@@ -640,7 +640,7 @@
       if (want[k] !== undefined && want[k].trim() !== (a[k] || "")) changes[k] = want[k].trim();
     }
     if (changes.text === "") return toast("The action can't be empty");
-    if (want.confirm && a.due && !a.confirmed) changes.confirmed = true;
+    if (want.confirm && !a.confirmed && (want.due !== undefined ? want.due : a.due)) changes.confirmed = true;
     if (want.due !== undefined && isoDay(want.due) !== isoDay(a.due)) {
       changes.due = want.due;
       // Only a date the user stood behind becomes the bar; moving an AI-inferred date is a first commitment.
@@ -656,7 +656,7 @@
       const updated = await S.source.saveAction(a, changes);
       Object.assign(a, updated);
       S.actions.sort(actionSort);
-      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed and saved." : "Saved. It'll sync to your iPhone.");
+      toast(changes.status === "Done" ? "Marked done. It'll sync to your iPhone." : Object.keys(changes).join() === "confirmed" ? "Due date confirmed." : "Saved. It'll sync to your iPhone.");
       if (changes.status) await autoResolve(a.session);
     } catch (e) {
       console.error(e);
@@ -855,8 +855,6 @@
     if (t.closest("[data-delete-no]")) { S.confirmDelete = null; render(); return; }
     const dy = t.closest("[data-delete-yes]");
     if (dy) { deleteSession(dy.dataset.deleteYes, dy); return; }
-    const cf = t.closest("[data-confirm]");
-    if (cf) { const a = S.actions.find((x) => x.rec === cf.dataset.confirm); if (a) updateAction(a, { confirm: true }); return; }
     const tx = t.closest("[data-tx]");
     if (tx) { e.preventDefault(); S.txMode = tx.dataset.tx; render(); return; }
     if (t.closest("#csv")) return csv();
@@ -922,7 +920,8 @@
     const v = $("#f-due").value;
     const due = v ? new Date(v + "T12:00:00") : null;
     const dv = $("#f-done").value;
-    updateAction(a, { text: $("#f-text").value, owner: $("#f-owner").value, ownerEmail: $("#f-email").value, notes: $("#f-notes").value,
+    const cb = $("#f-confirm");
+    updateAction(a, { confirm: !!(cb && cb.checked), text: $("#f-text").value, owner: $("#f-owner").value, ownerEmail: $("#f-email").value, notes: $("#f-notes").value,
       status: $("#f-status").value, priority: $("#f-prio").value, due, completed: dv ? new Date(dv + "T12:00:00") : null });
   });
   boot();
