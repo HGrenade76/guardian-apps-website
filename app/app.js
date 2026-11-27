@@ -741,7 +741,8 @@
     const i = ms.findIndex((x) => x.y * 100 + x.m === cur);
     return `<div class="month">
       <button data-act="month" data-d="1" aria-label="Previous month" ${i >= ms.length - 1 ? "disabled" : ""}>‹</button>
-      <select data-act="month-pick" aria-label="Month">${calendarOrder(ms).map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${monthName(x.y, x.m)}</option>`).join("")}</select>
+      <select data-act="year-pick" aria-label="Year">${[...new Set(ms.map((x) => x.y))].map((y) => `<option value="${y}" ${y === S.month.y ? "selected" : ""}>${y}</option>`).join("")}</select>
+      <select data-act="month-pick" aria-label="Month">${calendarOrder(ms.filter((x) => x.y === S.month.y)).map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${new Date(x.y, x.m, 1).toLocaleDateString("en-US", { month: "long" })}</option>`).join("")}</select>
       <button data-act="month" data-d="-1" aria-label="Next month" ${i <= 0 ? "disabled" : ""}>›</button></div>`;
   }
   const kpi = (l, v, s) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s || "&nbsp;"}</div></div>`;
@@ -1306,7 +1307,12 @@
     const bs = Object.values(S.businesses).sort((a, b) => a.createdAt - b.createdAt);
     const sel = (name, label, opts, val) => `<label class="in">${label}<select data-act="ropt" name="${name}">${opts.map((o) => `<option value="${esc(o[0])}" ${o[0] === val ? "selected" : ""}>${esc(o[1])}</option>`).join("")}</select></label>`;
     const kinds = Object.entries(KINDS).map(([k, v]) => `<button class="rkind ${R.kind === k ? "on" : ""}" data-act="rkind" data-k="${k}">${icon(I.doc)}<b>${v.title}</b><span>${v.text}</span></button>`).join("");
-    const periodOpts = ps.filter((x) => R.kind !== "tax" || x.key[0] === "y").map((x) => [x.key, x.label]);
+    const periodSel = (ps, R) => {
+      const opt = (x) => `<option value="${esc(x.key)}" ${x.key === R.period ? "selected" : ""}>${esc(x.label)}</option>`;
+      const yrs = ps.filter((x) => x.key[0] === "y"), mos = R.kind === "tax" ? [] : ps.filter((x) => x.key[0] === "m");
+      const groups = [...new Set(mos.map((x) => x.year))].map((y) => `<optgroup label="${y}">${mos.filter((x) => x.year === y).map((x) => opt({ ...x, label: x.start.toLocaleDateString("en-US", { month: "long" }) })).join("")}</optgroup>`).join("");
+      return `<label class="in">Period<select data-act="ropt" name="period">${yrs.length ? `<optgroup label="Full year">${yrs.map(opt).join("")}</optgroup>` : ""}${groups}</select></label>`;
+    };
     const scope = [vs.length > 1 ? (R.vehicle ? vehicleLabel(R.vehicle) : "All vehicles") : vs[0] ? vehicleLabel(vs[0].id) : "", bs.length > 1 ? (R.business ? S.businesses[R.business].name : "All businesses") : ""].filter(Boolean).join(" · ");
     const warn = [s.unreviewed ? `${s.unreviewed} drive${s.unreviewed > 1 ? "s aren't" : " isn't"} reviewed yet` : "", s.missing ? `${s.missing} business drive${s.missing > 1 ? "s are" : " is"} missing a purpose` : ""].filter(Boolean);
     let kp, table;
@@ -1364,7 +1370,7 @@
     }
     return `<h1>Reports</h1>
     <div class="rkinds">${kinds}</div>
-    <div class="opts">${sel("period", "Period", periodOpts, R.period)}
+    <div class="opts">${periodSel(ps, R)}
       ${sel("vehicle", "Vehicle", [["", "All vehicles"], ...vs.map((v) => [v.id, vehicleLabel(v.id)])], R.vehicle)}
       ${bs.length > 1 ? sel("business", "Business", [["", "All businesses"], ...bs.map((b) => [b.id, b.name])], R.business) : ""}
       ${R.kind === "claim" ? `<label class="in">Rate per ${RG.ca ? "km" : "mile"} (${RG.cur})<input data-act="rrate" inputmode="decimal" value="${esc(R.rate)}" placeholder="${D.claimRate}"></label>` : ""}</div>
@@ -1673,6 +1679,8 @@
   document.addEventListener("change", (e) => {
     const el = e.target;
     if (el.dataset.act === "receipt-up") { uploadReceipt(el); return; }
+    // Switching year keeps the same month when that year has it, otherwise the year's latest month.
+    if (el.dataset.act === "year-pick") { const y = Number(el.value), ms = availableMonths().filter((x) => x.y === y); S.month = ms.find((x) => x.m === S.month.m) || ms[0]; render(); }
     if (el.dataset.act === "month-pick") { const [y, m] = el.value.split("-").map(Number); S.month = { y, m }; render(); }
     else if (el.dataset.act === "ropt") { S.report[el.name] = el.value; render(); }
   });
