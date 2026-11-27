@@ -311,6 +311,12 @@
   .brand-lockup span{font-size:1.35rem;font-weight:800;letter-spacing:.02em;color:var(--text)}
   .brand-lockup b{color:var(--gold-2);font-weight:800}
   .soon{display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(212,168,74,.5);border-radius:6px;padding:.08rem .34rem;margin-left:.4rem;vertical-align:1px;line-height:1.4}
+
+  /* HERO: photo banner, same treatment as the MileGuard page */
+  .hero.banner{background:linear-gradient(90deg,rgba(10,17,30,.93) 0%,rgba(10,17,30,.78) 42%,rgba(10,17,30,.38) 100%),linear-gradient(180deg,rgba(10,17,30,.45) 0%,rgba(10,17,30,0) 28%,rgba(10,17,30,0) 72%,var(--bg) 100%),url(assets/decisio-hero-bg.webp) center 40%/cover no-repeat}
+  .hero.banner .hero-sub{color:#C9D3E2}
+  .hero.banner .hero-proof,.hero.banner .cta-fine{color:#A9B6C9}
+  @media (max-width:860px){.hero.banner{background:linear-gradient(180deg,rgba(10,17,30,.80) 0%,rgba(10,17,30,.88) 60%,var(--bg) 100%),url(assets/decisio-hero-bg.webp) center 30%/cover no-repeat}}
 </style>
   <!-- Canonical & indexing -->
   <link rel="canonical" href="https://gap-apps.com/decisio.html">
@@ -520,7 +526,7 @@
   </div>
 </nav>
 
-<header class="hero">
+<header class="hero banner">
   <div class="wrap">
     <div class="hero-grid">
       <div class="hero-copy">
