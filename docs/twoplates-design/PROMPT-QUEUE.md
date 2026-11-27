@@ -141,7 +141,9 @@ Unit tests for pause/resume keeping week and progression; UI test switching guid
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8b · Program builder day rows: pictures, grammar, gentle checks
+## ☑ 8-fix · Switch confirm everywhere, one back chevron, review counts own sessions — done 43811b7c
+
+## ☑ 8b · Program builder day rows: pictures, grammar, gentle checks — done 287059f8
 ```
 One item: program builder day rows (New program / Your program).
 1. The picture strip: always up to 3 pictures of the day's first exercises, plus a "+N" badge when there are more; never skip duplicates or missing pictures silently (use a placeholder). Upper with 7 exercises showed only 2 pictures.
@@ -226,6 +228,7 @@ Archive the next build from the latest commit (Review scheme, both containers). 
 - **Merge the two earlier profiles (Hein, Lenaigh):** waiting on Copy check from a TestFlight build ("Earlier household" block). The designer writes the approval prompt from those counts.
 
 ## Later (not queued yet)
+- Record the program id on each logged session (next time the store schema changes anyway), replacing the device-only program-stretch log used by the end-of-program review.
 - Garmin double-counting in Health (when Garmin is built).
 - Dark-mode versions of the exercise pictures (no pale squares).
 
