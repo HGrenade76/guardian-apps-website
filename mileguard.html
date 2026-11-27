@@ -235,6 +235,15 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
 .cmp-note{margin-top:.9rem;font-size:.78rem;color:var(--ink-muted)}
 .cmp-note a{text-decoration:underline}
 
+/* HERO: same dusk-road banner as the App Store artwork */
+.hero.banner{background:linear-gradient(180deg,rgba(10,17,30,.15) 0%,rgba(10,17,30,0) 30%,rgba(10,17,30,0) 70%,var(--bg) 100%),url(assets/mileguard/mg-hero-bg.webp) center 60%/cover no-repeat}
+.hero.banner .wordmark{display:block;font-size:clamp(3.2rem,7vw,5.6rem);font-weight:800;letter-spacing:-.035em;line-height:1;margin-bottom:1.1rem}
+.hero.banner h1{font-size:clamp(1.9rem,3.6vw,2.9rem);font-weight:600;line-height:1.18;color:#EBF0EE}
+.hero.banner h1 .serif{font-family:var(--sans);font-style:normal;font-weight:700;font-size:1em;color:#3DDC97}
+.hero.banner .badge{display:none}
+.hero.banner p.lede{color:#C6D2CD}
+.hero.banner .chips span{background:rgba(6,40,34,.35);border-color:rgba(255,255,255,.14)}
+
 </style>
 <link rel="stylesheet" href="assets/site-chrome.css?v=20261126">
 <script src="assets/site-chrome.js?v=20261126" defer></script>
@@ -263,11 +272,11 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0}
   </div>
 </nav>
 
-<header class="hero">
+<header class="hero banner">
   <div class="wrap hero-grid">
     <div>
       <div class="badge"><img src="assets/mileguard/mg-icon-512.webp" alt="MileGuard app icon"><div><b>MileGuard</b><small>In beta · iPhone, CarPlay &amp; web</small></div></div>
-      <h1>Drive for work.<br>We keep the log.<br><span class="serif">Tax time, done.</span></h1>
+      <span class="wordmark" aria-hidden="true">MileGuard</span><h1>Drive for work.<br>We keep the log.<br><span class="serif">Tax time, done.</span></h1>
       <p class="lede">MileGuard records every drive by itself, from the moment your car connects to the moment you park. Swipe it business or personal. At the end of the year you get a tax summary that answers Schedule C and compares the standard mileage rate with your actual costs.</p>
       <div class="cta-row"><a class="wait-btn" id="waitlist" href="mailto:support@gap-apps.com?subject=Let%20me%20know%20when%20MileGuard%20launches&amp;body=Hi%20Guardian%20Apps%2C%0A%0APlease%20let%20me%20know%20when%20MileGuard%20launches%2C%20and%20send%20me%20an%20early%20beta%20invite%20if%20there%27s%20room.%0A%0AThanks%21">Join the waitlist</a><a class="test-btn" href="mailto:support@gap-apps.com?subject=I%27d%20like%20to%20test%20MileGuard&amp;body=Hi%20Guardian%20Apps%2C%0A%0AI%27d%20like%20to%20help%20test%20MileGuard.%0A%0AApple%20account%20email%20%28for%20the%20TestFlight%20invite%29%3A%20%0AI%20drive%20for%20work%20as%20%28employee%20/%20self-employed%20/%20gig%20driver%29%3A%20%0AMy%20car%20has%20CarPlay%20%28yes%20/%20no%29%3A%20%0A%0AThanks%21">Help us test</a></div>
       <p class="fine">Both open your email app with a short note to us. Free for 40 drives a month; try Pro free for 2 weeks. <a href="mileguard/privacy/" style="text-decoration:underline">Privacy</a></p>
