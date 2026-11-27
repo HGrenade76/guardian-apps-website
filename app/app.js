@@ -1061,7 +1061,7 @@
     const todo = [
       all.unreviewed ? `<a href="#/drives/review" data-act="jump" data-f="review"><span>Drives that need a type</span><b>${all.unreviewed}</b></a>` : "",
       all.missing ? `<a href="#/drives/purpose" data-act="jump" data-f="purpose"><span>Business drives missing a purpose</span><b>${all.missing}</b></a>` : "",
-      tollsMissing ? `<a href="#/drives/business" data-act="jump" data-f="business"><span>Toll roads spotted with no amount</span><b>${tollsMissing}</b></a>` : "",
+      tollsMissing ? `<a href="#/costs"><span>Toll roads spotted with no amount</span><b>${tollsMissing}</b></a>` : "",
     ].join("");
     return `<div class="topbar"><h1>Overview</h1><span class="muted">${y} so far</span></div>
     <div class="kpis">
@@ -1237,20 +1237,54 @@
     const yEx = S.expenses.filter((x) => x.date.getFullYear() === S.month.y).reduce((a, x) => a + x.amount, 0);
     const yFu = S.fuel.filter((x) => x.date.getFullYear() === S.month.y).reduce((a, x) => a + x.cost, 0);
     const gallons = fu.reduce((a, x) => a + x.gallons, 0);
+    // Tolls live on drives: this month's drives with tolls, and business drives on toll roads with no amount yet (any month).
+    const tl = S.trips.filter((t) => !t.lockedFree && t.tolls > 0 && inMonth(t.start));
+    const missing = S.trips.filter((t) => !t.lockedFree && t.category === "business" && t.tollsLikely && !t.tolls).sort((a, b) => b.start - a.start);
+    const route = (t) => [t.from, t.to].filter(Boolean).map((x) => x.split(",")[0]).join(" → ") || "Drive";
+    const src = { imported: "from statement", manual: "typed in", estimated: "estimated" };
     const rows = [
+      ...tl.map((t) => ({ id: t.id, k: "toll", r: false, date: t.start, what: "Tolls", detail: [route(t), src[t.tollSource]].filter(Boolean).join(" · "), v: t.vehicleId, amt: t.tolls })),
       ...fu.map((x) => ({ id: x.id, k: "fuel", r: x.receipt, date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} ${RG.vol} · ${money(x.cost / x.gallons)}/${RG.vol}` : "", v: x.vehicleId, amt: x.cost })),
       ...ex.map((x) => ({ id: x.id, k: "expense", r: x.receipt, date: x.date, what: EXPENSE[x.kind] || "Other", detail: x.note, v: x.vehicleId, amt: x.amount })),
     ].sort((a, b) => b.date - a.date);
+    const missingCard = missing.length ? `<div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>Toll roads, no amount yet</b>
+        <span class="muted" style="font-size:12px">${missing.length} business drive${missing.length === 1 ? "" : "s"}</span>
+        <div class="right"><a class="btn" href="#/import" data-act="imp-tolls">Import toll statement</a></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Route</th><th>Vehicle</th><th class="n">Tolls</th><th></th></tr></thead><tbody>
+      ${missing.slice(0, 50).map((t) => `<tr><td>${esc(dayLabel(t.start))} ${esc(time(t.start))}</td><td>${esc(route(t))}</td><td>${esc(vehicleName(t.vehicleId))}</td>
+        <td class="n"><input class="mini" data-toll="${esc(t.id)}" inputmode="decimal" placeholder="${esc(money(0))}" style="width:90px;text-align:right"></td>
+        <td><button class="btn" data-act="toll-save" data-id="${esc(t.id)}">Save</button></td></tr>`).join("")}
+      </tbody></table></div></div>` : "";
     return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<div class="right"><a class="btn" href="#/import">${icon('<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>')}Import</a><button class="btn" data-act="cost-new" data-k="fuel">+ Fill-up</button><button class="btn primary" data-act="cost-new" data-k="expense">+ Car cost</button></div></div>
     <div class="kpis four">
       ${kpi("Fuel this month", money(fu.reduce((a, x) => a + x.cost, 0)), gallons ? `${num(gallons)} ${RG.vol}` : `${fu.length} fill-up${fu.length === 1 ? "" : "s"}`)}
       ${kpi("Car costs this month", money(ex.reduce((a, x) => a + x.amount, 0)), `${ex.length} item${ex.length === 1 ? "" : "s"}`)}
-      ${kpi(`Fuel in ${S.month.y}`, money(yFu), "")}
-      ${kpi(`Car costs in ${S.month.y}`, money(yEx), "for the actual-expense method")}
+      ${kpi("Tolls this month", money(tl.reduce((a, t) => a + t.tolls, 0)), missing.length ? `${missing.length} need an amount` : `${tl.length} drive${tl.length === 1 ? "" : "s"}`)}
+      ${kpi(`Fuel and car costs in ${S.month.y}`, money(yFu + yEx), "for the actual-expense method")}
     </div>
+    ${missingCard}
     <div class="card" style="padding:0;overflow:hidden"><div class="table-wrap"><table><thead><tr><th>Date</th><th>What</th><th>Details</th><th>Vehicle</th><th class="n">Amount</th></tr></thead><tbody>
-      ${rows.map((r) => `<tr class="click" data-act="cost-edit" data-k="${r.k}" data-id="${esc(r.id)}" tabindex="0"><td>${esc(r.date.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(r.what)}${r.r ? ' <span class="muted" title="Receipt attached">📎</span>' : ""}</td><td class="muted">${esc(r.detail)}</td><td>${esc(vehicleName(r.v))}</td><td class="n">${money(r.amt)}</td></tr>`).join("") || '<tr><td colspan="5"><div class="empty"><b>No costs this month</b>Add a fill-up or car cost here or in the app.</div></td></tr>'}
+      ${rows.map((r) => `<tr class="click" data-act="${r.k === "toll" ? "toll-open" : "cost-edit"}" data-k="${r.k}" data-id="${esc(r.id)}" tabindex="0"><td>${esc(r.date.toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</td><td>${esc(r.what)}${r.r ? ' <span class="muted" title="Receipt attached">📎</span>' : ""}</td><td class="muted">${esc(r.detail)}</td><td>${esc(vehicleName(r.v))}</td><td class="n">${money(r.amt)}</td></tr>`).join("") || '<tr><td colspan="5"><div class="empty"><b>No costs this month</b>Add a fill-up or car cost here or in the app. Tolls are added to the drive they belong to.</div></td></tr>'}
     </tbody></table></div></div>`;
+  }
+
+  // A toll typed on the Costs page, saved on its drive like an edit in the drive panel.
+  async function saveToll(id) {
+    const t = S.trips.find((x) => x.id === id), input = $(`input[data-toll="${CSS.escape(id)}"]`);
+    if (!t || !input) return;
+    const v = Math.round(Math.abs(parseMoney(input.value) || 0) * 100) / 100;
+    if (!v) { input.focus(); return toast("Type the toll amount first."); }
+    input.disabled = true;
+    try {
+      apply(await S.source.save(t, { fields: { tollAmount: v, tollSourceRaw: "manual" },
+        history: [{ field: "tolls", old: (t.tolls || 0).toFixed(2), new: v.toFixed(2) }] }));
+      toast(`Tolls saved: ${money(v)}.`);
+      render();
+    } catch (e) {
+      console.error(e);
+      input.disabled = false;
+      toast(e.conflict ? "This drive changed on your iPhone. Reload and try again." : "Couldn't save. Check your connection and try again.");
+    }
   }
 
   // ---------- Reports ----------
@@ -1634,6 +1668,9 @@
     else if (a === "share") openShare();
     else if (a === "receipt-view") { e.preventDefault(); viewReceipt(el.dataset.id, el.dataset.f); }
     else if (a === "cost-new") openCost(el.dataset.k, null);
+    else if (a === "imp-tolls") { S.imp = impFresh("tolls"); }
+    else if (a === "toll-open") { const t = S.trips.find((x) => x.id === el.dataset.id); if (t) { S.month = { y: t.start.getFullYear(), m: t.start.getMonth() }; S.filter = "all"; pick(t.id); location.hash = "#/drives/all"; } }
+    else if (a === "toll-save") saveToll(el.dataset.id);
     else if (a === "cost-edit") openCost(el.dataset.k, el.dataset.id);
     else if (a === "pdf") pdf();
     else if (a === "jump") { S.month = (() => { const t = S.trips.find(el.dataset.f === "review" ? (x) => x.category === "unclassified" && !x.lockedFree : el.dataset.f === "purpose" ? missingPurpose : (x) => x.category === "business" && x.tollsLikely && !x.tolls); return t ? { y: t.start.getFullYear(), m: t.start.getMonth() } : S.month; })(); }
