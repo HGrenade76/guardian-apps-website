@@ -170,7 +170,7 @@
     "mealAmount", "mealWith", "mealOvernight", "vehicle", "business", "classifiedAt", "autoRule", "lockedFree", "isManual",
     "viaCarPlay", "receiptData_ckAsset", "mealReceiptData_ckAsset", "tollDetail"];
   const OTHER_KEYS = ["trip", "date", "name", "isDefault", "createdAt", "year", "make", "model", "plate", "plateState",
-    "kindRaw", "amount", "note", "totalCost", "gallons", "station"];
+    "kindRaw", "amount", "note", "totalCost", "gallons", "station", "vin"];
   const DESIRED = [...new Set([...TRIP_KEYS, ...OTHER_KEYS])].map((k) => "CD_" + k);
 
   // Field name in the app's change history, and how the app writes the values.
@@ -239,7 +239,8 @@
           case "CD_TripEdit": { const t = str(r, "trip"); if (t) out.editCounts[t] = (out.editCounts[t] || 0) + 1; break; }
           case "CD_Vehicle":
             out.vehicles[r.recordName] = { id: r.recordName, name: str(r, "name") || "My Car", isDefault: bool(r, "isDefault"),
-              createdAt: date(r, "createdAt") || new Date(0), plate: str(r, "plate"), plateState: str(r, "plateState") };
+              createdAt: date(r, "createdAt") || new Date(0), plate: str(r, "plate"), plateState: str(r, "plateState"),
+              year: Number(F(r, "year") || 0), make: str(r, "make"), model: str(r, "model"), vin: str(r, "vin") };
             break;
           case "CD_Business":
             out.businesses[r.recordName] = { id: r.recordName, name: str(r, "name"), createdAt: date(r, "createdAt") || new Date(0) };
@@ -280,6 +281,29 @@
       return { data: this.build(), id: rec.recordName };
     },
 
+    // A vehicle made here is an ordinary record the app picks up, like one added on the iPhone.
+    // Only one can be the default, so the others are switched off in the same save.
+    async saveVehicle(v, isNew) {
+      const S2 = (x) => ({ value: x, type: "STRING" }), N = (x) => ({ value: x, type: "INT64" });
+      const fields = { CD_name: S2(v.name), CD_year: N(v.year || 0), CD_make: S2(v.make), CD_model: S2(v.model), CD_plate: S2(v.plate),
+        CD_plateState: S2(v.plateState), CD_vin: S2(v.vin), CD_isDefault: N(v.isDefault ? 1 : 0) };
+      if (isNew) Object.assign(fields, { CD_entityName: S2("Vehicle"), CD_id: S2(uuid()), CD_createdAt: { value: Date.now(), type: "TIMESTAMP" },
+        CD_driver: S2(""), CD_audioName: S2(""), CD_isLeased: N(0), CD_firstYearMethodRaw: S2(""), CD_availableOffDuty: N(1), CD_otherVehicleAvailable: N(0) });
+      const id = isNew ? uuid() : v.id;
+      const recs = [{ recordName: id, recordType: "CD_Vehicle", fields, ...(isNew ? {} : { recordChangeTag: (this._recs[id] || {}).recordChangeTag }) }];
+      if (v.isDefault) {
+        for (const r of Object.values(this._recs)) {
+          if (r.recordType === "CD_Vehicle" && r.recordName !== id && bool(r, "isDefault")) {
+            recs.push({ recordName: r.recordName, recordType: "CD_Vehicle", recordChangeTag: r.recordChangeTag, fields: { CD_isDefault: N(0) } });
+          }
+        }
+      }
+      const res = await this.db.saveRecords(recs, { zoneID: ZONE, atomic: true });
+      if (res.hasErrors) throw res.errors[0];
+      this.merge(res.records);
+      return { data: this.build(), id };
+    },
+
     async deleteCost(id) {
       const res = await this.db.deleteRecords([{ recordName: id }], { zoneID: ZONE });
       if (res.hasErrors) throw res.errors[0];
@@ -295,6 +319,22 @@
         recs.push({ recordName: t.id, recordType: "CD_Trip", recordChangeTag: t.rec.recordChangeTag, fields: encodeFields(fields) });
         for (const h of history) recs.push({ recordName: uuid(), recordType: "CD_TripEdit", fields: {
           CD_entityName: S2("TripEdit"), CD_date: { value: now, type: "TIMESTAMP" }, CD_field: S2(h.field), CD_oldValue: S2(h.old), CD_newValue: S2(h.new), CD_trip: S2(t.id) } });
+      }
+      // Past drives from another app or a spreadsheet: manual drives, like ones added by hand in the app.
+      const B = (v) => ({ value: v ? 1 : 0, type: "INT64" });
+      for (const x of ops.newTrips || []) {
+        const id = uuid(), classified = x.category !== "unclassified";
+        const f = { CD_entityName: S2("Trip"), CD_id: S2(uuid()), CD_startDate: ts(x.date), CD_endDate: ts(x.end), CD_startAddress: S2(x.from), CD_endAddress: S2(x.to),
+          CD_startLat: D2(0), CD_startLon: D2(0), CD_endLat: D2(0), CD_endLon: D2(0), CD_distanceMeters: D2(Math.round(x.meters)),
+          CD_categoryRaw: S2(x.category), CD_purpose: S2(x.purpose), CD_client: S2(x.client),
+          CD_tollAmount: D2(x.tolls || 0), CD_tollSourceRaw: S2(x.tolls ? "manual" : "none"), CD_tollDetail: S2(""), CD_tollsLikely: B(false),
+          CD_lockedFree: B(false), CD_viaCarPlay: B(false), CD_isManual: B(true), CD_autoRule: S2(""), CD_parkingAmount: D2(x.parking || 0),
+          CD_safetyScore: { value: -1, type: "INT64" }, CD_topSpeed: D2(0), CD_speedChecked: B(true), CD_mealAmount: D2(0), CD_mealWith: S2(""), CD_mealOvernight: B(false) };
+        if (classified) f.CD_classifiedAt = { value: now, type: "TIMESTAMP" };
+        if (x.vehicleId) f.CD_vehicle = S2(x.vehicleId);
+        recs.push({ recordName: id, recordType: "CD_Trip", fields: f });
+        recs.push({ recordName: uuid(), recordType: "CD_TripEdit", fields: { CD_entityName: S2("TripEdit"), CD_date: { value: now, type: "TIMESTAMP" },
+          CD_field: S2("created"), CD_oldValue: S2(""), CD_newValue: S2(`imported from ${x.source} (web)`), CD_trip: S2(id) } });
       }
       for (const c of ops.fuel) {
         const f = { CD_entityName: S2("FuelEntry"), CD_id: S2(uuid()), CD_createdAt: ts(new Date()), CD_date: ts(c.date), CD_totalCost: D2(c.cost),
@@ -453,16 +493,27 @@
       return this.d;
     },
     async receiptURL() { return null; },
+    async saveVehicle(v, isNew) {
+      const id = isNew ? "V" + Date.now() : v.id;
+      if (v.isDefault) for (const x of Object.values(this.d.vehicles)) x.isDefault = false;
+      this.d.vehicles[id] = { ...(this.d.vehicles[id] || { createdAt: new Date() }), ...v, id };
+      await new Promise((r) => setTimeout(r, 250));
+      return { data: this.d, id };
+    },
     async importBatch(ops) {
       for (const { t, fields } of ops.trips) {
         const tt = this.d.trips.find((x) => x.id === t.id);
         Object.assign(tt, { tolls: fields.tollAmount, tollSource: "imported", tollsLikely: true });
         this.d.editCounts[t.id] = (this.d.editCounts[t.id] || 0) + 1;
       }
+      for (const x of ops.newTrips || []) this.d.trips.push({ id: "I" + Math.random().toString(36).slice(2), rec: {}, start: x.date, end: x.end, from: x.from, to: x.to,
+        startLat: 0, startLon: 0, endLat: 0, endLon: 0, meters: x.meters, category: x.category, purpose: x.purpose, client: x.client, tolls: x.tolls, tollSource: x.tolls ? "manual" : "none",
+        tollsLikely: false, parking: x.parking, meal: 0, mealWith: "", mealOvernight: false, vehicleId: x.vehicleId, businessId: "", classifiedAt: x.category === "unclassified" ? null : new Date(),
+        autoRule: "", lockedFree: false, isManual: true, viaCarPlay: false, hasReceipt: false, _route: [] });
       for (const c of ops.fuel) this.d.fuel.push({ id: "N" + Math.random().toString(36).slice(2), date: c.date, cost: c.cost, gallons: c.gallons, station: c.station, vehicleId: c.vehicleId });
       for (const c of ops.expenses) this.d.expenses.push({ id: "N" + Math.random().toString(36).slice(2), date: c.date, kind: c.kind, amount: c.amount, note: c.note, vehicleId: c.vehicleId });
       await new Promise((r) => setTimeout(r, 400));
-      return { data: this.d, ok: ops.trips.length + ops.fuel.length + ops.expenses.length, failed: 0 };
+      return { data: this.d, ok: ops.trips.length + ops.fuel.length + ops.expenses.length + (ops.newTrips || []).length, failed: 0 };
     },
   };
 
@@ -1022,7 +1073,7 @@
       <div class="card"><b>Miles by month</b> <span class="muted" style="font-size:12px">· green is business</span><div class="bars">${barHTML}</div></div>
       <div class="card"><b>To do</b><div class="todo" style="margin-top:6px">${todo || '<p class="muted" style="margin:10px 0 0">All caught up. Every drive has a type and every business drive has a purpose.</p>'}</div></div>
     </div>
-    <div class="card"><b>By vehicle</b><div class="table-wrap"><table style="margin-top:8px"><thead><tr><th>Vehicle</th><th class="n">Total ${RG.unit}</th><th class="n">Business ${RG.unit}</th><th class="n">Business use</th><th class="n">Mileage value</th></tr></thead><tbody>
+    <div class="card"><div class="topbar"><b>By vehicle</b><div class="right"><button class="link" data-act="veh-new">+ Add vehicle</button></div></div><div class="table-wrap"><table style="margin-top:8px"><thead><tr><th>Vehicle</th><th class="n">Total ${RG.unit}</th><th class="n">Business ${RG.unit}</th><th class="n">Business use</th><th class="n">Mileage value</th></tr></thead><tbody>
       ${Object.entries(byVehicle).map(([k, v]) => `<tr><td>${esc(vehicleLabel(k) || "No vehicle")}</td><td class="n">${num(v.total)}</td><td class="n">${num(v.business)}</td><td class="n">${v.total ? Math.round((v.business / v.total) * 100) : 0}%</td><td class="n">${money(v.deduction)}</td></tr>`).join("") || '<tr><td colspan="5" class="muted">No drives yet this year.</td></tr>'}
     </tbody></table></div></div>`;
   }
@@ -1584,6 +1635,7 @@
   document.addEventListener("submit", (e) => {
     if (e.target.matches("form.form")) { e.preventDefault(); save(); }
     else if (e.target.matches("form[data-act=share-create]")) { e.preventDefault(); createShare(e.target); }
+    else if (e.target.matches("#veh-form")) { e.preventDefault(); saveVehicle(e.target); }
     else if (e.target.matches("form.sheet")) { e.preventDefault(); saveCost(e.target); }
   });
   // The cost editor sits outside #main.
@@ -1717,7 +1769,7 @@
               // Read the date parts straight from Excel's number so the browser's time zone can't shift them.
               const d = XLSX.SSF.parse_date_code(cell.v), t = `${p2(d.H)}:${p2(d.M)}:${p2(Math.floor(d.S))}`;
               v = cell.v < 1 ? t : (d.H || d.M || d.S) ? `${d.y}-${p2(d.m)}-${p2(d.d)} ${t}` : `${d.y}-${p2(d.m)}-${p2(d.d)}`;
-            } else v = cell.w != null && cell.t !== "n" ? cell.w : String(cell.v);
+            } else v = cell.w != null && cell.t !== "n" ? cell.w : cell.v == null ? "" : String(cell.v);
           }
           row.push(v.trim());
         }
@@ -1814,21 +1866,57 @@
     },
   };
   SCORE.costs = { date: SCORE.fuel.date, amount: SCORE.fuel.amount, station: SCORE.fuel.station };
+  // Drive logs from MileIQ, Everlance, Stride, TripLog, QuickBooks or a home-made spreadsheet. Fields are picked in this
+  // order and a column is used once, so "Start" can't be both the start time and the start address.
+  const wds = (h) => h.split(/[^a-z0-9]+/).filter(Boolean);
+  const isEnd = (h) => has(h, "end", "stop", "arriv", "finish", "destination") || wds(h).includes("to");
+  const isStart = (h) => has(h, "start", "begin", "depart", "origin") || wds(h).includes("from");
+  SCORE.drives = {
+    date: (h) => !has(h, "date", "day", "when") || has(h, "update", "created", "modified", "birthday") || isEnd(h) ? 0 : 3 + (has(h, "start", "trip", "drive") ? 2 : 0),
+    endDate: (h) => has(h, "date") && isEnd(h) && !has(h, "address", "location") ? 4 : 0,
+    odoStart: (h) => has(h, "odometer", "odo") && has(h, "start", "begin", "beginning", "open") ? 5 : 0,
+    odoEnd: (h) => has(h, "odometer", "odo") && has(h, "end", "stop", "finish", "close", "ending") ? 5 : 0,
+    distance: (h) => {
+      if (has(h, "rate", "value", "$", "amount", "reimb", "deduct", "odometer", "odo", "cost", "pay", "total cost")) return 0;
+      if (has(h, "business miles", "business km")) return 6;
+      return has(h, "distance", "miles", "mileage", "kilomet") || wds(h).includes("km") || wds(h).includes("mi") ? 4 : 0;
+    },
+    startTime: (h) => has(h, "time") && isStart(h) ? 4 : 0,
+    endTime: (h) => has(h, "time") && isEnd(h) ? 4 : 0,
+    time: (h) => h.includes("time") && !isStart(h) && !isEnd(h) && !h.includes("date") ? 2 : 0,
+    from: (h) => has(h, "date", "time", "odometer", "odo", "miles", "distance") ? 0 : has(h, "start address", "start location", "from address", "origin", "starting point", "departure") ? 5 : (isStart(h) && !has(h, "end")) ? 3 : 0,
+    to: (h) => has(h, "date", "time", "odometer", "odo", "miles", "distance") ? 0 : has(h, "end address", "end location", "to address", "destination", "stop address", "stop location") ? 5 : isEnd(h) ? 3 : 0,
+    category: (h) => has(h, "vehicle", "rate") ? 0 : has(h, "category", "classification", "business/personal", "trip type", "drive type") ? 5 : wds(h).includes("type") ? 3 : 0,
+    purpose: (h) => has(h, "purpose", "reason") ? 5 : has(h, "description") ? 3 : 0,
+    client: (h) => has(h, "client", "customer", "company", "contact", "job", "project") ? 4 : 0,
+    notes: (h) => has(h, "note", "memo", "comment") ? 3 : 0,
+    tolls: (h) => has(h, "toll") ? 4 : 0,
+    parking: (h) => has(h, "parking") ? 4 : 0,
+    vehicle: (h) => has(h, "vehicle", "car") && !has(h, "type", "carpool") ? 4 : 0,
+  };
 
   const FIELDS = {
     tolls: [["date", "Date", true], ["time", "Time"], ["amount", "Amount", true], ["location", "Plaza or road"]],
     fuel: [["date", "Date", true], ["time", "Time"], ["amount", "Total cost", true], ["gallons", "Gallons"], ["station", "Station or merchant"], ["odometer", "Odometer"], ["product", "Product"]],
     costs: [["date", "Date", true], ["amount", "Amount", true], ["station", "Description or merchant", true]],
+    drives: [["date", "Date", true], ["startTime", "Start time"], ["endTime", "End time"], ["time", "Time"], ["endDate", "End date"], ["from", "From"], ["to", "To"],
+      ["distance", "Distance"], ["odoStart", "Odometer start"], ["odoEnd", "Odometer end"], ["category", "Type (business, personal…)"], ["purpose", "Purpose"],
+      ["client", "Client"], ["notes", "Notes"], ["tolls", "Tolls"], ["parking", "Parking"], ["vehicle", "Vehicle"]],
   };
   const fieldsFor = (type) => FIELDS[type].map(([k, l, req]) => [k, k === "gallons" && RG.vol === "L" ? "Litres" : l, req]);
 
   function detect(rows, type) {
     const sc = SCORE[type];
     for (let r = 0; r < Math.min(rows.length, 25); r++) {
-      const h = rows[r].map((x) => x.toLowerCase());
-      const best = (f) => { let bi = -1, bs = 0; h.forEach((x, i) => { const s = f(x); if (s > bs) { bs = s; bi = i; } }); return bi; };
+      const h = rows[r].map((x) => x.toLowerCase().trim());
+      const used = new Set();
+      const best = (f) => { let bi = -1, bs = 0; h.forEach((x, i) => { if (type === "drives" && used.has(i)) return; const s = f(x); if (s > bs) { bs = s; bi = i; } }); if (bi >= 0) used.add(bi); return bi; };
       const map = {};
       for (const k of Object.keys(sc)) map[k] = best(sc[k]);
+      if (type === "drives") {
+        if (map.date < 0 || (map.distance < 0 && !(map.odoStart >= 0 && map.odoEnd >= 0))) continue;
+        return { header: r, map };
+      }
       if (map.date < 0 || map.amount < 0) continue;
       if (map.time === map.date) map.time = -1;
       return { header: r, map };
@@ -1838,8 +1926,10 @@
   // A guess at what the file is, from its headers.
   function guessType(rows) {
     const h = rows.slice(0, 25).map((r) => r.join(" ").toLowerCase()).join(" ");
-    if (has(h, "plaza", "gantry", "toll", "tag id", "transponder", "axle", "lane")) return "tolls";
-    if (has(h, "gallon", "litre", "liter", "odometer", "fuel type", "product")) return "fuel";
+    if (has(h, "gallon", "litre", "liter", "fuel type", "product")) return "fuel";
+    if (has(h, "plaza", "gantry", "tag id", "transponder", "axle", "lane")) return "tolls";
+    if (has(h, "miles", "mileage", "distance", "odometer", "kilomet") && has(h, "date")) return "drives";
+    if (h.includes("toll")) return "tolls";
     return null;
   }
   const layoutKey = (type, headers) => type + ":" + headers.map((x) => x.toLowerCase().replace(/[^a-z0-9]/g, "")).join("|");
@@ -1877,6 +1967,7 @@
 
   // Rows to transactions. Bank exports mix spending and payments in one signed column; the side most rows are on is spending.
   function readRows(I) {
+    if (I.type === "drives") return readDrives(I);
     const { rows, header, map, type } = I;
     const cell = (row, k) => (map[k] >= 0 && map[k] < row.length ? row[map[k]] : "") || "";
     const out = [];
@@ -1949,12 +2040,13 @@
 
   // ---------- import: screens ----------
   const TYPES = {
+    drives: { label: "Drive log", what: "drives", help: "Past drives from MileIQ, Everlance, Stride, TripLog, QuickBooks or your own spreadsheet. Added as drives in MileGuard." },
     tolls: { label: "Toll statement", what: "tolls", help: "From your toll account (EZ TAG, TxTag, NTTA TollTag, E-ZPass, SunPass, FasTrak, 407 ETR…). Each toll is added to the drive it happened on." },
     fuel: { label: "Fuel purchases", what: "fill-ups", help: "A fuel card export (WEX, Fleetcor, Shell, Exxon…) or a bank or card statement. Only gas station rows are picked from a bank statement." },
     costs: { label: "Car costs", what: "car costs", help: "A bank or card statement. Insurance, repairs, tires, registration and the like are picked out; tick anything else you want." },
   };
-  const impFresh = (type) => ({ step: "pick", type: type || (S.imp && S.imp.type) || "tolls" });
-  S.imp = impFresh("tolls");
+  const impFresh = (type) => ({ step: "pick", type: type || (S.imp && S.imp.type) || "drives" });
+  S.imp = impFresh("drives");
 
   function renderImport() {
     const I = S.imp;
@@ -1965,17 +2057,18 @@
         ${icon('<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>')}
         <b>Drop a CSV or Excel file here</b><span class="muted">or click to choose one · .csv, .xlsx, .xls</span>
         <input type="file" accept=".csv,.txt,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" data-act="imp-file" hidden></label>
-        <p class="hint">The file is read in this browser. Only the ${TYPES[I.type].what} you approve are saved to your iCloud.</p>`;
+        <p class="hint">The file is read in this browser. Only the ${TYPES[I.type].what} you approve are saved to your iCloud.${I.type === "drives" ? ` Keeping your log in a spreadsheet? Start from the <a href="MileGuard-Drive-Log-Template.xlsx" download>MileGuard drive log template</a>.` : ""}</p>`;
     } else if (I.step === "map") body = mapHTML();
     else if (I.step === "preview") body = previewHTML();
     else if (I.step === "done") body = `<div class="card empty"><b>${esc(I.result)}</b>${I.failed ? `<span class="warn">${I.failed} couldn't be saved. Import the file again to retry them.</span><br>` : ""}They'll be on your iPhone shortly.
       <div class="actions" style="justify-content:center;margin-top:16px"><button class="btn" data-act="imp-reset">Import another file</button>
-      <a class="btn primary" href="${I.type === "tolls" ? "#/drives/business" : "#/costs"}">${I.type === "tolls" ? "See drives" : "See costs"}</a></div></div>`;
+      <a class="btn primary" href="${I.type === "tolls" || I.type === "drives" ? "#/drives/all" : "#/costs"}">${I.type === "tolls" || I.type === "drives" ? "See drives" : "See costs"}</a></div></div>`;
     return `<div class="topbar"><h1>Import</h1>${I.file ? `<span class="muted">${esc(I.file)}</span>` : ""}
       ${I.step !== "pick" && I.step !== "done" ? `<div class="right"><button class="btn" data-act="imp-reset">Start over</button></div>` : ""}</div>
-      <div class="rkinds">${seg}</div>${body}`;
+      <div class="rkinds four">${seg}</div>${body}`;
   }
   const I_ICONS = {
+    drives: '<path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
     tolls: '<path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/>',
     fuel: '<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 8h6M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/>',
     costs: '<path d="M3 7h18v12H3zM3 11h18M7 15h3"/>',
@@ -1996,9 +2089,103 @@
       <div class="actions" style="margin-top:14px"><button class="btn primary" data-act="imp-mapped">Continue</button></div></div>`;
   }
 
+
+  // ---------- import: drive logs ----------
+  const CAT_WORDS = [["business", ["business", "work", "biz", "client", "job"]], ["commute", ["commut"]], ["medical", ["medical", "doctor", "health"]],
+    ["charity", ["charit", "volunteer"]], ["personal", ["personal", "private", "home", "pers"]]];
+  function catOf(text) {
+    const t = String(text || "").toLowerCase().trim();
+    if (!t) return null;
+    for (const [k, ws] of CAT_WORDS) if (ws.some((w) => t.includes(w))) return ASSIGNABLE.includes(k) ? k : "personal";
+    if (/^(b|w)$/.test(t)) return "business";
+    if (/^p$/.test(t)) return "personal";
+    return null;
+  }
+  // Distance in the file's unit: a header that says km or miles wins, otherwise the country's unit.
+  function unitOf(header) {
+    const h = String(header || "").toLowerCase();
+    if (/kilomet|\bkm\b|\(km\)/.test(h)) return 1000;
+    if (/mile|\bmi\b/.test(h)) return 1609.344;
+    return MI;
+  }
+  function readDrives(I) {
+    const { rows, header, map } = I;
+    const heads = rows[header] || [];
+    const cell = (row, k) => (map[k] >= 0 && map[k] < row.length ? row[map[k]] : "") || "";
+    const unit = unitOf(heads[map.distance >= 0 ? map.distance : map.odoStart]);
+    const out = [], seen = new Set();
+    let hasCat = false;
+    for (const r of rows.slice(header + 1)) {
+      const dateText = cell(r, "date");
+      const start = parseWhen((dateText + " " + (cell(r, "startTime") || cell(r, "time"))).trim()) || parseWhen(dateText);
+      if (!start) continue;
+      let dist = parseMoney(cell(r, "distance"));
+      if (!(dist > 0)) {
+        const a = parseMoney(cell(r, "odoStart")), b = parseMoney(cell(r, "odoEnd"));
+        dist = a != null && b != null && b > a ? b - a : 0;
+      }
+      if (!(dist > 0) || dist > 3000) continue;   // totals rows and typos
+      const line = r.join(" ").toLowerCase();
+      if (/^\s*(total|sum|subtotal)\b/.test(line)) continue;
+      let end = null;
+      const endText = cell(r, "endTime");
+      if (endText || cell(r, "endDate")) {
+        const e = parseWhen(((cell(r, "endDate") || dateText.split(/[ T]/)[0]) + " " + endText).trim()) || parseWhen(endText);
+        if (e && e.hasTime) { end = e.date; if (end < start.date) end = new Date(end.getTime() + 86400000); }
+      }
+      if (!end) end = start.hasTime ? new Date(start.date.getTime() + Math.max(5, (dist * unit / 1609.344) * 1.6) * 60000) : start.date;
+      const cat = catOf(cell(r, "category"));
+      if (cat) hasCat = true;
+      const meters = dist * unit;
+      const key = [start.date.getTime(), Math.round(meters / 100), cell(r, "from"), cell(r, "to")].join("|");
+      const dupFile = seen.has(key); seen.add(key);
+      const dup = dupFile || S.trips.some((t) => iso(t.start) === iso(start.date) && Math.abs(t.meters - meters) < 0.15 * MI
+        && (!start.hasTime || Math.abs(t.start - start.date) < 15 * 60000));
+      const vname = cell(r, "vehicle").trim().toLowerCase();
+      const veh = vname && Object.values(S.vehicles).find((v) => v.name.toLowerCase() === vname || [v.make, v.model].join(" ").toLowerCase() === vname);
+      const notes = cell(r, "notes");
+      out.push({ date: start.date, hasTime: start.hasTime, end, meters, from: cell(r, "from").slice(0, 300), to: cell(r, "to").slice(0, 300),
+        cat, purpose: (cell(r, "purpose") || notes).slice(0, 200), client: cell(r, "client").slice(0, 200),
+        tolls: Math.abs(parseMoney(cell(r, "tolls")) || 0), parking: Math.abs(parseMoney(cell(r, "parking")) || 0), vehicleId: veh ? veh.id : "",
+        dup, on: !dup });
+    }
+    // A log without a type column is usually a business log; one with types leaves blanks for review.
+    I.defaultCat = I.defaultCat || (hasCat ? "unclassified" : "business");
+    return out.sort((a, b) => a.date - b.date);
+  }
+
+  function drivesPreviewHTML() {
+    const I = S.imp;
+    const vs = Object.values(S.vehicles).sort((a, b) => a.createdAt - b.createdAt);
+    const defV = (vs.find((v) => v.isDefault) || vs[0] || {}).id || "";
+    if (I.vehicle == null) I.vehicle = defV;
+    const on = I.txs.filter((x) => x.on);
+    const catOpts = (sel) => [["unclassified", "Needs review"], ...ASSIGNABLE.map((k) => [k, CATS[k].label])].map(([k, l]) => `<option value="${k}" ${sel === k ? "selected" : ""}>${l}</option>`).join("");
+    const catFor = (x) => x.cat || I.defaultCat;
+    const total = on.reduce((a, x) => a + x.meters, 0), biz = on.filter((x) => catFor(x) === "business").reduce((a, x) => a + x.meters, 0);
+    const shown = I.txs.slice(0, 400);
+    const yrs = [...new Set(on.map((x) => x.date.getFullYear()))].sort();
+    return `<div class="kpis four">${kpi("Drives found", I.txs.length, yrs.length ? (yrs.length > 1 ? `${yrs[0]}–${yrs[yrs.length - 1]}` : String(yrs[0])) : "")}${kpi("To import", on.length, `${I.txs.filter((x) => x.dup).length} already in MileGuard`)}
+      ${kpi("Distance", `${num(total / MI, 0)} ${RG.unit}`, "")}${kpi("Business", `${num(biz / MI, 0)} ${RG.unit}`, total ? `${Math.round((biz / total) * 100)}% business use` : "")}</div>
+      <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>Drives</b>
+        <label class="in inline">Rows without a type<select data-act="imp-defcat">${catOpts(I.defaultCat)}</select></label>
+        ${vs.length ? `<label class="in inline">Vehicle<select data-act="imp-vehicle">${vs.map((v) => `<option value="${esc(v.id)}" ${I.vehicle === v.id ? "selected" : ""}>${esc(vehicleLabel(v.id))}</option>`).join("")}</select></label>` : ""}
+        <div class="right"><button class="link" data-act="imp-all" data-v="1">Tick all</button><button class="link" data-act="imp-all" data-v="0">Untick all</button><button class="link" data-act="imp-remap">Change columns</button></div></div>
+        <div class="table-wrap"><table class="imp"><thead><tr><th></th><th>Date</th><th>Route</th><th class="n">${RG.Word}</th><th>Type</th><th>Purpose</th><th></th></tr></thead><tbody>
+        ${shown.map((x) => { const i = I.txs.indexOf(x); return `<tr class="${x.on ? "" : "off"}"><td><input type="checkbox" data-act="imp-tick" data-i="${i}" ${x.on ? "checked" : ""} aria-label="Include"></td>
+          <td style="white-space:nowrap">${esc(x.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }))}${x.hasTime ? " " + esc(time(x.date)) : ""}</td>
+          <td>${esc(x.from || "—")} → ${esc(x.to || "—")}</td><td class="n">${miles(x.meters)}</td>
+          <td><select class="mini" data-act="imp-cat" data-i="${i}">${catOpts(catFor(x))}</select></td>
+          <td>${esc([x.purpose, x.client].filter(Boolean).join(" · "))}</td><td>${x.dup ? '<span class="muted">Already in MileGuard</span>' : ""}</td></tr>`; }).join("")}
+        </tbody></table></div>${I.txs.length > shown.length ? `<p class="hint" style="padding:0 16px 12px">Showing the first ${shown.length} of ${I.txs.length}. All ticked drives are imported.</p>` : ""}</div>
+      <p class="hint">Imported drives are marked as added by hand, with "imported from ${esc(I.file)}" in their change history. They don't count toward the free monthly limit.</p>
+      <div class="actions"><button class="btn" data-act="imp-reset">Cancel</button><button class="btn primary" data-act="imp-go" ${on.length ? "" : "disabled"}>Import ${on.length} drive${on.length === 1 ? "" : "s"}</button></div>`;
+  }
+
   const drivesOn = (d) => S.trips.filter((t) => !t.lockedFree && !t.isManual && t.end && Math.abs(t.start - d) < 36 * 3600000).sort((a, b) => a.start - b.start);
   function previewHTML() {
     const I = S.imp;
+    if (I.type === "drives") return drivesPreviewHTML();
     const change = `<button class="link" data-act="imp-remap">Change columns</button>`;
     if (I.type === "tolls") {
       const { matches, unmatched } = matchTolls(I.txs);
@@ -2052,8 +2239,8 @@
       const rows = /\.xlsx?$/i.test(file.name) || /sheet|excel/.test(file.type) ? await sheetRows(file) : csvRows(await file.text());
       if (!rows.length) return toast("That file is empty.");
       const guess = guessType(rows);
-      if (guess && guess !== I.type) toast(`This looks like ${guess === "tolls" ? "a toll statement" : "fuel purchases"}. Switched to ${TYPES[guess].label}.`);
-      Object.assign(I, { type: guess || I.type, rows, file: file.name, showAll: false, vehicle: null });
+      if (guess && guess !== I.type) toast(`This looks like ${guess === "tolls" ? "a toll statement" : guess === "drives" ? "a drive log" : "fuel purchases"}. Switched to ${TYPES[guess].label}.`);
+      Object.assign(I, { type: guess || I.type, rows, file: file.name, showAll: false, vehicle: null, defaultCat: null });
             const found = detect(rows, I.type);
       // A saved layout wins when its header row still matches this file.
       const lay = Object.values(S.prefs.layouts).find((l) => l.type === I.type && rows[l.header] && layoutKey(I.type, rows[l.header]) === l.key);
@@ -2067,11 +2254,12 @@
   function toPreview(remember) {
     const I = S.imp;
     const missing = fieldsFor(I.type).filter(([k, , req]) => req && !(I.map[k] >= 0));
+    if (I.type === "drives" && !(I.map.distance >= 0) && !(I.map.odoStart >= 0 && I.map.odoEnd >= 0)) missing.push(["distance", "Distance (or both odometer)"]);
     if (missing.length) { I.step = "map"; render(); return toast(`Pick the ${missing.map((m) => m[1].toLowerCase()).join(" and ")} column.`); }
     I.txs = readRows(I);
     if (!I.txs.length) {
       I.step = "map"; render();
-      return toast(I.type === "tolls" ? "No toll charges found. Check the columns." : I.type === "fuel" ? "No fuel purchases found. Check the columns." : "No purchases found. Check the columns.");
+      return toast(I.type === "drives" ? "No drives found. Check the date and distance columns." : I.type === "tolls" ? "No toll charges found. Check the columns." : I.type === "fuel" ? "No fuel purchases found. Check the columns." : "No purchases found. Check the columns.");
     }
     if (remember) {
       const key = layoutKey(I.type, I.rows[I.header]);
@@ -2084,14 +2272,18 @@
   async function runImport() {
     const I = S.imp, btn = $('[data-act="imp-go"]');
     if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
-    const ops = { trips: [], fuel: [], expenses: [] };
+    const ops = { trips: [], fuel: [], expenses: [], newTrips: [] };
     if (I.type === "tolls") {
       for (const m of I.matches.filter((x) => x.status === "update")) {
         ops.trips.push({ t: m.t, fields: { tollAmount: m.total, tollSourceRaw: "imported", tollsLikely: true, tollDetail: tollDetail(m.txs) },
           history: [{ field: "tolls (web import)", old: (m.t.tolls || 0).toFixed(2), new: m.total.toFixed(2) }] });
       }
     } else {
-      for (const x of I.txs.filter((y) => y.on)) {
+      for (const x of I.txs.filter((y) => y.on && I.type === "drives")) {
+        const cat = x.cat || I.defaultCat;
+        ops.newTrips.push({ ...x, category: cat, vehicleId: x.vehicleId || I.vehicle || "", source: I.file });
+      }
+      for (const x of I.txs.filter((y) => y.on && I.type !== "drives")) {
         const date = x.hasTime ? x.date : new Date(x.date.getFullYear(), x.date.getMonth(), x.date.getDate(), 12);
         if (I.type === "fuel") ops.fuel.push({ date, cost: x.amount, gallons: Math.round(x.gallons * 1000) / 1000, station: x.station, odometer: x.odometer, vehicleId: I.vehicle || "" });
         else ops.expenses.push({ date, amount: x.amount, kind: x.kind, note: x.note, vehicleId: I.vehicle || "" });
@@ -2102,8 +2294,8 @@
       apply(res.data);
       const n = res.ok;
       I.failed = res.failed;
-      I.result = I.type === "tolls" ? `Tolls added to ${n} drive${n === 1 ? "" : "s"}` : `${n} ${n === 1 ? (I.type === "fuel" ? "fill-up" : "car cost") : TYPES[I.type].what} imported`;
-      if (I.type !== "tolls" && I.vehicle) S.prefs.importVehicle !== I.vehicle && setPref("importVehicle", I.vehicle, true);
+      I.result = I.type === "tolls" ? `Tolls added to ${n} drive${n === 1 ? "" : "s"}` : I.type === "drives" ? `${n} drive${n === 1 ? "" : "s"} imported` : `${n} ${n === 1 ? (I.type === "fuel" ? "fill-up" : "car cost") : TYPES[I.type].what} imported`;
+      if (I.type !== "tolls" && I.type !== "drives" && I.vehicle) S.prefs.importVehicle !== I.vehicle && setPref("importVehicle", I.vehicle, true);
       I.step = "done";
       render();
     } catch (e) {
@@ -2144,13 +2336,14 @@
         <div class="srow col"><div><b>Saved column layouts</b><span>Kept when you change columns on an import, so the same statement reads right next time</span></div>
           ${layouts.length ? `<table><tbody>${layouts.map((l) => `<tr><td>${esc(l.name || "Layout")}<div class="muted" style="font-size:12px">${esc(TYPES[l.type] ? TYPES[l.type].label : l.type)} · saved ${esc(new Date(l.saved).toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</div></td>
             <td class="n"><button class="link" data-act="set-layout-del" data-k="${esc(l.key)}" style="color:#C2372F">Remove</button></td></tr>`).join("")}</tbody></table>` : '<span class="muted" style="font-size:13px">None yet.</span>'}</div>
-        ${row("Import a file", "Toll statements, fuel purchases and car costs from CSV or Excel", '<a class="btn" href="#/import">Open Import</a>')}
+        ${row("Import a file", "Past drives, toll statements, fuel purchases and car costs from CSV or Excel", '<a class="btn" href="#/import">Open Import</a>')}
       </section>
       <section class="card"><h3>Share links</h3><div id="set-shares"><div class="spin"></div></div></section>
-      <section class="card"><h3>Vehicles and businesses</h3>
-        <p class="hint" style="margin:0 0 6px">Add or edit these in the app; changes show up here.</p>
-        ${vs.map((v) => row(esc(v.name), esc([v.plateState, v.plate].filter(Boolean).join(" ").toUpperCase()) || '<span class="warn">No plate number</span>', v.isDefault ? '<span class="tag">Default</span>' : "")).join("") || '<p class="muted">No vehicles yet.</p>'}
-        ${bs.map((b, i) => row(esc(b.name || "Business"), "Business", i === 0 ? '<span class="tag">Default</span>' : "")).join("")}
+      <section class="card"><div class="topbar"><h3 style="margin:0">Vehicles</h3><div class="right"><button class="btn" data-act="veh-new">+ Add vehicle</button></div></div>
+        <p class="hint" style="margin:6px 0">Click one to edit it. Changes show up on your iPhone. Remove vehicles in the app.</p>
+        ${vs.map((v) => `<button class="srow vrow" data-act="veh-edit" data-id="${esc(v.id)}"><div><b>${esc(v.name)}</b><span>${esc([v.year || "", v.make, v.model].filter(Boolean).join(" "))}${v.make ? " · " : ""}${esc([v.plateState, v.plate].filter(Boolean).join(" ").toUpperCase()) || '<span class="warn">No plate number</span>'}</span></div>
+          <div>${v.isDefault ? '<span class="tag">Default</span>' : ""} <span class="muted">Edit</span></div></button>`).join("") || '<p class="muted">No vehicles yet.</p>'}
+        ${bs.length ? `<h3 style="margin-top:14px">Businesses</h3>${bs.map((b, i) => row(esc(b.name || "Business"), "Add or rename in the app", i === 0 ? '<span class="tag">Default</span>' : "")).join("")}` : ""}
       </section>
       <section class="card"><h3>Your data</h3>
         ${row("Download everything", "Every drive, fill-up and car cost as one CSV", `<button class="btn" data-act="set-export">${icon(I.dl)}CSV</button>`)}
@@ -2194,9 +2387,11 @@
     else if (a === "imp-remap") { I.step = "map"; render(); }
     else if (a === "imp-mapped") toPreview(true);
     else if (a === "imp-show") { I.showAll = true; render(); }
-    else if (a === "imp-all") { const v = el.dataset.v === "1"; for (const x of I.txs) if (I.showAll || I.type === "fuel" || x.known || x.on) x.on = v; render(); }
+    else if (a === "imp-all") { const v = el.dataset.v === "1"; for (const x of I.txs) if (I.showAll || I.type === "fuel" || I.type === "drives" || x.known || x.on) x.on = v; render(); }
     else if (a === "imp-go") runImport();
     else if (a === "set-export") exportAll();
+    else if (a === "veh-new") openVehicle(null);
+    else if (a === "veh-edit") openVehicle(el.dataset.id);
     else if (a === "set-signout") { const s = $("#sign-out"); if (s) s.click(); }
     else if (a === "set-layout-del") { const l = { ...S.prefs.layouts }; delete l[el.dataset.k]; setPref("layouts", l).then(render); }
     else if (a === "set-share-copy") copy(shareURL(el.dataset.t));
@@ -2212,6 +2407,8 @@
     else if (a === "imp-tick") { I.txs[Number(el.dataset.i)].on = el.checked; render(); }
     else if (a === "imp-kind") { const x = I.txs[Number(el.dataset.i)]; x.kind = el.value; x.on = true; render(); }
     else if (a === "imp-vehicle") I.vehicle = el.value;
+    else if (a === "imp-defcat") { I.defaultCat = el.value; render(); }
+    else if (a === "imp-cat") { const x = I.txs[Number(el.dataset.i)]; x.cat = el.value; x.on = true; render(); }
     else if (a === "pref") setPref(el.name, el.name === "tollWindow" ? Number(el.value) : el.value);
     else if (a === "pref-check") setPref(el.name, el.checked);
     else if (a === "pref-rate") { const v = parseFloat(el.value.replace(/[^0-9.]/g, "")); el.value = v > 0 ? String(v) : ""; setPref("claimRate", el.value); }
@@ -2225,6 +2422,160 @@
     readFile(e.dataTransfer.files && e.dataTransfer.files[0]);
   });
   document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "drop") e.target.querySelector("input").click(); });
+
+  // ---------- vehicle editor ----------
+  const MAKES = ["Acura", "Alfa Romeo", "Aston Martin", "Audi", "Bentley", "BMW", "Buick", "Cadillac", "Chevrolet", "Chrysler", "Dodge", "Ferrari",
+    "Fiat", "Ford", "Genesis", "GMC", "Honda", "Hyundai", "Infiniti", "Jaguar", "Jeep", "Kia", "Lamborghini", "Land Rover", "Lexus", "Lincoln", "Lucid",
+    "Maserati", "Mazda", "McLaren", "Mercedes-Benz", "Mini", "Mitsubishi", "Nissan", "Polestar", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Scout",
+    "Subaru", "Tesla", "Toyota", "Volkswagen", "Volvo"];
+  // Same trims the app adds (VehicleLookup.swift): NHTSA only lists "1500".
+  const NOW = 2100;
+  const EXTRA_MODELS = {
+    ram: [["1500 Tradesman", 2011, NOW], ["1500 Big Horn", 2011, NOW], ["1500 Lone Star", 2011, NOW], ["1500 Laramie", 2011, NOW], ["1500 Rebel", 2015, NOW],
+      ["1500 Limited", 2012, NOW], ["1500 Longhorn", 2012, NOW], ["1500 Warlock", 2019, NOW], ["1500 TRX", 2021, 2024], ["1500 RHO", 2025, NOW],
+      ["1500 Tungsten", 2025, NOW], ["2500 Tradesman", 2011, NOW], ["2500 Big Horn", 2011, NOW], ["2500 Laramie", 2011, NOW], ["2500 Rebel", 2024, NOW],
+      ["2500 Power Wagon", 2014, NOW], ["2500 Limited", 2012, NOW], ["3500 Tradesman", 2011, NOW], ["3500 Laramie", 2011, NOW], ["3500 Limited", 2012, NOW]],
+    dodge: [["Charger Scat Pack", 2015, NOW], ["Charger SRT Hellcat", 2015, 2023], ["Charger Daytona", 2024, NOW], ["Challenger R/T", 2009, 2023],
+      ["Challenger Scat Pack", 2015, 2023], ["Challenger SRT Hellcat", 2015, 2023], ["Durango R/T", 2011, NOW], ["Durango SRT 392", 2018, NOW],
+      ["Durango SRT Hellcat", 2021, 2025]],
+  };
+  const US_STATES = "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA PR RI SC SD TN TX UT VT VA WA WV WI WY".split(" ");
+  const PROVINCES = "AB BC MB NB NL NS NT NU ON PE QC SK YT".split(" ");
+  const modelCache = {};
+  async function modelsFor(make, year) {
+    if (!make) return [];
+    const key = make.toLowerCase() + "|" + year;
+    if (!modelCache[key]) {
+      modelCache[key] = (async () => {
+        let list = [];
+        try {
+          const m = encodeURIComponent(make);
+          const r = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/${year ? `GetModelsForMakeYear/make/${m}/modelyear/${year}` : `GetModelsForMake/${m}`}?format=json`);
+          if (r.ok) list = (await r.json()).Results.map((x) => String(x.Model_Name || "").trim()).filter(Boolean);
+        } catch (e) { /* offline: trims only, or type one */ }
+        const extra = (EXTRA_MODELS[make.toLowerCase()] || []).filter(([, a, b]) => !year || (year >= a && year <= b)).map((x) => x[0]);
+        return [...new Set([...list, ...extra])].sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+      })();
+    }
+    return modelCache[key];
+  }
+  // Ram trucks are their own make from 2011; people still look under Dodge.
+  const ramSplit = (make, year) => /^dodge$/i.test(make) && (!year || year >= 2011);
+
+  async function fillModels() {
+    const f = $("#veh-form");
+    if (!f) return;
+    const make = f.make.value.trim(), year = Number(f.year.value) || 0;
+    const dl = $("#veh-models");
+    const main = await modelsFor(make, year);
+    const ram = ramSplit(make, year) ? (await modelsFor("Ram", year)).map((m) => "Ram " + m) : [];
+    if ($("#veh-form") !== f) return;
+    dl.innerHTML = [...main, ...ram].map((m) => `<option value="${esc(m)}">`).join("");
+  }
+
+  function openVehicle(id) {
+    const v = id ? S.vehicles[id] : null;
+    const count = Object.keys(S.vehicles).length;
+    S.modal = { kind: "vehicle", id: v ? v.id : null };
+    const states = RG.uk ? null : RG.ca ? PROVINCES : US_STATES;
+    const thisYear = new Date().getFullYear();
+    const years = []; for (let y = thisYear + 1; y >= 1980; y--) years.push(y);
+    modalHost().innerHTML = `<div class="scrim" data-act="modal-close"></div>
+    <form class="card sheet" id="veh-form" data-act="veh-save" autocomplete="off" role="dialog" aria-label="Vehicle">
+      <div class="hd"><h2>${v ? "Edit vehicle" : "Add vehicle"}</h2><button type="button" class="btn close" style="display:inline-flex" data-act="modal-close" aria-label="Close">✕</button></div>
+      <div class="form">
+        <label class="in">Name<input name="name" value="${esc(v ? v.name : "")}" maxlength="60" placeholder="e.g. Work truck" required></label>
+        <div class="three" style="grid-template-columns:110px 1fr">
+          <label class="in">Year<select name="year"><option value="0">Not set</option>${years.map((y) => `<option ${v && v.year === y ? "selected" : ""}>${y}</option>`).join("")}</select></label>
+          <label class="in">Make<input name="make" list="veh-makes" value="${esc(v ? v.make : "")}" maxlength="40" placeholder="Choose or type"></label>
+        </div>
+        <datalist id="veh-makes">${MAKES.map((m) => `<option value="${esc(m)}">`).join("")}</datalist>
+        <label class="in">Model<input name="model" list="veh-models" value="${esc(v ? v.model : "")}" maxlength="60" placeholder="Choose or type, e.g. 1500 RHO"></label>
+        <datalist id="veh-models"></datalist>
+        <div class="three" style="grid-template-columns:1fr ${states ? "130px" : ""}">
+          <label class="in">Plate number<input name="plate" value="${esc(v ? v.plate : "")}" maxlength="12" style="text-transform:uppercase"></label>
+          ${states ? `<label class="in">${RG.ca ? "Province" : "State"}<select name="plateState"><option value="">—</option>${states.map((c) => `<option ${v && (v.plateState || "").toUpperCase() === c ? "selected" : ""}>${c}</option>`).join("")}</select></label>` : ""}
+        </div>
+        <div class="three" style="grid-template-columns:1fr auto;align-items:end">
+          <label class="in">VIN (optional)<input name="vin" value="${esc(v ? v.vin : "")}" maxlength="17" style="text-transform:uppercase" placeholder="Fills in year, make and model"></label>
+          <button type="button" class="btn" data-act="veh-vin">Look up</button>
+        </div>
+        <label class="check"><input type="checkbox" name="isDefault" ${(v ? v.isDefault : !count) ? "checked" : ""} ${v && v.isDefault ? "disabled" : ""}> Default vehicle for new drives</label>
+        <div class="actions"><button type="button" class="btn" data-act="modal-close">Cancel</button><button type="submit" class="btn primary" id="veh-save">Save</button></div>
+      </div>
+    </form>`;
+    fillModels();
+    if (!v) modalHost().querySelector("input[name=name]").focus();
+  }
+
+  async function vinLookup() {
+    const f = $("#veh-form");
+    const vin = f.vin.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (vin.length !== 17) return toast("A VIN is 17 letters and numbers.");
+    const btn = $('[data-act="veh-vin"]'); btn.disabled = true; btn.textContent = "Looking up…";
+    try {
+      const r = await fetch(`https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/${vin}?format=json`);
+      const x = (await r.json()).Results[0] || {};
+      if (!x.Make) throw new Error("none");
+      const make = x.Make.split(" ").map((w) => w.length <= 3 && w === "BMW" ? w : w.charAt(0) + w.slice(1).toLowerCase()).join(" ");
+      const known = MAKES.find((m) => m.toLowerCase() === make.toLowerCase());
+      if (Number(x.ModelYear)) f.year.value = x.ModelYear;
+      f.make.value = known || make;
+      const trim = (x.Trim || "").trim();
+      const extra = (EXTRA_MODELS[(known || make).toLowerCase()] || []).map((e) => e[0]);
+      const withTrim = trim ? `${x.Model} ${trim}` : "";
+      f.model.value = extra.find((e) => e.toLowerCase() === withTrim.toLowerCase()) || x.Model || "";
+      f.vin.value = vin;
+      if (!f.name.value.trim()) f.name.value = [f.make.value, f.model.value].filter(Boolean).join(" ");
+      toast("Found: " + [x.ModelYear, f.make.value, f.model.value].filter(Boolean).join(" "));
+      fillModels();
+    } catch (e) { toast("Couldn't look up that VIN. Fill in the details yourself."); }
+    finally { btn.disabled = false; btn.textContent = "Look up"; }
+  }
+
+  async function saveVehicle(f) {
+    const m = S.modal;
+    let make = f.make.value.trim(), model = f.model.value.trim();
+    const year = Number(f.year.value) || 0;
+    // "Ram 1500 RHO" picked under Dodge, or typed with the make in front.
+    if (/^ram\s+/i.test(model) && (ramSplit(make, year) || !make || /^ram$/i.test(make))) { make = "Ram"; model = model.replace(/^ram\s+/i, ""); }
+    const known = MAKES.find((x) => x.toLowerCase() === make.toLowerCase());
+    if (known) make = known;
+    const name = f.name.value.trim() || [make, model].filter(Boolean).join(" ");
+    if (!name) return toast("Give the vehicle a name.");
+    // The app merges vehicles with the same name, so keep names unique.
+    if (Object.values(S.vehicles).some((x) => x.id !== m.id && x.name.trim().toLowerCase() === name.toLowerCase())) return toast(`You already have a vehicle called "${name}".`);
+    const vin = f.vin.value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+    if (vin && vin.length !== 17) return toast("A VIN is 17 letters and numbers. Leave it empty if you don't have it.");
+    const old = m.id ? S.vehicles[m.id] : null;
+    const v = { id: m.id, name, year, make, model, plate: f.plate.value.trim().toUpperCase(), plateState: f.plateState ? f.plateState.value : (old ? old.plateState : ""),
+      vin, isDefault: old && old.isDefault ? true : f.isDefault.checked };
+    const btn = $("#veh-save"); btn.disabled = true; btn.textContent = "Saving…";
+    try {
+      apply((await S.source.saveVehicle(v, !m.id)).data);
+      closeModal(); render();
+      toast(m.id ? "Vehicle saved. It'll be on your iPhone shortly." : `${name} added. It'll be on your iPhone shortly.`);
+    } catch (e) {
+      console.error(e);
+      toast(/CONFLICT/.test(errCode(e)) ? "This vehicle changed on your iPhone. Close and open it again." : "Couldn't save. Check your connection and try again.");
+      btn.disabled = false; btn.textContent = "Save";
+    }
+  }
+
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-act]");
+    if (!el || !el.closest("#modal")) return;
+    if (el.dataset.act === "veh-vin") vinLookup();
+  });
+  document.addEventListener("change", (e) => {
+    const f = e.target.form;
+    if (!f || f.id !== "veh-form") return;
+    if (e.target.name === "make" || e.target.name === "year") fillModels();
+    if (e.target.name === "model" && !f.name.value.trim()) {
+      const ram = /^ram\s+/i.test(e.target.value);
+      f.name.value = ram ? e.target.value : [f.make.value.trim(), e.target.value.trim()].filter(Boolean).join(" ");
+    }
+  });
 
   boot();
 })();

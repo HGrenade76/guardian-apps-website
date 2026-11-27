@@ -259,3 +259,8 @@ tr.off td{color:var(--sub)}
 .switch input:focus-visible+i{outline:2px solid rgba(14,138,99,.4);outline-offset:2px}
 @media (max-width:1180px){.settings{grid-template-columns:minmax(0,1fr)}}
 a.btn{text-decoration:none}
+.vrow{width:100%;background:none;border-left:none;border-right:none;border-bottom:none;text-align:left;cursor:pointer;font:inherit;color:inherit;padding-left:6px;padding-right:6px;border-radius:8px}
+.vrow:hover{background:#fafbfa}
+#veh-form input::placeholder{text-transform:none}
+.rkinds.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media (max-width:1180px){.rkinds.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
