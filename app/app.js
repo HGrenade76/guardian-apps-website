@@ -168,7 +168,7 @@
   const TRIP_KEYS = ["id", "startDate", "endDate", "startAddress", "endAddress", "startLat", "startLon", "endLat", "endLon",
     "distanceMeters", "categoryRaw", "purpose", "client", "tollAmount", "tollSourceRaw", "tollsLikely", "parkingAmount",
     "mealAmount", "mealWith", "mealOvernight", "vehicle", "business", "classifiedAt", "autoRule", "lockedFree", "isManual",
-    "viaCarPlay", "receiptData_ckAsset", "mealReceiptData_ckAsset"];
+    "viaCarPlay", "receiptData_ckAsset", "mealReceiptData_ckAsset", "tollDetail"];
   const OTHER_KEYS = ["trip", "date", "name", "isDefault", "createdAt", "year", "make", "model", "plate", "plateState",
     "kindRaw", "amount", "note", "totalCost", "gallons", "station"];
   const DESIRED = [...new Set([...TRIP_KEYS, ...OTHER_KEYS])].map((k) => "CD_" + k);
@@ -179,6 +179,16 @@
     tollAmount: "tolls", parkingAmount: "parking", mealAmount: "meal", mealWith: "meal with", mealOvernight: "meal overnight",
     startAddress: "from", endAddress: "to",
   };
+
+  function encodeFields(obj) {
+    const fields = {};
+    for (const [k, v] of Object.entries(obj)) {
+      if (k === "classifiedAt") continue;
+      fields["CD_" + k] = typeof v === "boolean" ? { value: v ? 1 : 0, type: "INT64" }
+        : typeof v === "number" ? { value: v, type: "DOUBLE" } : { value: v, type: "STRING" };
+    }
+    return fields;
+  }
 
   const Cloud = {
     db: null, token: null,
@@ -277,6 +287,40 @@
       return this.build();
     },
 
+    // Many changes at once from an import. Saved in chunks, not all-or-nothing, so one bad row doesn't block the rest.
+    async importBatch(ops) {
+      const now = Date.now(), ts = (d) => ({ value: d.getTime(), type: "TIMESTAMP" }), S2 = (v) => ({ value: v, type: "STRING" }), D2 = (v) => ({ value: v, type: "DOUBLE" });
+      const recs = [];
+      for (const { t, fields, history } of ops.trips) {
+        recs.push({ recordName: t.id, recordType: "CD_Trip", recordChangeTag: t.rec.recordChangeTag, fields: encodeFields(fields) });
+        for (const h of history) recs.push({ recordName: uuid(), recordType: "CD_TripEdit", fields: {
+          CD_entityName: S2("TripEdit"), CD_date: { value: now, type: "TIMESTAMP" }, CD_field: S2(h.field), CD_oldValue: S2(h.old), CD_newValue: S2(h.new), CD_trip: S2(t.id) } });
+      }
+      for (const c of ops.fuel) {
+        const f = { CD_entityName: S2("FuelEntry"), CD_id: S2(uuid()), CD_createdAt: ts(new Date()), CD_date: ts(c.date), CD_totalCost: D2(c.cost),
+          CD_gallons: D2(c.gallons || 0), CD_station: S2(c.station || ""), CD_odometer: D2(c.odometer || 0), CD_note: S2(""), CD_sourceRaw: S2("imported") };
+        if (c.vehicleId) f.CD_vehicle = S2(c.vehicleId);
+        recs.push({ recordName: uuid(), recordType: "CD_FuelEntry", fields: f });
+      }
+      for (const c of ops.expenses) {
+        const f = { CD_entityName: S2("VehicleExpense"), CD_id: S2(uuid()), CD_createdAt: ts(new Date()), CD_date: ts(c.date), CD_kindRaw: S2(c.kind),
+          CD_amount: D2(c.amount), CD_note: S2(c.note || "") };
+        if (c.vehicleId) f.CD_vehicle = S2(c.vehicleId);
+        recs.push({ recordName: uuid(), recordType: "CD_VehicleExpense", fields: f });
+      }
+      let ok = 0, failed = 0;
+      const main = (r) => r.recordType !== "CD_TripEdit";
+      for (let i = 0; i < recs.length; i += 150) {
+        const chunk = recs.slice(i, i + 150);
+        const res = await this.db.saveRecords(chunk, { zoneID: ZONE, atomic: false });
+        if (!(res.records || []).length && res.hasErrors && i === 0) throw res.errors[0];
+        this.merge(res.records);
+        ok += (res.records || []).filter(main).length;
+        failed += (res.errors || []).filter((e) => main(chunk.find((r) => r.recordName === e.recordName) || {})).length;
+      }
+      return { data: this.build(), ok, failed };
+    },
+
     merge(records) {
       for (const r of records || []) {
         const old = this._recs[r.recordName] || {};
@@ -333,12 +377,7 @@
 
     async save(t, changes) {
       const now = Date.now();
-      const fields = {};
-      for (const [k, v] of Object.entries(changes.fields)) {
-        if (k === "classifiedAt") continue;
-        fields["CD_" + k] = typeof v === "boolean" ? { value: v ? 1 : 0, type: "INT64" }
-          : typeof v === "number" ? { value: v, type: "DOUBLE" } : { value: v, type: "STRING" };
-      }
+      const fields = encodeFields(changes.fields);
       if (changes.fields.classifiedAt !== undefined) fields.CD_classifiedAt = { value: now, type: "TIMESTAMP" };
       const records = [{ recordName: t.id, recordType: "CD_Trip", recordChangeTag: t.rec.recordChangeTag, fields }];
       for (const h of changes.history) {
@@ -414,6 +453,17 @@
       return this.d;
     },
     async receiptURL() { return null; },
+    async importBatch(ops) {
+      for (const { t, fields } of ops.trips) {
+        const tt = this.d.trips.find((x) => x.id === t.id);
+        Object.assign(tt, { tolls: fields.tollAmount, tollSource: "imported", tollsLikely: true });
+        this.d.editCounts[t.id] = (this.d.editCounts[t.id] || 0) + 1;
+      }
+      for (const c of ops.fuel) this.d.fuel.push({ id: "N" + Math.random().toString(36).slice(2), date: c.date, cost: c.cost, gallons: c.gallons, station: c.station, vehicleId: c.vehicleId });
+      for (const c of ops.expenses) this.d.expenses.push({ id: "N" + Math.random().toString(36).slice(2), date: c.date, kind: c.kind, amount: c.amount, note: c.note, vehicleId: c.vehicleId });
+      await new Promise((r) => setTimeout(r, 400));
+      return { data: this.d, ok: ops.trips.length + ops.fuel.length + ops.expenses.length, failed: 0 };
+    },
   };
 
   // Official amount per drive. Canada's step at 5,000 km counts every business drive earlier in the year,
@@ -490,6 +540,7 @@
       }
       S.pro = true;
       apply(data);
+      await Prefs.load();
       showApp();
       ShareCloud.sweep().catch(() => {});
     } catch (e) {
@@ -563,7 +614,7 @@
       $("#sign-out").hidden = true;
       $("#demo-out").hidden = false;
       $("#demo-out").href = location.pathname;
-      Demo.access().then(setRegion).then(() => Demo.load()).then((d) => { S.pro = true; apply(d); showApp(); });
+      Demo.access().then(setRegion).then(() => Demo.load()).then(async (d) => { S.pro = true; apply(d); await Prefs.load(); showApp(); });
       return;
     }
     gate("Your drives, on a bigger screen", "Loading…", '<div class="spin"></div>');
@@ -604,8 +655,8 @@
 
   // ---------- routing ----------
   function route() {
-    const [, view, arg] = (location.hash || "#/drives").split("/");
-    S.view = ["overview", "drives", "costs", "reports"].includes(view) ? view : "drives";
+    const [, view, arg] = (location.hash || "#/" + (S.prefs.openOn || "drives")).split("/");
+    S.view = ["overview", "drives", "costs", "reports", "import", "settings"].includes(view) ? view : "drives";
     if (S.view === "drives" && arg) S.filter = arg;
     document.querySelectorAll("#nav a").forEach((a) => a.classList.toggle("on", a.dataset.view === S.view));
     render();
@@ -617,9 +668,10 @@
     const n = S.trips.filter(needsReview).length;
     const b = $("#badge");
     b.hidden = !n; b.textContent = n;
-    const views = { overview: renderOverview, drives: renderDrives, costs: renderCosts, reports: renderReports };
+    const views = { overview: renderOverview, drives: renderDrives, costs: renderCosts, reports: renderReports, import: renderImport, settings: renderSettings };
     $("#main").innerHTML = views[S.view]();
     if (S.view === "drives" && S.selected) drawMap();
+    if (S.view === "settings") fillShares();
   }
 
   // ---------- shared pieces ----------
@@ -1136,7 +1188,7 @@
       ...fu.map((x) => ({ id: x.id, k: "fuel", r: x.receipt, date: x.date, what: "Fuel" + (x.station ? " · " + x.station : ""), detail: x.gallons ? `${num(x.gallons, 3)} ${RG.vol} · ${money(x.cost / x.gallons)}/${RG.vol}` : "", v: x.vehicleId, amt: x.cost })),
       ...ex.map((x) => ({ id: x.id, k: "expense", r: x.receipt, date: x.date, what: EXPENSE[x.kind] || "Other", detail: x.note, v: x.vehicleId, amt: x.amount })),
     ].sort((a, b) => b.date - a.date);
-    return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<div class="right"><button class="btn" data-act="cost-new" data-k="fuel">+ Fill-up</button><button class="btn primary" data-act="cost-new" data-k="expense">+ Car cost</button></div></div>
+    return `<div class="topbar"><h1>Costs</h1>${monthPicker()}<div class="right"><a class="btn" href="#/import">${icon('<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>')}Import</a><button class="btn" data-act="cost-new" data-k="fuel">+ Fill-up</button><button class="btn primary" data-act="cost-new" data-k="expense">+ Car cost</button></div></div>
     <div class="kpis four">
       ${kpi("Fuel this month", money(fu.reduce((a, x) => a + x.cost, 0)), gallons ? `${num(gallons)} ${RG.vol}` : `${fu.length} fill-up${fu.length === 1 ? "" : "s"}`)}
       ${kpi("Car costs this month", money(ex.reduce((a, x) => a + x.amount, 0)), `${ex.length} item${ex.length === 1 ? "" : "s"}`)}
@@ -1576,6 +1628,603 @@
     if (e.key === "Escape" && S.selected && S.view === "drives" && !e.target.closest("input")) { S.selected = null; S.draft = null; render(); }
   });
   window.addEventListener("beforeunload", (e) => { if (S.draftDirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  // ---------- web settings ----------
+  // Kept in the person's private iCloud so they follow them to any browser. Stored on a record of the
+  // share-list type (already in the production schema) under its own name, so no schema change is needed.
+  const PREFS_RECORD = "mileguard-web-settings";
+  const PREF_DEFAULTS = { openOn: "drives", tollWindow: 10, tollsBusinessOnly: false, importVehicle: "", claimRate: "", reportKind: "log", layouts: {} };
+  S.prefs = { ...PREF_DEFAULTS };
+  const Prefs = {
+    tag: null,
+    async load() {
+      let p = null;
+      if (S.source === Cloud) {
+        try {
+          const res = await Cloud.db.fetchRecords([{ recordName: PREFS_RECORD }]);
+          const r = res.records && res.records[0];
+          if (r && !r.serverErrorCode && r.fields && r.fields.items) { this.tag = r.recordChangeTag; p = JSON.parse(r.fields.items.value || "{}"); }
+        } catch (e) { /* fall back below */ }
+      }
+      if (!p && S.source === Cloud) { try { p = JSON.parse(localStorage.getItem("mg-web-prefs") || "null"); } catch (e) { p = null; } }
+      S.prefs = { ...PREF_DEFAULTS, ...(p || {}), layouts: { ...((p && p.layouts) || {}) } };
+      if (S.prefs.claimRate) S.report.rate = S.prefs.claimRate;
+      if (KINDS[S.prefs.reportKind]) S.report.kind = S.prefs.reportKind;
+    },
+    async save() {
+      if (S.source !== Cloud) return;   // the demo keeps its settings in memory
+      const data = JSON.stringify(S.prefs);
+      try { localStorage.setItem("mg-web-prefs", data); } catch (e) {}
+      const rec = { recordName: PREFS_RECORD, recordType: "MgShareList", fields: { items: { value: data, type: "STRING" } } };
+      if (this.tag) rec.recordChangeTag = this.tag;
+      let res = await Cloud.db.saveRecords([rec]);
+      if (res.hasErrors && /CONFLICT|EXISTS/.test(errCode(res.errors[0]))) {
+        const f = await Cloud.db.fetchRecords([{ recordName: PREFS_RECORD }]);
+        const r = f.records && f.records[0];
+        rec.recordChangeTag = r && r.recordChangeTag;
+        res = await Cloud.db.saveRecords([rec]);
+      }
+      if (res.hasErrors) throw res.errors[0];
+      this.tag = res.records[0].recordChangeTag;
+    },
+  };
+  const errCode = (e) => (e && (e.ckErrorCode || e.serverErrorCode)) || "";
+  async function setPref(k, v, quiet) {
+    S.prefs[k] = v;
+    if (k === "claimRate") S.report.rate = v;
+    if (k === "reportKind") S.report.kind = v;
+    try { await Prefs.save(); if (!quiet) toast("Saved."); }
+    catch (e) { console.error(e); toast("Saved in this browser. Couldn't reach iCloud to save it everywhere."); }
+  }
+
+  // ---------- import: reading files ----------
+  // Same rules as the app's TollImporter and FuelImporter, so a statement imports the same way on both.
+  function csvRows(text) {
+    text = text.replace(/^﻿/, "").replace(/\r\n?/g, "\n");
+    const first = text.split("\n").slice(0, 8).join("\n");
+    const count = (c) => first.split(c).length;
+    const sep = [",", ";", "\t"].sort((a, b) => count(b) - count(a))[0];
+    const rows = []; let row = [], field = "", q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) { if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else q = false; } else field += c; continue; }
+      if (c === '"') q = true;
+      else if (c === sep) { row.push(field); field = ""; }
+      else if (c === "\n") { row.push(field); field = ""; if (row.some((x) => x.trim())) rows.push(row); row = []; }
+      else field += c;
+    }
+    row.push(field);
+    if (row.some((x) => x.trim())) rows.push(row);
+    return rows.map((r) => r.map((x) => x.trim()));
+  }
+
+  async function sheetRows(file) {
+    if (!window.XLSX) await loadScript("vendor/xlsx.mini.min.js"); // SheetJS 0.18.5, Apache-2.0
+    const wb = XLSX.read(await file.arrayBuffer(), { type: "array", cellNF: true });
+    // The first sheet with something in it.
+    for (const name of wb.SheetNames) {
+      const ws = wb.Sheets[name];
+      if (!ws["!ref"]) continue;
+      const rg = XLSX.utils.decode_range(ws["!ref"]), out = [];
+      const p2 = (n) => String(n).padStart(2, "0");
+      for (let r = rg.s.r; r <= rg.e.r; r++) {
+        const row = [];
+        for (let c = rg.s.c; c <= rg.e.c; c++) {
+          const cell = ws[XLSX.utils.encode_cell({ r, c })];
+          let v = "";
+          if (cell) {
+            if (cell.t === "n" && cell.z && XLSX.SSF.is_date(cell.z)) {
+              // Read the date parts straight from Excel's number so the browser's time zone can't shift them.
+              const d = XLSX.SSF.parse_date_code(cell.v), t = `${p2(d.H)}:${p2(d.M)}:${p2(Math.floor(d.S))}`;
+              v = cell.v < 1 ? t : (d.H || d.M || d.S) ? `${d.y}-${p2(d.m)}-${p2(d.d)} ${t}` : `${d.y}-${p2(d.m)}-${p2(d.d)}`;
+            } else v = cell.w != null && cell.t !== "n" ? cell.w : String(cell.v);
+          }
+          row.push(v.trim());
+        }
+        if (row.some(Boolean)) out.push(row);
+      }
+      if (out.length) return out;
+    }
+    return [];
+  }
+
+  const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  function parseWhen(s) {
+    s = String(s || "").replace(/\s+/g, " ").replace(/(\d)\.\d+/, "$1").replace(/\s?(Z|UTC|GMT|[ECMP][SD]T)$/i, "").trim();
+    if (!s) return null;
+    let y, mo, d, rest, m;
+    if ((m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[T ]?(.*)$/))) { [, y, mo, d, rest] = m; }
+    else if ((m = s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4}),?\s*(.*)$/))) {
+      let [, a, b, yy, r] = m;
+      a = +a; b = +b;
+      const dmy = a > 12 || (RG.uk && b <= 12) || (RG.ca && /\./.test(s.slice(0, 6)));
+      [d, mo] = dmy ? [a, b] : [b, a]; y = yy; rest = r;
+    } else if ((m = s.match(/^(\d{1,2})[ -]([A-Za-z]{3,})\.?[ -,]+(\d{2,4}),?\s*(.*)$/))) { [, d, mo, y, rest] = m; mo = MONTHS.indexOf(mo.slice(0, 3).toLowerCase()) + 1; }
+    else if ((m = s.match(/^([A-Za-z]{3,})\.? (\d{1,2}),? (\d{4}),?\s*(.*)$/))) { [, mo, d, y, rest] = m; mo = MONTHS.indexOf(mo.slice(0, 3).toLowerCase()) + 1; }
+    else return null;
+    y = +y; if (y < 100) y += 2000;
+    mo = +mo; d = +d;
+    if (!(mo >= 1 && mo <= 12 && d >= 1 && d <= 31 && y > 2000 && y < 2100)) return null;
+    let h = 12, mi = 0, se = 0, hasTime = false;
+    const t = (rest || "").match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*([AaPp])?\.?[Mm]?\.?/);
+    if (t) {
+      h = +t[1]; mi = +t[2]; se = +(t[3] || 0); hasTime = true;
+      if (t[4]) { const pm = /p/i.test(t[4]); if (h === 12) h = pm ? 12 : 0; else if (pm) h += 12; }
+      if (h > 23 || mi > 59) return null;
+    }
+    const date = new Date(y, mo - 1, d, h, mi, se);
+    return date.getMonth() === mo - 1 ? { date, hasTime } : null;
+  }
+
+  function parseMoney(s) {
+    let t = String(s || "").replace(/[$£€\s]|USD|CAD|GBP|CA\$|C\$/gi, "").replace(/,(?=\d{3}(\D|$))/g, "");
+    let neg = false;
+    if (/^\(.*\)$/.test(t)) { neg = true; t = t.slice(1, -1); }
+    if (/-$/.test(t)) { neg = true; t = t.slice(0, -1); }
+    if (/^[+-]/.test(t)) { neg = t[0] === "-"; t = t.slice(1); }
+    if (/CR$/i.test(t)) { neg = !neg; t = t.slice(0, -2); }
+    t = t.replace(",", ".");
+    if (!/^\d*\.?\d+$/.test(t)) return null;
+    const v = parseFloat(t);
+    return neg ? -v : v;
+  }
+
+  // Header scoring, ported from the app.
+  const has = (h, ...w) => w.some((x) => h.includes(x));
+  const SCORE = {
+    tolls: {
+      date: (h) => !h.includes("date") ? 0 : Math.max(1, 1 + (has(h, "transaction", "trans", "toll") ? 2 : 0) + (h.includes("exit") ? 2 : 0) + (h.includes("entry") ? 1 : 0) - (h.includes("post") ? 1 : 0)),
+      time: (h) => !h.includes("time") || h.includes("date") ? 0 : Math.max(1, 1 + (has(h, "exit", "transaction", "trans") ? 2 : 0) - (h.includes("post") ? 1 : 0)),
+      amount: (h) => {
+        if (has(h, "balance", "number", "#", "tag", "plaza", "location", "date", "time", "type", "class", "axle")) return 0;
+        const w = h.split(/[^a-z]+/);
+        if (w.includes("id") || w.includes("prepaid")) return 0;
+        if (h.includes("toll") && h.includes("amount")) return 4;
+        if (has(h, "amount", "charge")) return 3;
+        return has(h, "toll", "fare", "debit", "cost") ? 2 : 0;
+      },
+      location: (h) => {
+        if (has(h, "date", "time", "amount", "balance")) return 0;
+        if (h.includes("plaza") && h.includes("exit")) return 4;
+        if (has(h, "location", "plaza")) return 3;
+        if (has(h, "facility", "road", "gantry", "exit")) return 2;
+        return has(h, "description", "lane", "agency") ? 1 : 0;
+      },
+    },
+    fuel: {
+      date: (h) => !h.includes("date") ? 0 : 2 + (has(h, "transaction", "trans", "purchase") ? 2 : 0) - (h.includes("post") ? 1 : 0),
+      time: (h) => h.includes("time") && !h.includes("date") ? 1 : 0,
+      amount: (h) => {
+        if (has(h, "balance", "gallon", "litre", "liter", "price", "unit", "qty", "quantity", "date", "number", "#", "rebate", "discount", "tax")) return 0;
+        if (h.includes("total") && has(h, "amount", "cost", "sale")) return 5;
+        if (has(h, "gross", "net amount")) return 4;
+        if (has(h, "amount", "total")) return 3;
+        return has(h, "cost", "debit", "charge", "paid out", "money out") ? 2 : 0;
+      },
+      gallons: (h) => has(h, "price", "cost", "amount", "ppg") ? 0 : has(h, "gallon", "litre", "liter") ? 3 : has(h, "quantity", "qty", "volume") || h === "units" ? 2 : 0,
+      station: (h) => {
+        if (has(h, "date", "time", "amount", "number", "id", "#", "category", "type")) return 0;
+        if (h.includes("merchant") && h.includes("name")) return 5;
+        if (has(h, "merchant", "station", "site")) return 4;
+        if (has(h, "payee", "description", "details", "narrative")) return 3;
+        return has(h, "location", "name") ? 2 : 0;
+      },
+      odometer: (h) => has(h, "odometer", "odo") ? 3 : h.includes("mileage") ? 1 : 0,
+      product: (h) => h.includes("product") && !h.includes("code") ? 2 : has(h, "fuel type", "grade") ? 2 : 0,
+    },
+  };
+  SCORE.costs = { date: SCORE.fuel.date, amount: SCORE.fuel.amount, station: SCORE.fuel.station };
+
+  const FIELDS = {
+    tolls: [["date", "Date", true], ["time", "Time"], ["amount", "Amount", true], ["location", "Plaza or road"]],
+    fuel: [["date", "Date", true], ["time", "Time"], ["amount", "Total cost", true], ["gallons", "Gallons"], ["station", "Station or merchant"], ["odometer", "Odometer"], ["product", "Product"]],
+    costs: [["date", "Date", true], ["amount", "Amount", true], ["station", "Description or merchant", true]],
+  };
+  const fieldsFor = (type) => FIELDS[type].map(([k, l, req]) => [k, k === "gallons" && RG.vol === "L" ? "Litres" : l, req]);
+
+  function detect(rows, type) {
+    const sc = SCORE[type];
+    for (let r = 0; r < Math.min(rows.length, 25); r++) {
+      const h = rows[r].map((x) => x.toLowerCase());
+      const best = (f) => { let bi = -1, bs = 0; h.forEach((x, i) => { const s = f(x); if (s > bs) { bs = s; bi = i; } }); return bi; };
+      const map = {};
+      for (const k of Object.keys(sc)) map[k] = best(sc[k]);
+      if (map.date < 0 || map.amount < 0) continue;
+      if (map.time === map.date) map.time = -1;
+      return { header: r, map };
+    }
+    return null;
+  }
+  // A guess at what the file is, from its headers.
+  function guessType(rows) {
+    const h = rows.slice(0, 25).map((r) => r.join(" ").toLowerCase()).join(" ");
+    if (has(h, "plaza", "gantry", "toll", "tag id", "transponder", "axle", "lane")) return "tolls";
+    if (has(h, "gallon", "litre", "liter", "odometer", "fuel type", "product")) return "fuel";
+    return null;
+  }
+  const layoutKey = (type, headers) => type + ":" + headers.map((x) => x.toLowerCase().replace(/[^a-z0-9]/g, "")).join("|");
+
+  const TOLL_SKIP = ["payment", "replenish", "deposit", "refund", "reload", "autopay", "auto pay", "credit card", "rebill", "transfer", "balance forward"];
+  const FUEL_SKIP = ["payment", "refund", "reversal", "returned", "autopay", "credit adj", "balance forward"];
+  const FUEL_PRODUCTS = ["fuel", "gas", "unleaded", "unl", "regular", "reg", "plus", "premium", "prem", "mid", "super", "diesel", "dsl", "e85", "e15", "ethanol", "petrol"];
+  const STATIONS = ["shell", "exxon", "mobil", "chevron", "texaco", "valero", "citgo", "sunoco", "marathon", "speedway", "phillips 66", "conoco", "76 ",
+    "sinclair", "bp ", "bp#", "amoco", "arco", "gulf", "cenex", "holiday stat", "circle k", "7-eleven", "7 eleven", "wawa", "sheetz", "quiktrip", "qt ",
+    "racetrac", "raceway", "murphy", "buc-ee", "bucee", "love's", "loves travel", "pilot", "flying j", "ta travel", "petro stopping", "casey", "kum & go",
+    "kwik trip", "kwik star", "maverik", "stewart's", "thorntons", "royal farms", "getty", "cumberland farms", "costco gas", "sams club fuel", "sam's fuel",
+    "kroger fuel", "heb fuel", "h-e-b fuel", "safeway fuel", "fred meyer fuel", "walmart fuel", "petro-canada", "petro canada", "esso", "husky", "ultramar",
+    "pioneer", "irving", "co-op gas", "tesco petrol", "sainsbury", "asda petrol", "morrisons", "texaco", "jet ", "fuel", "gas station", "gasoline", "petrol"];
+  // Car costs on a bank or card statement, by merchant words.
+  const COST_WORDS = [
+    ["insurance", ["geico", "progressive", "state farm", "allstate", "usaa", "farmers ins", "liberty mutual", "nationwide", "travelers", "esurance", "root ins",
+      "aviva", "admiral", "direct line", "intact", "desjardins", "insurance", "insur"]],
+    ["tires", ["discount tire", "les schwab", "tire", "tyre", "big o", "goodyear", "michelin"]],
+    ["maintenance", ["jiffy lube", "valvoline", "oil change", "take 5", "quick lube", "firestone", "autozone", "o'reilly", "oreilly", "advance auto", "napa",
+      "kwik fit", "halfords", "canadian tire", "midas", "meineke", "pep boys", "grease monkey"]],
+    ["repairs", ["repair", "collision", "body shop", "maaco", "caliber", "mechanic", "transmission", "auto service", "automotive", "glass", "safelite"]],
+    ["registration", ["dmv", "registration", "tag renewal", "vehicle reg", "dvla", "serviceontario", "smog", "inspection", "mot test", "tax disc"]],
+    ["lease", ["auto lease", "lease"]],
+    ["loanInterest", ["toyota financial", "honda financial", "ally auto", "gm financial", "ford credit", "auto loan", "car loan"]],
+    ["carWash", ["car wash", "carwash", "auto wash", "wash"]],
+    ["garage", ["garage rent", "storage unit"]],
+  ];
+  const costKind = (text) => { const t = text.toLowerCase(); for (const [k, ws] of COST_WORDS) if (ws.some((w) => t.includes(w))) return k; return null; };
+  // Bank descriptions are shouty: "SHELL OIL 5744  HOUSTON TX" → "Shell Oil 5744 Houston TX".
+  const tidy = (s) => {
+    s = String(s || "").replace(/\s+/g, " ").trim();
+    if (s !== s.toUpperCase()) return s;
+    return s.split(" ").map((w) => /\d/.test(w) || (w.length === 2 && /^[A-Z]+$/.test(w)) ? w : w.charAt(0) + w.slice(1).toLowerCase()).join(" ");
+  };
+
+  // Rows to transactions. Bank exports mix spending and payments in one signed column; the side most rows are on is spending.
+  function readRows(I) {
+    const { rows, header, map, type } = I;
+    const cell = (row, k) => (map[k] >= 0 && map[k] < row.length ? row[map[k]] : "") || "";
+    const out = [];
+    const body = rows.slice(header + 1);
+    const amounts = body.map((r) => parseMoney(cell(r, "amount"))).filter((v) => v);
+    const negs = amounts.filter((v) => v < 0).length, spendNeg = type !== "tolls" && negs > amounts.length / 2;
+    const mixed = type !== "tolls" && negs > 0 && negs < amounts.length;
+    const seen = new Set();
+    for (const r of body) {
+      const line = r.join(" ").toLowerCase();
+      const when = parseWhen((cell(r, "date") + " " + cell(r, "time")).trim());
+      const raw = parseMoney(cell(r, "amount"));
+      if (!when || !raw) continue;
+      if (mixed && (raw < 0) !== spendNeg) continue;
+      const amount = Math.round(Math.abs(raw) * 100) / 100;
+      if (type === "tolls") {
+        if (TOLL_SKIP.some((w) => line.includes(w))) continue;
+        const location = cell(r, "location");
+        const k = [when.date.getTime(), amount, location].join("|");
+        const dup = seen.has(k); seen.add(k);
+        out.push({ ...when, amount, location, dupInFile: dup });
+      } else if (type === "fuel") {
+        if (FUEL_SKIP.some((w) => line.includes(w))) continue;
+        const station = cell(r, "station"), product = cell(r, "product").toLowerCase();
+        const gallons = Math.abs(parseMoney(cell(r, "gallons")) || 0);
+        if (map.product >= 0 && product) { if (!FUEL_PRODUCTS.some((w) => product.includes(w))) continue; }
+        else if (map.gallons < 0) { const n = (station || line).toLowerCase() + " "; if (!STATIONS.some((w) => n.includes(w))) continue; }
+        const odo = parseMoney(cell(r, "odometer")) || 0;
+        const dup = S.fuel.some((f) => iso(f.date) === iso(when.date) && Math.abs(f.cost - amount) < 0.01);
+        out.push({ ...when, amount, gallons, station: tidy(station), odometer: odo > 0 ? odo : 0, dup, on: !dup });
+      } else {
+        if (FUEL_SKIP.some((w) => line.includes(w))) continue;
+        const desc = tidy(cell(r, "station"));
+        const kind = costKind(desc || line);
+        const dup = S.expenses.some((x) => iso(x.date) === iso(when.date) && Math.abs(x.amount - amount) < 0.01);
+        out.push({ ...when, amount, note: desc.slice(0, 200), kind: kind || "other", on: !!kind && !dup, dup, known: !!kind });
+      }
+    }
+    return out.sort((a, b) => a.date - b.date);
+  }
+
+  // A timed toll belongs to the drive running then (with a few minutes' slack). A date-only toll is matched
+  // only when that day has one likely drive.
+  function matchTolls(txs) {
+    const slack = (Number(S.prefs.tollWindow) || 10) * 60000;
+    const eligible = S.trips.filter((t) => t.end && !t.isManual && !t.lockedFree && (!S.prefs.tollsBusinessOnly || t.category === "business"));
+    const gap = (d, t) => d < t.start ? t.start - d : d > t.end ? d - t.end : 0;
+    const groups = {}, unmatched = [];
+    for (const tx of txs) {
+      if (tx.dupInFile) continue;
+      let pick = null;
+      if (tx.assign) pick = S.trips.find((t) => t.id === tx.assign);
+      else if (tx.hasTime) {
+        pick = eligible.filter((t) => tx.date >= t.start - slack && tx.date <= t.end.getTime() + slack).sort((a, b) => gap(tx.date, a) - gap(tx.date, b))[0];
+      } else {
+        const same = eligible.filter((t) => iso(t.start) === iso(tx.date)), likely = same.filter((t) => t.tollsLikely);
+        pick = likely.length === 1 ? likely[0] : same.length === 1 ? same[0] : null;
+      }
+      if (pick) (groups[pick.id] = groups[pick.id] || { t: pick, txs: [] }).txs.push(tx);
+      else unmatched.push(tx);
+    }
+    const matches = Object.values(groups).sort((a, b) => a.t.start - b.t.start).map((g) => {
+      const total = Math.round(g.txs.reduce((a, x) => a + x.amount, 0) * 100) / 100;
+      const status = g.t.tollSource === "manual" && g.t.tolls ? "kept" : g.t.tollSource === "imported" && Math.abs(g.t.tolls - total) < 0.005 ? "same" : "update";
+      return { ...g, total, status };
+    });
+    return { matches, unmatched };
+  }
+  const tollDetail = (txs) => txs.map((x) => [x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · ") + "  " + money(x.amount)).join("\n");
+
+  // ---------- import: screens ----------
+  const TYPES = {
+    tolls: { label: "Toll statement", what: "tolls", help: "From your toll account (EZ TAG, TxTag, NTTA TollTag, E-ZPass, SunPass, FasTrak, 407 ETR…). Each toll is added to the drive it happened on." },
+    fuel: { label: "Fuel purchases", what: "fill-ups", help: "A fuel card export (WEX, Fleetcor, Shell, Exxon…) or a bank or card statement. Only gas station rows are picked from a bank statement." },
+    costs: { label: "Car costs", what: "car costs", help: "A bank or card statement. Insurance, repairs, tires, registration and the like are picked out; tick anything else you want." },
+  };
+  const impFresh = (type) => ({ step: "pick", type: type || (S.imp && S.imp.type) || "tolls" });
+  S.imp = impFresh("tolls");
+
+  function renderImport() {
+    const I = S.imp;
+    const seg = Object.entries(TYPES).map(([k, v]) => `<button class="rkind ${I.type === k ? "on" : ""}" data-act="imp-type" data-k="${k}" ${I.step !== "pick" ? "disabled" : ""}>${icon(I_ICONS[k])}<b>${v.label}</b><span>${v.help}</span></button>`).join("");
+    let body = "";
+    if (I.step === "pick") {
+      body = `<label class="card drop" id="drop" tabindex="0">
+        ${icon('<path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>')}
+        <b>Drop a CSV or Excel file here</b><span class="muted">or click to choose one · .csv, .xlsx, .xls</span>
+        <input type="file" accept=".csv,.txt,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" data-act="imp-file" hidden></label>
+        <p class="hint">The file is read in this browser. Only the ${TYPES[I.type].what} you approve are saved to your iCloud.</p>`;
+    } else if (I.step === "map") body = mapHTML();
+    else if (I.step === "preview") body = previewHTML();
+    else if (I.step === "done") body = `<div class="card empty"><b>${esc(I.result)}</b>${I.failed ? `<span class="warn">${I.failed} couldn't be saved. Import the file again to retry them.</span><br>` : ""}They'll be on your iPhone shortly.
+      <div class="actions" style="justify-content:center;margin-top:16px"><button class="btn" data-act="imp-reset">Import another file</button>
+      <a class="btn primary" href="${I.type === "tolls" ? "#/drives/business" : "#/costs"}">${I.type === "tolls" ? "See drives" : "See costs"}</a></div></div>`;
+    return `<div class="topbar"><h1>Import</h1>${I.file ? `<span class="muted">${esc(I.file)}</span>` : ""}
+      ${I.step !== "pick" && I.step !== "done" ? `<div class="right"><button class="btn" data-act="imp-reset">Start over</button></div>` : ""}</div>
+      <div class="rkinds">${seg}</div>${body}`;
+  }
+  const I_ICONS = {
+    tolls: '<path d="M4 20V9l8-5 8 5v11M9 20v-6h6v6"/>',
+    fuel: '<path d="M4 21V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v16M3 21h12M6 8h6M14 9h2a2 2 0 0 1 2 2v5a1.5 1.5 0 0 0 3 0V8l-3-3"/>',
+    costs: '<path d="M3 7h18v12H3zM3 11h18M7 15h3"/>',
+  };
+
+  function mapHTML() {
+    const I = S.imp, heads = I.rows[I.header] || [];
+    const opts = (k) => `<option value="-1">—</option>` + heads.map((h, i) => `<option value="${i}" ${I.map[k] === i ? "selected" : ""}>${esc(h || `Column ${i + 1}`)}</option>`).join("");
+    const sample = I.rows.slice(I.header + 1, I.header + 6);
+    return `<div class="card">
+      <b>Which column is which?</b><p class="hint" style="margin:4px 0 12px">We couldn't read this file's layout on our own, or you asked to change it. MileGuard remembers it for next time.</p>
+      <div class="opts">
+        <label class="in">Header row<select data-act="imp-header">${I.rows.slice(0, 25).map((r, i) => `<option value="${i}" ${I.header === i ? "selected" : ""}>Row ${i + 1}: ${esc(r.filter(Boolean).slice(0, 3).join(", ").slice(0, 40))}</option>`).join("")}</select></label>
+        ${fieldsFor(I.type).map(([k, l, req]) => `<label class="in">${l}${req ? "" : " (optional)"}<select data-act="imp-col" name="${k}">${opts(k)}</select></label>`).join("")}
+      </div>
+      <div class="table-wrap" style="margin-top:14px"><table><thead><tr>${heads.map((h) => `<th>${esc(h)}</th>`).join("")}</tr></thead>
+        <tbody>${sample.map((r) => `<tr>${heads.map((_, i) => `<td>${esc(r[i] || "")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+      <div class="actions" style="margin-top:14px"><button class="btn primary" data-act="imp-mapped">Continue</button></div></div>`;
+  }
+
+  const drivesOn = (d) => S.trips.filter((t) => !t.lockedFree && !t.isManual && t.end && Math.abs(t.start - d) < 36 * 3600000).sort((a, b) => a.start - b.start);
+  function previewHTML() {
+    const I = S.imp;
+    const change = `<button class="link" data-act="imp-remap">Change columns</button>`;
+    if (I.type === "tolls") {
+      const { matches, unmatched } = matchTolls(I.txs);
+      I.matches = matches;
+      const upd = matches.filter((m) => m.status === "update");
+      const dupRows = I.txs.filter((x) => x.dupInFile).length;
+      const total = upd.reduce((a, m) => a + m.total, 0);
+      const st = { update: "Will update", kept: '<span class="muted">Typed by hand · kept</span>', same: '<span class="muted">Already imported</span>' };
+      return `<div class="kpis four">${kpi("Tolls in file", I.txs.length - dupRows, dupRows ? `${dupRows} duplicate row${dupRows > 1 ? "s" : ""} skipped` : "")}${kpi("Drives to update", upd.length, `of ${matches.length} matched`)}
+        ${kpi("Tolls added", money(total), "")}${kpi("Not matched", unmatched.length, unmatched.length ? "pick a drive below" : "")}</div>
+      <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>Matched drives</b><span class="muted" style="font-size:12px">Within ${S.prefs.tollWindow} min of a drive${S.prefs.tollsBusinessOnly ? " · business drives only" : ""} · <a href="#/settings">change</a></span><div class="right">${change}</div></div>
+        <div class="table-wrap"><table><thead><tr><th>Drive</th><th>Route</th><th>Type</th><th>Tolls</th><th class="n">Now</th><th class="n">From file</th><th>Result</th></tr></thead><tbody>
+        ${matches.map((m) => `<tr><td>${esc(dayLabel(m.t.start))} ${esc(time(m.t.start))}</td><td>${esc(m.t.from)} → ${esc(m.t.to)}</td><td>${esc((CATS[m.t.category] || CATS.unclassified).label)}</td>
+          <td class="muted" style="font-size:12px">${m.txs.map((x) => esc([x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · "))).join("<br>")}</td>
+          <td class="n">${m.t.tolls ? money(m.t.tolls) : "—"}</td><td class="n"><b>${money(m.total)}</b></td><td>${st[m.status]}</td></tr>`).join("") || '<tr><td colspan="7" class="muted">No tolls lined up with a recorded drive.</td></tr>'}
+        </tbody></table></div></div>
+      ${unmatched.length ? `<div class="card" style="padding:0;overflow:hidden"><div style="padding:14px 16px"><b>Not matched</b><div class="hint">No drive was running at these times. Pick one, or leave them out.</div></div>
+        <div class="table-wrap"><table><thead><tr><th>When</th><th>Plaza or road</th><th class="n">Amount</th><th>Add to drive</th></tr></thead><tbody>
+        ${unmatched.map((x) => { const i = I.txs.indexOf(x), ds = drivesOn(x.date); return `<tr><td>${esc(dayLabel(x.date))}${x.hasTime ? " " + esc(time(x.date)) : ""}</td><td>${esc(x.location || "—")}</td><td class="n">${money(x.amount)}</td>
+          <td><select class="mini" data-act="imp-assign" data-i="${i}"><option value="">Leave out</option>${ds.map((t) => `<option value="${esc(t.id)}">${esc(dayLabel(t.start))} ${esc(time(t.start))} · ${esc((t.to || "").slice(0, 34))}</option>`).join("")}</select></td></tr>`; }).join("")}
+        </tbody></table></div></div>` : ""}
+      <div class="actions"><button class="btn" data-act="imp-reset">Cancel</button><button class="btn primary" data-act="imp-go" ${upd.length ? "" : "disabled"}>Add tolls to ${upd.length} drive${upd.length === 1 ? "" : "s"}</button></div>`;
+    }
+    const fuel = I.type === "fuel";
+    const vs = Object.values(S.vehicles).sort((a, b) => a.createdAt - b.createdAt);
+    const defV = S.prefs.importVehicle && S.vehicles[S.prefs.importVehicle] ? S.prefs.importVehicle : (vs.find((v) => v.isDefault) || vs[0] || {}).id || "";
+    if (I.vehicle == null) I.vehicle = defV;
+    const on = I.txs.filter((x) => x.on);
+    const shown = I.showAll || fuel ? I.txs : I.txs.filter((x) => x.known || x.on);
+    const hidden = I.txs.length - shown.length;
+    const rows = shown.map((x) => { const i = I.txs.indexOf(x); return `<tr class="${x.on ? "" : "off"}"><td><input type="checkbox" data-act="imp-tick" data-i="${i}" ${x.on ? "checked" : ""} aria-label="Include"></td>
+      <td>${esc(x.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }))}</td>
+      ${fuel ? `<td>${esc(x.station || "—")}</td><td class="n">${x.gallons ? num(x.gallons, 3) : "—"}</td>`
+        : `<td>${esc(x.note || "—")}</td><td><select class="mini" data-act="imp-kind" data-i="${i}">${Object.entries(EXPENSE).map(([k, l]) => `<option value="${k}" ${x.kind === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></td>`}
+      <td class="n">${money(x.amount)}</td><td>${x.dup ? '<span class="muted">Already logged</span>' : ""}</td></tr>`; }).join("");
+    return `<div class="kpis four">${kpi(fuel ? "Fill-ups found" : "Rows found", I.txs.length, "")}${kpi("To import", on.length, "")}${kpi("Total", money(on.reduce((a, x) => a + x.amount, 0)), "")}${kpi("Already logged", I.txs.filter((x) => x.dup).length, "same day and amount")}</div>
+      <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>${fuel ? "Fill-ups" : "Car costs"}</b>
+        ${vs.length ? `<label class="in inline">Vehicle<select data-act="imp-vehicle">${vs.map((v) => `<option value="${esc(v.id)}" ${I.vehicle === v.id ? "selected" : ""}>${esc(vehicleLabel(v.id))}</option>`).join("")}</select></label>` : ""}
+        <div class="right"><button class="link" data-act="imp-all" data-v="1">Tick all</button><button class="link" data-act="imp-all" data-v="0">Untick all</button>${change}</div></div>
+        <div class="table-wrap"><table class="imp"><thead><tr><th></th><th>Date</th><th>${fuel ? "Station" : "Description"}</th>${fuel ? `<th class="n">${RG.vol === "L" ? "Litres" : "Gallons"}</th>` : "<th>Kind</th>"}<th class="n">Amount</th><th></th></tr></thead>
+        <tbody>${rows || '<tr><td colspan="6" class="muted">Nothing found.</td></tr>'}</tbody></table></div>
+        ${hidden ? `<div style="padding:12px 16px"><button class="link" data-act="imp-show">Show ${hidden} other row${hidden > 1 ? "s" : ""} from the statement</button></div>` : ""}</div>
+      <div class="actions"><button class="btn" data-act="imp-reset">Cancel</button><button class="btn primary" data-act="imp-go" ${on.length ? "" : "disabled"}>Import ${on.length} ${on.length === 1 ? (fuel ? "fill-up" : "car cost") : TYPES[I.type].what}</button></div>`;
+  }
+
+  async function readFile(file) {
+    const I = S.imp;
+    if (!file) return;
+    if (file.size > 15 * 1024 * 1024) return toast("That file is too big. Export a shorter date range.");
+    try {
+      const rows = /\.xlsx?$/i.test(file.name) || /sheet|excel/.test(file.type) ? await sheetRows(file) : csvRows(await file.text());
+      if (!rows.length) return toast("That file is empty.");
+      const guess = guessType(rows);
+      if (guess && guess !== I.type) toast(`This looks like ${guess === "tolls" ? "a toll statement" : "fuel purchases"}. Switched to ${TYPES[guess].label}.`);
+      Object.assign(I, { type: guess || I.type, rows, file: file.name, showAll: false, vehicle: null });
+            const found = detect(rows, I.type);
+      // A saved layout wins when its header row still matches this file.
+      const lay = Object.values(S.prefs.layouts).find((l) => l.type === I.type && rows[l.header] && layoutKey(I.type, rows[l.header]) === l.key);
+      if (lay) { I.header = lay.header; I.map = { ...lay.map }; }
+      else if (found) { I.header = found.header; I.map = found.map; }
+      else { I.header = 0; I.map = Object.fromEntries(FIELDS[I.type].map(([k]) => [k, -1])); I.step = "map"; return render(); }
+      toPreview(false);
+    } catch (e) { console.error(e); toast("Couldn't read that file. Save it as CSV or .xlsx and try again."); }
+  }
+
+  function toPreview(remember) {
+    const I = S.imp;
+    const missing = fieldsFor(I.type).filter(([k, , req]) => req && !(I.map[k] >= 0));
+    if (missing.length) { I.step = "map"; render(); return toast(`Pick the ${missing.map((m) => m[1].toLowerCase()).join(" and ")} column.`); }
+    I.txs = readRows(I);
+    if (!I.txs.length) {
+      I.step = "map"; render();
+      return toast(I.type === "tolls" ? "No toll charges found. Check the columns." : I.type === "fuel" ? "No fuel purchases found. Check the columns." : "No purchases found. Check the columns.");
+    }
+    if (remember) {
+      const key = layoutKey(I.type, I.rows[I.header]);
+      setPref("layouts", { ...S.prefs.layouts, [key]: { key, type: I.type, header: I.header, map: { ...I.map }, name: I.file.replace(/\.[^.]+$/, "").slice(0, 60), saved: Date.now() } }, true);
+    }
+    I.step = "preview";
+    render();
+  }
+
+  async function runImport() {
+    const I = S.imp, btn = $('[data-act="imp-go"]');
+    if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+    const ops = { trips: [], fuel: [], expenses: [] };
+    if (I.type === "tolls") {
+      for (const m of I.matches.filter((x) => x.status === "update")) {
+        ops.trips.push({ t: m.t, fields: { tollAmount: m.total, tollSourceRaw: "imported", tollsLikely: true, tollDetail: tollDetail(m.txs) },
+          history: [{ field: "tolls (web import)", old: (m.t.tolls || 0).toFixed(2), new: m.total.toFixed(2) }] });
+      }
+    } else {
+      for (const x of I.txs.filter((y) => y.on)) {
+        const date = x.hasTime ? x.date : new Date(x.date.getFullYear(), x.date.getMonth(), x.date.getDate(), 12);
+        if (I.type === "fuel") ops.fuel.push({ date, cost: x.amount, gallons: Math.round(x.gallons * 1000) / 1000, station: x.station, odometer: x.odometer, vehicleId: I.vehicle || "" });
+        else ops.expenses.push({ date, amount: x.amount, kind: x.kind, note: x.note, vehicleId: I.vehicle || "" });
+      }
+    }
+    try {
+      const res = await S.source.importBatch(ops);
+      apply(res.data);
+      const n = res.ok;
+      I.failed = res.failed;
+      I.result = I.type === "tolls" ? `Tolls added to ${n} drive${n === 1 ? "" : "s"}` : `${n} ${n === 1 ? (I.type === "fuel" ? "fill-up" : "car cost") : TYPES[I.type].what} imported`;
+      if (I.type !== "tolls" && I.vehicle) S.prefs.importVehicle !== I.vehicle && setPref("importVehicle", I.vehicle, true);
+      I.step = "done";
+      render();
+    } catch (e) {
+      console.error(e);
+      toast("Couldn't save. Check your connection and try again.");
+      if (btn) { btn.disabled = false; btn.textContent = "Try again"; }
+    }
+  }
+
+  // ---------- Settings ----------
+  function renderSettings() {
+    const vs = Object.values(S.vehicles).sort((a, b) => a.createdAt - b.createdAt);
+    const bs = Object.values(S.businesses).sort((a, b) => a.createdAt - b.createdAt);
+    const P = S.prefs;
+    const sel = (k, opts) => `<select data-act="pref" name="${k}">${opts.map(([v, l]) => `<option value="${esc(v)}" ${String(P[k]) === String(v) ? "selected" : ""}>${esc(l)}</option>`).join("")}</select>`;
+    const row = (label, sub, ctl) => `<div class="srow"><div><b>${label}</b>${sub ? `<span>${sub}</span>` : ""}</div><div>${ctl}</div></div>`;
+    const country = RG.uk ? "United Kingdom" : RG.ca ? `Canada${RG.province ? " · " + RG.province : ""}` : "United States";
+    const layouts = Object.values(P.layouts || {}).sort((a, b) => b.saved - a.saved);
+    return `<h1>Settings</h1>
+    <div class="settings">
+      <section class="card"><h3>Account</h3>
+        ${row("Signed in", "", esc(S.user) + (S.pro ? ' <span class="tag">Pro</span>' : ""))}
+        ${row("Country", "Set in the app under Settings → Country", `${esc(country)} · ${RG.word} · ${RG.cur}`)}
+        ${row("Rate used", "", esc(RG.rateName))}
+        ${row("Sign out", "On a shared computer, sign out when you're done", S.source === Demo ? '<a class="btn" href="' + location.pathname + '">Leave demo</a>' : '<button class="btn" data-act="set-signout">Sign out</button>')}
+      </section>
+      <section class="card"><h3>Web app</h3>
+        ${row("Open on", "The page you see after signing in", sel("openOn", [["drives", "Drives"], ["overview", "Overview"], ["costs", "Costs"], ["reports", "Reports"]]))}
+        ${row("Default report", "", sel("reportKind", Object.entries(KINDS).map(([k, v]) => [k, v.title])))}
+        ${row(`Employer rate per ${RG.ca ? "km" : "mile"}`, `Fills in the reimbursement claim. Leave empty to use the ${esc(RG.rateName)}.`,
+          `<input class="mini" data-act="pref-rate" inputmode="decimal" value="${esc(P.claimRate)}" placeholder="${rateFor("business", new Date())}" style="width:110px">`)}
+      </section>
+      <section class="card"><h3>Imports</h3>
+        ${row("Toll matching window", "How far before or after a drive a toll can post and still count", sel("tollWindow", [[5, "5 minutes"], [10, "10 minutes"], [15, "15 minutes"], [30, "30 minutes"]]))}
+        ${row("Tolls on business drives only", "Leave off to add tolls to any drive, like the app does",
+          `<label class="switch"><input type="checkbox" data-act="pref-check" name="tollsBusinessOnly" ${P.tollsBusinessOnly ? "checked" : ""}><i></i></label>`)}
+        ${vs.length ? row("Vehicle for imported costs", "", sel("importVehicle", [["", "Default vehicle"], ...vs.map((v) => [v.id, vehicleLabel(v.id)])])) : ""}
+        <div class="srow col"><div><b>Saved column layouts</b><span>Kept when you change columns on an import, so the same statement reads right next time</span></div>
+          ${layouts.length ? `<table><tbody>${layouts.map((l) => `<tr><td>${esc(l.name || "Layout")}<div class="muted" style="font-size:12px">${esc(TYPES[l.type] ? TYPES[l.type].label : l.type)} · saved ${esc(new Date(l.saved).toLocaleDateString("en-US", { month: "short", day: "numeric" }))}</div></td>
+            <td class="n"><button class="link" data-act="set-layout-del" data-k="${esc(l.key)}" style="color:#C2372F">Remove</button></td></tr>`).join("")}</tbody></table>` : '<span class="muted" style="font-size:13px">None yet.</span>'}</div>
+        ${row("Import a file", "Toll statements, fuel purchases and car costs from CSV or Excel", '<a class="btn" href="#/import">Open Import</a>')}
+      </section>
+      <section class="card"><h3>Share links</h3><div id="set-shares"><div class="spin"></div></div></section>
+      <section class="card"><h3>Vehicles and businesses</h3>
+        <p class="hint" style="margin:0 0 6px">Add or edit these in the app; changes show up here.</p>
+        ${vs.map((v) => row(esc(v.name), esc([v.plateState, v.plate].filter(Boolean).join(" ").toUpperCase()) || '<span class="warn">No plate number</span>', v.isDefault ? '<span class="tag">Default</span>' : "")).join("") || '<p class="muted">No vehicles yet.</p>'}
+        ${bs.map((b, i) => row(esc(b.name || "Business"), "Business", i === 0 ? '<span class="tag">Default</span>' : "")).join("")}
+      </section>
+      <section class="card"><h3>Your data</h3>
+        ${row("Download everything", "Every drive, fill-up and car cost as one CSV", `<button class="btn" data-act="set-export">${icon(I.dl)}CSV</button>`)}
+        ${row("Where it lives", "Your drives are read from and saved to your own iCloud. Guardian Apps never sees them.", '<a class="btn" href="/mileguard/privacy/">Privacy</a>')}
+      </section>
+    </div>`;
+  }
+
+  async function fillShares() {
+    const box = $("#set-shares");
+    if (!box) return;
+    let items = [];
+    try { items = (await Share().list()).items.filter((x) => x.exp >= Date.now()); } catch (e) { box.innerHTML = '<p class="muted">Couldn\'t load your links.</p>'; return; }
+    if (!$("#set-shares")) return;
+    const d = (ms) => new Date(ms).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+    box.innerHTML = items.length ? `<table><tbody>${items.map((x) => `<tr><td>${esc(x.title)}<div class="muted" style="font-size:12px">Until ${d(x.exp)}</div></td>
+      <td class="n"><button class="link" data-act="set-share-copy" data-t="${esc(x.t)}">Copy</button> · <button class="link" data-act="set-share-off" data-t="${esc(x.t)}" style="color:#C2372F">Turn off</button></td></tr>`).join("")}</tbody></table>`
+      : '<p class="muted" style="margin:0">No active links. Make one from Reports → Share link.</p>';
+  }
+
+  function exportAll() {
+    const lines = [`Drives`, `Date,Start,End,From,To,${RG.Word},Category,Business Purpose,Client,Tolls,Parking,Meal,Amount,Vehicle,Business`];
+    for (const t of S.trips.filter((x) => !x.lockedFree).slice().sort((a, b) => a.start - b.start)) {
+      lines.push([iso(t.start), hm(t.start), hm(t.end), t.from, t.to, (t.meters / MI).toFixed(1), (CATS[t.category] || CATS.unclassified).label, t.purpose, t.client,
+        t.tolls.toFixed(2), t.parking.toFixed(2), t.meal ? t.meal.toFixed(2) : "", amt(t).toFixed(2), vehicleLabel(t.vehicleId), t.category === "business" ? businessName(t) : ""].map(csvCell).join(","));
+    }
+    lines.push("", "Fuel", `Date,Station,${RG.vol === "L" ? "Litres" : "Gallons"},Cost,Vehicle`);
+    for (const f of S.fuel.slice().sort((a, b) => a.date - b.date)) lines.push([iso(f.date), f.station, f.gallons ? f.gallons.toFixed(3) : "", f.cost.toFixed(2), vehicleName(f.vehicleId)].map(csvCell).join(","));
+    lines.push("", "Car costs", "Date,Kind,Amount,Note,Vehicle");
+    for (const x of S.expenses.slice().sort((a, b) => a.date - b.date)) lines.push([iso(x.date), EXPENSE[x.kind] || "Other", x.amount.toFixed(2), x.note, vehicleName(x.vehicleId)].map(csvCell).join(","));
+    download(`MileGuard-All-Data-${iso(new Date())}.csv`, new Blob(["﻿" + lines.join("\n") + "\n"], { type: "text/csv;charset=utf-8" }));
+  }
+
+  // Import and Settings events.
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("[data-act]");
+    if (!el || !main().contains(el)) return;
+    const a = el.dataset.act, I = S.imp;
+    if (a === "imp-type") { S.imp = impFresh(el.dataset.k); render(); }
+    else if (a === "imp-reset") { S.imp = impFresh(I.type); render(); }
+    else if (a === "imp-remap") { I.step = "map"; render(); }
+    else if (a === "imp-mapped") toPreview(true);
+    else if (a === "imp-show") { I.showAll = true; render(); }
+    else if (a === "imp-all") { const v = el.dataset.v === "1"; for (const x of I.txs) if (I.showAll || I.type === "fuel" || x.known || x.on) x.on = v; render(); }
+    else if (a === "imp-go") runImport();
+    else if (a === "set-export") exportAll();
+    else if (a === "set-signout") { const s = $("#sign-out"); if (s) s.click(); }
+    else if (a === "set-layout-del") { const l = { ...S.prefs.layouts }; delete l[el.dataset.k]; setPref("layouts", l).then(render); }
+    else if (a === "set-share-copy") copy(shareURL(el.dataset.t));
+    else if (a === "set-share-off") Share().revoke(el.dataset.t).then(() => { toast("Link turned off."); fillShares(); }).catch(() => toast("Couldn't turn it off. Try again."));
+  });
+  document.addEventListener("change", (e) => {
+    const el = e.target, a = el.dataset && el.dataset.act, I = S.imp;
+    if (!a || !main().contains(el)) return;
+    if (a === "imp-file") { readFile(el.files && el.files[0]); el.value = ""; }
+    else if (a === "imp-header") { I.header = Number(el.value); const f = detect(I.rows.slice(I.header), I.type); if (f && f.header === 0) I.map = f.map; render(); }
+    else if (a === "imp-col") { I.map[el.name] = Number(el.value); }
+    else if (a === "imp-assign") { I.txs[Number(el.dataset.i)].assign = el.value || null; render(); }
+    else if (a === "imp-tick") { I.txs[Number(el.dataset.i)].on = el.checked; render(); }
+    else if (a === "imp-kind") { const x = I.txs[Number(el.dataset.i)]; x.kind = el.value; x.on = true; render(); }
+    else if (a === "imp-vehicle") I.vehicle = el.value;
+    else if (a === "pref") setPref(el.name, el.name === "tollWindow" ? Number(el.value) : el.value);
+    else if (a === "pref-check") setPref(el.name, el.checked);
+    else if (a === "pref-rate") { const v = parseFloat(el.value.replace(/[^0-9.]/g, "")); el.value = v > 0 ? String(v) : ""; setPref("claimRate", el.value); }
+  });
+  ["dragover", "dragenter"].forEach((ev) => document.addEventListener(ev, (e) => { const d = e.target.closest && e.target.closest("#drop"); if (d) { e.preventDefault(); d.classList.add("over"); } }));
+  document.addEventListener("dragleave", (e) => { const d = e.target.closest && e.target.closest("#drop"); if (d) d.classList.remove("over"); });
+  document.addEventListener("drop", (e) => {
+    const d = e.target.closest && e.target.closest("#drop");
+    if (!d) return;
+    e.preventDefault(); d.classList.remove("over");
+    readFile(e.dataTransfer.files && e.dataTransfer.files[0]);
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Enter" && e.target.id === "drop") e.target.querySelector("input").click(); });
 
   boot();
 })();
