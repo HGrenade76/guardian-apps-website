@@ -129,7 +129,7 @@ One item: when the tab bar minimizes to its pill on scroll, the pill (bottom lef
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8 · Programs page: guided vs my programs, easy switching
+## ☑ 8 · Programs page: guided vs my programs, easy switching — done 6a59d128 (warnings cleared 8b25cc27)
 ```
 One item: Train › Programs. git pull in ~/TwoPlatesTools/design-drop and follow mockup 38-programs (updated 26 Nov).
 1. Layout: photo header (as Pick a goal); sections IN USE, GUIDED PROGRAMS · BY GOAL (See all ›), MY PROGRAMS (+ Build new), each separated by a hairline with 16 pt space above the label.
