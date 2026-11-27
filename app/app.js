@@ -154,7 +154,7 @@
       meters: dbl(r, "distanceMeters"),
       category: str(r, "categoryRaw") || "unclassified",
       purpose: str(r, "purpose"), client: str(r, "client"),
-      tolls: dbl(r, "tollAmount"), tollSource: str(r, "tollSourceRaw"), tollsLikely: bool(r, "tollsLikely"),
+      tolls: dbl(r, "tollAmount"), tollSource: str(r, "tollSourceRaw"), tollsLikely: bool(r, "tollsLikely"), tollDetail: str(r, "tollDetail"),
       parking: dbl(r, "parkingAmount"),
       meal: dbl(r, "mealAmount"), mealWith: str(r, "mealWith"), mealOvernight: bool(r, "mealOvernight"),
       vehicleId: str(r, "vehicle"), businessId: str(r, "business"),
@@ -503,7 +503,7 @@
     async importBatch(ops) {
       for (const { t, fields } of ops.trips) {
         const tt = this.d.trips.find((x) => x.id === t.id);
-        Object.assign(tt, { tolls: fields.tollAmount, tollSource: "imported", tollsLikely: true });
+        Object.assign(tt, { tolls: fields.tollAmount, tollSource: "imported", tollsLikely: true, tollDetail: fields.tollDetail });
         this.d.editCounts[t.id] = (this.d.editCounts[t.id] || 0) + 1;
       }
       for (const x of ops.newTrips || []) this.d.trips.push({ id: "I" + Math.random().toString(36).slice(2), rec: {}, start: x.date, end: x.end, from: x.from, to: x.to,
@@ -1986,8 +1986,9 @@
       if (type === "tolls") {
         if (TOLL_SKIP.some((w) => line.includes(w))) continue;
         const location = cell(r, "location");
-        const k = [when.date.getTime(), amount, location].join("|");
-        const dup = seen.has(k); seen.add(k);
+        // Only timed rows can be told apart; two equal date-only tolls (there and back) are both kept.
+        const k = [when.date.getTime(), amount, location.toLowerCase()].join("|");
+        const dup = when.hasTime && seen.has(k); seen.add(k);
         out.push({ ...when, amount, location, dupInFile: dup });
       } else if (type === "fuel") {
         if (FUEL_SKIP.some((w) => line.includes(w))) continue;
@@ -1996,14 +1997,19 @@
         if (map.product >= 0 && product) { if (!FUEL_PRODUCTS.some((w) => product.includes(w))) continue; }
         else if (map.gallons < 0) { const n = (station || line).toLowerCase() + " "; if (!STATIONS.some((w) => n.includes(w))) continue; }
         const odo = parseMoney(cell(r, "odometer")) || 0;
-        const dup = S.fuel.some((f) => iso(f.date) === iso(when.date) && Math.abs(f.cost - amount) < 0.01);
-        out.push({ ...when, amount, gallons, station: tidy(station), odometer: odo > 0 ? odo : 0, dup, on: !dup });
+        const k = [iso(when.date), Math.round(amount * 100), Math.round(gallons * 100), tidy(station).toLowerCase()].join("|");
+        const dupFile = seen.has(k); seen.add(k);
+        const dup = dupFile || S.fuel.some((f) => iso(f.date) === iso(when.date) && Math.abs(f.cost - amount) < 0.01
+          && (!(f.gallons > 0) || !(gallons > 0) || Math.abs(f.gallons - gallons) < 0.05));
+        out.push({ ...when, amount, gallons, station: tidy(station), odometer: odo > 0 ? odo : 0, dup, dupFile, on: !dup });
       } else {
         if (FUEL_SKIP.some((w) => line.includes(w))) continue;
         const desc = tidy(cell(r, "station"));
         const kind = costKind(desc || line);
-        const dup = S.expenses.some((x) => iso(x.date) === iso(when.date) && Math.abs(x.amount - amount) < 0.01);
-        out.push({ ...when, amount, note: desc.slice(0, 200), kind: kind || "other", on: !!kind && !dup, dup, known: !!kind });
+        const k = [iso(when.date), Math.round(amount * 100), desc.toLowerCase()].join("|");
+        const dupFile = seen.has(k); seen.add(k);
+        const dup = dupFile || S.expenses.some((x) => iso(x.date) === iso(when.date) && Math.abs(x.amount - amount) < 0.01);
+        out.push({ ...when, amount, note: desc.slice(0, 200), kind: kind || "other", on: !!kind && !dup, dup, dupFile, known: !!kind });
       }
     }
     return out.sort((a, b) => a.date - b.date);
@@ -2029,14 +2035,25 @@
       if (pick) (groups[pick.id] = groups[pick.id] || { t: pick, txs: [] }).txs.push(tx);
       else unmatched.push(tx);
     }
+    // A toll already on its drive from an earlier import (app or web) is left out, so the same or an
+    // overlapping statement, or a second toll account, adds only what's new. Same rules as the app.
     const matches = Object.values(groups).sort((a, b) => a.t.start - b.t.start).map((g) => {
-      const total = Math.round(g.txs.reduce((a, x) => a + x.amount, 0) * 100) / 100;
-      const status = g.t.tollSource === "manual" && g.t.tolls ? "kept" : g.t.tollSource === "imported" && Math.abs(g.t.tolls - total) < 0.005 ? "same" : "update";
-      return { ...g, total, status };
+      const have = {};
+      const earlier = g.t.tollSource === "imported" && g.t.tollDetail ? g.t.tollDetail.split("\n").filter(Boolean) : [];
+      for (const l of earlier) { const k = lineKey(l); have[k] = (have[k] || 0) + 1; }
+      let already = 0;
+      const txs = g.txs.filter((x) => { const k = lineKey(tollLine(x)); if (have[k] > 0) { have[k]--; already++; return false; } return true; });
+      const added = Math.round(txs.reduce((a, x) => a + x.amount, 0) * 100) / 100;
+      const base = g.t.tollSource === "imported" ? g.t.tolls || 0 : 0;
+      const total = Math.round((base + added) * 100) / 100;
+      const status = g.t.tollSource === "manual" && g.t.tolls ? "kept" : !txs.length ? "same" : "update";
+      return { ...g, txs, earlier, already, added, total, status };
     });
     return { matches, unmatched };
   }
-  const tollDetail = (txs) => txs.map((x) => [x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · ") + "  " + money(x.amount)).join("\n");
+  const tollLine = (x) => [x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · ") + "  " + money(x.amount);
+  const lineKey = (s) => s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean).join("|");
+  const tollDetail = (m) => [...m.earlier, ...m.txs.map(tollLine)].join("\n");
 
   // ---------- import: screens ----------
   const TYPES = {
@@ -2113,7 +2130,7 @@
     const heads = rows[header] || [];
     const cell = (row, k) => (map[k] >= 0 && map[k] < row.length ? row[map[k]] : "") || "";
     const unit = unitOf(heads[map.distance >= 0 ? map.distance : map.odoStart]);
-    const out = [], seen = new Set();
+    const out = [], seen = {};
     let hasCat = false;
     for (const r of rows.slice(header + 1)) {
       const dateText = cell(r, "date");
@@ -2137,22 +2154,34 @@
       const cat = catOf(cell(r, "category"));
       if (cat) hasCat = true;
       const meters = dist * unit;
-      const key = [start.date.getTime(), Math.round(meters / 100), cell(r, "from"), cell(r, "to")].join("|");
-      const dupFile = seen.has(key); seen.add(key);
-      const dup = dupFile || S.trips.some((t) => iso(t.start) === iso(start.date) && Math.abs(t.meters - meters) < 0.15 * MI
-        && (!start.hasTime || Math.abs(t.start - start.date) < 15 * 60000));
+      // Same drive: same day and distance (0.3 mi or 3%), start times within 10 minutes when both have one.
+      // Two rows of the file without times also need the same route and purpose. Same rules as the app.
+      const from = cell(r, "from"), to = cell(r, "to"), purpose = cell(r, "purpose") || cell(r, "notes"), day = iso(start.date);
+      const dupFile = (seen[day] || []).some((x) => sameDist(x.meters, meters) && x.hasTime === start.hasTime
+        && (start.hasTime ? Math.abs(x.date - start.date) < 10 * 60000
+          : x.from.toLowerCase() === from.toLowerCase() && x.to.toLowerCase() === to.toLowerCase() && x.purpose.toLowerCase() === purpose.toLowerCase()));
+      if (!dupFile) (seen[day] = seen[day] || []).push({ date: start.date, hasTime: start.hasTime, meters, from, to, purpose });
+      const dup = dupFile || S.trips.some((t) => iso(t.start) === day && sameDist(t.meters, meters)
+        && (!start.hasTime || (t.isManual && t.end && t.end - t.start === 0) || Math.abs(t.start - start.date) < 10 * 60000));
       const vname = cell(r, "vehicle").trim().toLowerCase();
       const veh = vname && Object.values(S.vehicles).find((v) => v.name.toLowerCase() === vname || [v.make, v.model].join(" ").toLowerCase() === vname);
       const notes = cell(r, "notes");
       out.push({ date: start.date, hasTime: start.hasTime, end, meters, from: cell(r, "from").slice(0, 300), to: cell(r, "to").slice(0, 300),
         cat, purpose: (cell(r, "purpose") || notes).slice(0, 200), client: cell(r, "client").slice(0, 200),
         tolls: Math.abs(parseMoney(cell(r, "tolls")) || 0), parking: Math.abs(parseMoney(cell(r, "parking")) || 0), vehicleId: veh ? veh.id : "",
-        dup, on: !dup });
+        dup, dupFile, on: !dup });
     }
     // A log without a type column is usually a business log; one with types leaves blanks for review.
     I.defaultCat = I.defaultCat || (hasCat ? "unclassified" : "business");
     return out.sort((a, b) => a.date - b.date);
   }
+
+  const sameDist = (a, b) => Math.abs(a - b) <= Math.max(0.3 * 1609.344, 0.03 * Math.max(a, b));
+  const dupTag = (x, label) => x.dupFile ? '<span class="muted">Twice in this file</span>' : x.dup ? `<span class="muted">${label}</span>` : "";
+  const dupNote = (txs, label) => {
+    const f = txs.filter((x) => x.dupFile).length, e = txs.filter((x) => x.dup && !x.dupFile).length;
+    return [label && e ? `${e} ${label}` : "", f ? `${f} twice in this file` : ""].filter(Boolean).join(" · ");
+  };
 
   function drivesPreviewHTML() {
     const I = S.imp;
@@ -2165,7 +2194,7 @@
     const total = on.reduce((a, x) => a + x.meters, 0), biz = on.filter((x) => catFor(x) === "business").reduce((a, x) => a + x.meters, 0);
     const shown = I.txs.slice(0, 400);
     const yrs = [...new Set(on.map((x) => x.date.getFullYear()))].sort();
-    return `<div class="kpis four">${kpi("Drives found", I.txs.length, yrs.length ? (yrs.length > 1 ? `${yrs[0]}–${yrs[yrs.length - 1]}` : String(yrs[0])) : "")}${kpi("To import", on.length, `${I.txs.filter((x) => x.dup).length} already in MileGuard`)}
+    return `<div class="kpis four">${kpi("Drives found", I.txs.length, yrs.length ? (yrs.length > 1 ? `${yrs[0]}–${yrs[yrs.length - 1]}` : String(yrs[0])) : "")}${kpi("To import", on.length, dupNote(I.txs, "already in MileGuard"))}
       ${kpi("Distance", `${num(total / MI, 0)} ${RG.unit}`, "")}${kpi("Business", `${num(biz / MI, 0)} ${RG.unit}`, total ? `${Math.round((biz / total) * 100)}% business use` : "")}</div>
       <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>Drives</b>
         <label class="in inline">Rows without a type<select data-act="imp-defcat">${catOpts(I.defaultCat)}</select></label>
@@ -2176,7 +2205,7 @@
           <td style="white-space:nowrap">${esc(x.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }))}${x.hasTime ? " " + esc(time(x.date)) : ""}</td>
           <td>${esc(x.from || "—")} → ${esc(x.to || "—")}</td><td class="n">${miles(x.meters)}</td>
           <td><select class="mini" data-act="imp-cat" data-i="${i}">${catOpts(catFor(x))}</select></td>
-          <td>${esc([x.purpose, x.client].filter(Boolean).join(" · "))}</td><td>${x.dup ? '<span class="muted">Already in MileGuard</span>' : ""}</td></tr>`; }).join("")}
+          <td>${esc([x.purpose, x.client].filter(Boolean).join(" · "))}</td><td>${dupTag(x, "Already in MileGuard")}</td></tr>`; }).join("")}
         </tbody></table></div>${I.txs.length > shown.length ? `<p class="hint" style="padding:0 16px 12px">Showing the first ${shown.length} of ${I.txs.length}. All ticked drives are imported.</p>` : ""}</div>
       <p class="hint">Imported drives are marked as added by hand, with "imported from ${esc(I.file)}" in their change history. They don't count toward the free monthly limit.</p>
       <div class="actions"><button class="btn" data-act="imp-reset">Cancel</button><button class="btn primary" data-act="imp-go" ${on.length ? "" : "disabled"}>Import ${on.length} drive${on.length === 1 ? "" : "s"}</button></div>`;
@@ -2192,15 +2221,16 @@
       I.matches = matches;
       const upd = matches.filter((m) => m.status === "update");
       const dupRows = I.txs.filter((x) => x.dupInFile).length;
-      const total = upd.reduce((a, m) => a + m.total, 0);
+      const already = matches.reduce((a, m) => a + m.already, 0);
+      const total = upd.reduce((a, m) => a + m.added, 0);
       const st = { update: "Will update", kept: '<span class="muted">Typed by hand · kept</span>', same: '<span class="muted">Already imported</span>' };
-      return `<div class="kpis four">${kpi("Tolls in file", I.txs.length - dupRows, dupRows ? `${dupRows} duplicate row${dupRows > 1 ? "s" : ""} skipped` : "")}${kpi("Drives to update", upd.length, `of ${matches.length} matched`)}
+      return `<div class="kpis four">${kpi("Tolls in file", I.txs.length - dupRows, dupRows ? `${dupRows} duplicate row${dupRows > 1 ? "s" : ""} skipped` : "")}${kpi("Drives to update", upd.length, already ? `${already} toll${already > 1 ? "s" : ""} already imported` : `of ${matches.length} matched`)}
         ${kpi("Tolls added", money(total), "")}${kpi("Not matched", unmatched.length, unmatched.length ? "pick a drive below" : "")}</div>
       <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>Matched drives</b><span class="muted" style="font-size:12px">Within ${S.prefs.tollWindow} min of a drive${S.prefs.tollsBusinessOnly ? " · business drives only" : ""} · <a href="#/settings">change</a></span><div class="right">${change}</div></div>
         <div class="table-wrap"><table><thead><tr><th>Drive</th><th>Route</th><th>Type</th><th>Tolls</th><th class="n">Now</th><th class="n">From file</th><th>Result</th></tr></thead><tbody>
         ${matches.map((m) => `<tr><td>${esc(dayLabel(m.t.start))} ${esc(time(m.t.start))}</td><td>${esc(m.t.from)} → ${esc(m.t.to)}</td><td>${esc((CATS[m.t.category] || CATS.unclassified).label)}</td>
-          <td class="muted" style="font-size:12px">${m.txs.map((x) => esc([x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · "))).join("<br>")}</td>
-          <td class="n">${m.t.tolls ? money(m.t.tolls) : "—"}</td><td class="n"><b>${money(m.total)}</b></td><td>${st[m.status]}</td></tr>`).join("") || '<tr><td colspan="7" class="muted">No tolls lined up with a recorded drive.</td></tr>'}
+          <td class="muted" style="font-size:12px">${m.txs.map((x) => esc([x.hasTime ? time(x.date) : "", x.location].filter(Boolean).join(" · "))).join("<br>")}${m.already ? `${m.txs.length ? "<br>" : ""}${m.already} already imported` : ""}</td>
+          <td class="n">${m.t.tolls ? money(m.t.tolls) : "—"}</td><td class="n"><b>${money(m.status === "update" ? m.total : m.t.tolls)}</b></td><td>${st[m.status]}</td></tr>`).join("") || '<tr><td colspan="7" class="muted">No tolls lined up with a recorded drive.</td></tr>'}
         </tbody></table></div></div>
       ${unmatched.length ? `<div class="card" style="padding:0;overflow:hidden"><div style="padding:14px 16px"><b>Not matched</b><div class="hint">No drive was running at these times. Pick one, or leave them out.</div></div>
         <div class="table-wrap"><table><thead><tr><th>When</th><th>Plaza or road</th><th class="n">Amount</th><th>Add to drive</th></tr></thead><tbody>
@@ -2220,8 +2250,8 @@
       <td>${esc(x.date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }))}</td>
       ${fuel ? `<td>${esc(x.station || "—")}</td><td class="n">${x.gallons ? num(x.gallons, 3) : "—"}</td>`
         : `<td>${esc(x.note || "—")}</td><td><select class="mini" data-act="imp-kind" data-i="${i}">${Object.entries(EXPENSE).map(([k, l]) => `<option value="${k}" ${x.kind === k ? "selected" : ""}>${esc(l)}</option>`).join("")}</select></td>`}
-      <td class="n">${money(x.amount)}</td><td>${x.dup ? '<span class="muted">Already logged</span>' : ""}</td></tr>`; }).join("");
-    return `<div class="kpis four">${kpi(fuel ? "Fill-ups found" : "Rows found", I.txs.length, "")}${kpi("To import", on.length, "")}${kpi("Total", money(on.reduce((a, x) => a + x.amount, 0)), "")}${kpi("Already logged", I.txs.filter((x) => x.dup).length, "same day and amount")}</div>
+      <td class="n">${money(x.amount)}</td><td>${dupTag(x, "Already logged")}</td></tr>`; }).join("");
+    return `<div class="kpis four">${kpi(fuel ? "Fill-ups found" : "Rows found", I.txs.length, "")}${kpi("To import", on.length, "")}${kpi("Total", money(on.reduce((a, x) => a + x.amount, 0)), "")}${kpi("Already logged", I.txs.filter((x) => x.dup && !x.dupFile).length, I.txs.some((x) => x.dupFile) ? dupNote(I.txs.filter((x) => x.dupFile), "") : "same day and amount")}</div>
       <div class="card" style="padding:0;overflow:hidden"><div class="topbar" style="padding:14px 16px"><b>${fuel ? "Fill-ups" : "Car costs"}</b>
         ${vs.length ? `<label class="in inline">Vehicle<select data-act="imp-vehicle">${vs.map((v) => `<option value="${esc(v.id)}" ${I.vehicle === v.id ? "selected" : ""}>${esc(vehicleLabel(v.id))}</option>`).join("")}</select></label>` : ""}
         <div class="right"><button class="link" data-act="imp-all" data-v="1">Tick all</button><button class="link" data-act="imp-all" data-v="0">Untick all</button>${change}</div></div>
@@ -2275,7 +2305,7 @@
     const ops = { trips: [], fuel: [], expenses: [], newTrips: [] };
     if (I.type === "tolls") {
       for (const m of I.matches.filter((x) => x.status === "update")) {
-        ops.trips.push({ t: m.t, fields: { tollAmount: m.total, tollSourceRaw: "imported", tollsLikely: true, tollDetail: tollDetail(m.txs) },
+        ops.trips.push({ t: m.t, fields: { tollAmount: m.total, tollSourceRaw: "imported", tollsLikely: true, tollDetail: tollDetail(m) },
           history: [{ field: "tolls (web import)", old: (m.t.tolls || 0).toFixed(2), new: m.total.toFixed(2) }] });
       }
     } else {
