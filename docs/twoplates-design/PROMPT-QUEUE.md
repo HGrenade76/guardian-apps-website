@@ -175,7 +175,9 @@ Unit tests for the ring and the roll-over across Sunday midnight; UI test for Me
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8e · Finished session: overview everywhere, per-exercise stat card
+## ☑ 8d-fix · Next week never replaces this week — done c0dba592
+
+## ☑ 8e · Finished session: overview everywhere, per-exercise stat card — done 07864516
 ```
 One item: finished session detail.
 1. Every way into a finished session (Progress list, All sessions, Home, notifications, Health link) opens the session overview from SPEC-UPDATE-34 item 12 / mockup 36-session-overview, never the old set-by-set page. Find any entry point still using the old page.
@@ -233,6 +235,9 @@ Archive the next build from the latest commit (Review scheme, both containers). 
 - Record the program id on each logged session (next time the store schema changes anyway), replacing the device-only program-stretch log used by the end-of-program review.
 - Garmin double-counting in Health (when Garmin is built).
 - Dark-mode versions of the exercise pictures (no pale squares).
+
+## Questions for the review panel
+- Teens: show "vs last time: +2 reps" (reps only, never load or 1RM) on the session overview? Currently off for teens.
 
 ## Hein's own tasks
 - Two-phone join test with your wife or Lenaigh.
