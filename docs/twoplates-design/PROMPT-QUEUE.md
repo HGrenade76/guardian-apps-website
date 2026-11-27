@@ -164,7 +164,9 @@ Core tests: Full body fill covers push, pull, squat, hinge and core from history
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8d · Meals: Eat step and week roll-over
+## ☑ 8c-fix · No two of one swap group in a filled day — done 58adbf9e
+
+## ☑ 8d · Meals: Eat step and week roll-over — done 31e6c2fb
 ```
 One item: Meals home, the Eat step and the week roll-over.
 1. Eat is daily: its circle is a progress ring for the week (days eaten as planned / 7) and ticks only when the week is done; the line reads "Today ✓ · 4 of 7 days" or "Today · 2 of 4 meals". Never "Today done" next to an empty circle. Tapping Eat opens today's meals.
