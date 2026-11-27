@@ -733,13 +733,15 @@
     keys.add(ymKey(now));
     return [...keys].sort((a, b) => b - a).map((k) => ({ y: Math.floor(k / 100), m: k % 100 }));
   }
+  // Dropdowns list the newest year first, with its months in calendar order (January to December).
+  const calendarOrder = (ms) => ms.slice().sort((a, b) => b.y - a.y || a.m - b.m);
   function monthPicker() {
     const ms = availableMonths();
     const cur = S.month.y * 100 + S.month.m;
     const i = ms.findIndex((x) => x.y * 100 + x.m === cur);
     return `<div class="month">
       <button data-act="month" data-d="1" aria-label="Previous month" ${i >= ms.length - 1 ? "disabled" : ""}>‹</button>
-      <select data-act="month-pick" aria-label="Month">${ms.map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${monthName(x.y, x.m)}</option>`).join("")}</select>
+      <select data-act="month-pick" aria-label="Month">${calendarOrder(ms).map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${monthName(x.y, x.m)}</option>`).join("")}</select>
       <button data-act="month" data-d="-1" aria-label="Next month" ${i <= 0 ? "disabled" : ""}>›</button></div>`;
   }
   const kpi = (l, v, s) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s || "&nbsp;"}</div></div>`;
@@ -1263,7 +1265,7 @@
     const years = [...new Set(ms.map((x) => taxYearOf(new Date(x.y, x.m, 28))))].sort((a, b) => b - a);
     return [
       ...years.map((y) => { const [st, en] = taxYearRange(y); return { key: `y${y}`, label: `${taxYearLabel(y)} (${RG.uk ? "tax year" : "full year"})`, start: st, end: en, year: y }; }),
-      ...ms.map((x) => ({ key: `m${x.y}-${x.m}`, label: monthName(x.y, x.m), start: new Date(x.y, x.m, 1), end: new Date(x.y, x.m + 1, 1), year: x.y })),
+      ...calendarOrder(ms).map((x) => ({ key: `m${x.y}-${x.m}`, label: monthName(x.y, x.m), start: new Date(x.y, x.m, 1), end: new Date(x.y, x.m + 1, 1), year: x.y })),
     ];
   }
 
