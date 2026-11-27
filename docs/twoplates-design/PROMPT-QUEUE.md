@@ -111,7 +111,7 @@ One item: the weight hint for machines. Plate-loaded machines (no weight stack) 
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 6 · Upper/lower days show arms and core
+## ☑ 6 · Upper/lower days show arms and core — done 22879311
 ```
 One item: on an upper/lower program the week reads as only "Upper body" and "Lower body", and Hein asked where arms, core and fitness went. Check and fix:
 1. Every generated upper day includes at least one biceps and one triceps move; every week has core work (a core finisher on two days, or one per lower day); keep within the day's time and the 7-exercise cap.

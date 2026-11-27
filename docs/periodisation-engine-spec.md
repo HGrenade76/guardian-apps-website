@@ -242,3 +242,13 @@ Every session length the app shows (program day, Quick start, Surprise me, Make 
 - Every exercise has exactly one primary area; secondary areas count half toward weekly volume.
 - Area order everywhere: Chest, Back, Shoulders, Arms, Legs, Glutes, Core, Full body, Cardio.
 - Nothing in §4, §8 or §9 changes.
+
+## Rules added 27 Nov 2026 (mirrors the twoplates-ios copy, §7): arms and core on upper/lower weeks
+- Every generated upper day includes a biceps and a triceps move, paired as one superset; every lower day ends with core work.
+- To stay inside the day's minutes and the 7-exercise cap, accessories are dropped in this order: delts, calves, a quad isolation, a hamstring curl, the single-leg move, a second pull, then the shoulder press. Never dropped: the day's first lift, its only press, pull or leg exercise, and the arm pair and core move.
+- Strength days keep their shape: their accessory superset becomes the arms pair or takes the core.
+- 30-minute days are too short for the lead lift plus the arm pair and keep their previous shape.
+- The day line names its areas in the standard order, then core and cardio ("Chest, back, shoulders, arms"; "Legs · core").
+- Lifting-only plans show an optional "Add a cardio day" link (Plan settings › Lifting + cardio); nothing changes unless the person saves.
+- Generated weeks are fitted with the single time estimate, within 5 minutes of the chosen session length, using the drop order above.
+- Teen limits unchanged.
