@@ -99,13 +99,13 @@ Write docs/EXERCISE-BRAND-NAMES.md: old name → new name, and the undecided lis
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report, and send me the undecided list.
 ```
 
-## ☐ 4a · Brand names in descriptions and history
+## ☑ 4a · Brand names in descriptions and history — done 64ad8404
 ```
 4a. Brand names, follow-up: remove the brand from the descriptions, instructions and cues of the seven renamed exercises (e.g. "TRX" in the Suspension Trainer Row text), using the same generic terms. Logged history shows the exercise's current name (same id), so old "TRX Row" sessions read "Suspension Trainer Row". Core test: no brand from the list appears in any displayed exercise text.
 (Send together with item 5.)
 ```
 
-## ☐ 5 · Plate-loaded machines say "Add plates"
+## ☑ 5 · Plate-loaded machines say "Add plates" — done 590b6c49
 ```
 One item: the weight hint for machines. Plate-loaded machines (no weight stack) show "Set the stack" today. Use the equipment data: selectorized/stack machines → "Set the stack"; plate-loaded machines → "Add plates" (load = plates added, not counting the sled or arm unless the machine's starting resistance is known); cable stacks → "Set the stack". With no history, the weight field stays empty with that hint. Core test for one of each type.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
