@@ -1,13 +1,13 @@
 # TwoPlates — prompt queue (in order)
 
-Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 26 Nov 2026 (items 1b, 6–8b added).
+Kept by the designer. Send one prompt at a time, only when the agent has stopped. Tick it off when the agent reports it done. Updated 27 Nov 2026 — build 20261127.1 archived (items 1–5 included) (items 1b, 6–8b added).
 
 **Footer used on every item** (already included below):
 > One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 
 ---
 
-## ☐ 0 · Archive (only if the onboarding build isn't uploaded yet)
+## ☑ 0 · Archive — superseded by 20261127.1
 ```
 Archive the next build from the latest commit (Review scheme, both containers). Before archiving: full Core and app unit suites, and the full UI suite once on the simulator; fix real failures and report counts. Release check: no review tools and no Replay onboarding in the App Store build. Open the archive in Organizer and STOP with the build number. Don't install on my iPhone.
 ```
