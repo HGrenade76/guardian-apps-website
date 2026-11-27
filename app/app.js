@@ -741,8 +741,7 @@
     const i = ms.findIndex((x) => x.y * 100 + x.m === cur);
     return `<div class="month">
       <button data-act="month" data-d="1" aria-label="Previous month" ${i >= ms.length - 1 ? "disabled" : ""}>‹</button>
-      <select data-act="year-pick" aria-label="Year">${[...new Set(ms.map((x) => x.y))].map((y) => `<option value="${y}" ${y === S.month.y ? "selected" : ""}>${y}</option>`).join("")}</select>
-      <select data-act="month-pick" aria-label="Month">${calendarOrder(ms.filter((x) => x.y === S.month.y)).map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${new Date(x.y, x.m, 1).toLocaleDateString("en-US", { month: "long" })}</option>`).join("")}</select>
+      <select data-act="month-pick" aria-label="Month">${[...new Set(ms.map((x) => x.y))].map((y) => `<optgroup label="${y}">${calendarOrder(ms.filter((x) => x.y === y)).map((x) => `<option value="${x.y}-${x.m}" ${x.y * 100 + x.m === cur ? "selected" : ""}>${monthName(x.y, x.m)}</option>`).join("")}</optgroup>`).join("")}</select>
       <button data-act="month" data-d="-1" aria-label="Next month" ${i <= 0 ? "disabled" : ""}>›</button></div>`;
   }
   const kpi = (l, v, s) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="s">${s || "&nbsp;"}</div></div>`;
@@ -1679,8 +1678,6 @@
   document.addEventListener("change", (e) => {
     const el = e.target;
     if (el.dataset.act === "receipt-up") { uploadReceipt(el); return; }
-    // Switching year keeps the same month when that year has it, otherwise the year's latest month.
-    if (el.dataset.act === "year-pick") { const y = Number(el.value), ms = availableMonths().filter((x) => x.y === y); S.month = ms.find((x) => x.m === S.month.m) || ms[0]; render(); }
     if (el.dataset.act === "month-pick") { const [y, m] = el.value.split("-").map(Number); S.month = { y, m }; render(); }
     else if (el.dataset.act === "ropt") { S.report[el.name] = el.value; render(); }
   });
