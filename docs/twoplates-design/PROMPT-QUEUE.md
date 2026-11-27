@@ -153,7 +153,7 @@ Snapshot and unit tests.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 8c · Program builder: suggestions for an empty day
+## ☑ 8c · Program builder: suggestions for an empty day — done ee145935
 ```
 One item: New program › a day with no exercises shows only "Add exercise". Make it helpful, using the person's own data:
 1. "Fill this day for me" (secondary button): builds the day from the day's name/focus (Full body, Upper, Lower, Push, Pull, Legs, Core, Cardio) using the person's logged exercises first (most used, then progressing), staples to cover every movement pattern the focus needs, their kit and level, the 7-exercise default cap and the time estimate. Never adds an exercise the person excluded or that isn't teen-permitted for a teen.
