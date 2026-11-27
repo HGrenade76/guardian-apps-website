@@ -121,7 +121,9 @@ Core tests for an upper and a lower day at 45 and 60 min; teen rules unchanged.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
-## ☐ 7 · Shrunken tab bar covers content at the bottom
+## ☑ 6a · Generated days fit their length — done a9a7a105
+
+## ☑ 7 · Shrunken tab bar covers content at the bottom — done a112df6d
 ```
 One item: when the tab bar minimizes to its pill on scroll, the pill (bottom left) sits on top of content: on Progress it covers the "Find an exercise" field and its hint. Every scrolling screen needs bottom content inset so the last content always scrolls clear of the full tab bar and the minimized pill, including with the workout bar accessory shown. UI test: scroll Progress to the bottom, the exercise search field is fully visible and tappable with the bar minimized.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
