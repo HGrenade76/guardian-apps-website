@@ -188,6 +188,16 @@ UI test from each entry point; unit test for last time.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8i · Home header photos should be the gym, not a forest path
+```
+One item: Home's time-of-day header uses the "morning" Moments photo (a forest path), which has nothing to do with training. Home's header must show gym/training scenes, still people-free:
+1. Now, from the approved set: morning → run-indoor (treadmills by sunlit windows), midday → lift (barbell rack and dumbbells), evening → summary (power racks, black and white). Keep each distinct from the Train and Progress headers' crops where possible (different crop or the full photo).
+2. Propose three new licensed Unsplash photos for Home (empty gym in morning light; a bright gym floor at midday; a dim gym with lights on in the evening), no people, faces, reflections, logos or readable brand names, as one contact sheet with credits ready, for Hein's approval before replacing anything.
+3. The forest, sunrise-trail and other outdoor photos stay only for runs and outdoor cardio.
+Snapshot test of Home at 08:00, 13:00 and 19:00.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report with the contact sheet.
+```
+
 ## ☐ 8f · Visual-first data, app-wide (SPEC-UPDATE-36)
 ```
 One item: apply SPEC-UPDATE-36 "Show, don't list". git pull in ~/TwoPlatesTools/design-drop first.
