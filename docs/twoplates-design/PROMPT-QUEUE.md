@@ -188,6 +188,16 @@ UI test from each entry point; unit test for last time.
 One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
 ```
 
+## ☐ 8j · Meals loop on the last day of the week (BUG, do first)
+```
+One item: Meals loop on the last day of the week (Hein, Sat Nov 28, week Sun 22–Sat 28): Plan ✓, Shop ✓ ("Done · 17 items not bought"), Prep "Friday · 1 dish · 2 h 18 min" not done, Eat greyed "Today · 0 of 4 meals"; the button stays "Start prep". Ticking meals (today's, and tomorrow's) leaves Eat at 0.
+1. Prep never blocks Eat. Eat is always available once Plan is done. If the prep day has passed without prep, the Prep row offers "Prep done" and "Skip prep this week"; the main button moves on to the next useful step (today's meals, or "Plan next week" from Saturday).
+2. Ticking a meal as eaten counts on the week it belongs to: today's ticks update "Today · N of 4 meals" and the ring immediately. Tomorrow (Sunday) belongs to next week's plan; if next week isn't planned yet, opening tomorrow says "Plan next week first" instead of showing this week's meals.
+3. On the week's last day, "Plan next week" shows (item 8d); check it does on this data.
+Find why ticks didn't count (per-week storage from 8d-fix, or the Eat step reading another week). Unit tests for the Saturday case; UI test: tick today's 4 meals on the last day, Eat shows 4 of 4 and the ring moves.
+One item only. Work in this chat, no helper agents. Run only this area's tests, commit, back up. Don't install on my iPhone. STOP and report.
+```
+
 ## ☐ 8i · Home header photos should be the gym, not a forest path
 ```
 One item: Home's time-of-day header uses the "morning" Moments photo (a forest path), which has nothing to do with training. Home's header must show gym/training scenes, still people-free:
